@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Akonocap Command Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      /* Light theme */
+      --bg: #f0f2f5;
+      --bg-card: #ffffff;
+      --bg-header: #ffffff;
+      --border-subtle: #dadde1;
+      --text-main: #050505;
+      --text-muted: #606770;
+      --accent: #1877f2;
+      --accent-soft: rgba(24, 119, 242, 0.1);
+      --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-strong: 0 12px 30px rgba(0, 0, 0, 0.12);
+      --pill-bg: #e4e6eb;
+      --overlay: rgba(255,255,255,0.7);
+    }
+
+    body.theme-dark {
+      --bg: #050816;
+      --bg-card: #111827;
+      --bg-header: #020617;
+      --border-subtle: #1f2933;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent: #1d9bf0;
+      --accent-soft: rgba(29, 155, 240, 0.12);
+      --shadow-soft: 0 8px 20px rgba(0,0,0,0.45);
+      --shadow-strong: 0 18px 40px rgba(0,0,0,0.7);
+      --pill-bg: #1f2937;
+      --overlay: rgba(15,23,42,0.8);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #e3ebff 0, #f0f2f5 40%, var(--bg) 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    body.theme-dark {
+      background: radial-gradient(circle at top, #0b1120 0, #020617 45%, #020617 100%);
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1320px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 12px 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 12px 18px;
+      border-radius: 14px;
+      background: var(--bg-header);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-pill {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #1877f2, #42b72a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.9);
+    }
+
+    .app-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn-primary,
+    .btn-secondary,
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 7px 14px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, box-shadow 0.15s ease,
+                  transform 0.08s ease, color 0.15s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 3px 8px rgba(24,119,242,0.35);
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      background: #1664d8;
+      box-shadow: 0 4px 10px rgba(24,119,242,0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--accent);
+      border: 1px solid rgba(24,119,242,0.35);
+    }
+    body.theme-dark .btn-secondary {
+      background: #020617;
+      color: var(--accent);
+      border-color: rgba(148,163,184,0.6);
+    }
+    .btn-secondary:hover {
+      background: var(--accent-soft);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+    .btn-ghost:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #f5f6f7;
+      font-size: 11px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    body.theme-dark .theme-toggle {
+      background: #020617;
+    }
+
+    /* User info */
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .user-info.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .user-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .logout {
+      font-size: 11px;
+      color: #e11d48;
+      cursor: pointer;
+    }
+
+    /* Layout */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .grid {
+      width: 100%;
+      max-width: 1280px;
+      display: grid;
+      grid-template-columns: 1.9fr 1.4fr;
+      gap: 16px;
+    }
+
+    /* Panels */
+    .panel {
+      background: var(--bg-card);
+      border-radius: 14px;
+      padding: 16px 16px 18px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      transition: box-shadow 0.15s ease, transform 0.15s ease,
+                  opacity 0.2s ease, filter 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel.disabled {
+      opacity: 0.45;
+      filter: grayscale(0.1);
+      box-shadow: none;
+      pointer-events: none;
+    }
+
+    .panel:not(.disabled):hover {
+      box-shadow: var(--shadow-strong);
+      transform: translateY(-2px);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .panel-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .perm-pill {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--pill-bg);
+      color: var(--text-muted);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    select {
+      min-width: 180px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      font-size: 13px;
+      background: #ffffff;
+      color: var(--text-main);
+    }
+    body.theme-dark select {
+      background: #020617;
+      color: var(--text-main);
+    }
+
+    /* Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .card {
+      background: linear-gradient(135deg, #ffffff, #f5f7fb);
+      border-radius: 12px;
+      padding: 8px 10px;
+      border: 1px solid #dde1ea;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    body.theme-dark .card {
+      background: linear-gradient(135deg, #111827, #020617);
+      border-color: #1f2937;
+    }
+    .card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    .card-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .card-value {
+      margin-top: 3px;
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .card-delta {
+      margin-top: 3px;
+      font-size: 11px;
+      color: #16a34a;
+    }
+
+    /* Chart placeholder */
+    .chart-placeholder {
+      border-radius: 10px;
+      border: 1px dashed var(--border-subtle);
+      padding: 10px 10px 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: linear-gradient(135deg, rgba(24,119,242,0.02), rgba(66,103,178,0.02));
+      margin-bottom: 10px;
+    }
+
+    /* List */
+    .list {
+      margin-top: 4px;
+      font-size: 12px;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      padding-top: 6px;
+    }
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+      cursor: default;
+      transition: background 0.12s ease;
+    }
+    .list-item:hover {
+      background: rgba(24,119,242,0.03);
+    }
+    .list-title {
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .list-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .pill {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--pill-bg);
+      font-size: 11px;
+      color: var(--text-main);
+    }
+
+    /* Loading overlay for ads panel */
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--overlay);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      font-size: 13px;
+      color: var(--accent);
+      backdrop-filter: blur(2px);
+    }
+    .loading-overlay.visible {
+      display: flex;
+    }
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 2px solid rgba(24,119,242,0.25);
+      border-top-color: var(--accent);
+      margin-right: 8px;
+      animation: spin 0.75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Login modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    .modal-backdrop.visible {
+      display: flex;
+      animation: fadeIn 0.18s ease-out;
+    }
+    .modal {
+      width: 380px;
+      max-width: 94vw;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+      overflow: hidden;
+      font-family: system-ui, sans-serif;
+    }
+    .modal-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e4e6eb;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .fb-logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: #1877f2;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .modal-body {
+      padding: 12px 16px 14px;
+      font-size: 13px;
+      color: #444950;
+    }
+    .modal-perms {
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      background: #f5f6f7;
+      border: 1px solid #e4e6eb;
+      font-size: 12px;
+    }
+    .modal-footer {
+      padding: 10px 16px 12px;
+      border-top: 1px solid #e4e6eb;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .modal-btn-primary,
+    .modal-btn-secondary {
+      border-radius: 6px;
+      border: none;
+      padding: 7px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .modal-btn-secondary {
+      background: #e4e6eb;
+      color: #050505;
+    }
+    .modal-btn-primary {
+      background: #1877f2;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Drawers */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.25);
+      display: none;
+      z-index: 40;
+    }
+    .drawer-backdrop.visible {
+      display: block;
+    }
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 360px;
+      max-width: 100%;
+      height: 100%;
+      background: var(--bg-card);
+      box-shadow: -12px 0 30px rgba(0,0,0,0.18);
+      border-left: 1px solid var(--border-subtle);
+      transform: translateX(100%);
+      transition: transform 0.2s ease-out;
+      z-index: 41;
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer.visible {
+      transform: translateX(0);
+    }
+    .drawer-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .drawer-close {
+      border: none;
+      background: transparent;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .drawer-body {
+      padding: 12px 16px 16px;
+      font-size: 13px;
+      color: var(--text-main);
+      flex: 1;
+      overflow-y: auto;
+    }
+    .drawer-footer {
+      padding: 10px 16px 12px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      background: var(--bg-card);
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+    .field-input,
+    .field-textarea {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      padding: 6px 8px;
+      font-size: 13px;
+      background: #ffffff;
+      color: var(--text-main);
+      margin-bottom: 10px;
+    }
+    body.theme-dark .field-input,
+    body.theme-dark .field-textarea {
+      background: #020617;
+      color: var(--text-main);
+    }
+    .field-textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+    .image-placeholder {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px dashed var(--border-subtle);
+      padding: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Icon circles for Facebook / Instagram */
+    .icon-circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .icon-circle.fb {
+      background: #1877f2;
+    }
+    .icon-circle.ig {
+      background: radial-gradient(circle at 30% 30%, #feda75, #d62976, #962fbf, #4f5bd5);
+    }
+
+    /* Requirements list */
+    .panel.full-span {
+      grid-column: 1 / -1;
+    }
+    .requirements-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .req-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(24,119,242,0.02), rgba(66,103,178,0.01));
+      transition: border-color 0.12s ease, box-shadow 0.12s ease, transform 0.12s ease;
+    }
+    body.theme-dark .req-item {
+      background: linear-gradient(135deg, rgba(29,155,240,0.08), rgba(2,6,23,0.6));
+    }
+    .req-item:hover {
+      border-color: rgba(24,119,242,0.35);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      transform: translateY(-1px);
+    }
+    .req-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+    .status-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 2px solid var(--border-subtle);
+      background: #ffffff;
+      box-shadow: inset 0 0 0 2px #ffffff;
+      flex-shrink: 0;
+    }
+    body.theme-dark .status-dot {
+      background: #020617;
+    }
+    .req-item.complete .status-dot {
+      background: #16a34a;
+      border-color: #16a34a;
+      box-shadow: 0 0 0 4px rgba(22,163,74,0.15);
+    }
+    .req-item.pending .status-dot {
+      border-color: rgba(0,0,0,0.08);
+      box-shadow: inset 0 0 0 2px #ffffff;
+    }
+    body.theme-dark .req-item.pending .status-dot {
+      border-color: rgba(255,255,255,0.06);
+      box-shadow: inset 0 0 0 2px #020617;
+    }
+    .req-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .req-title {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .req-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+    .req-chevron {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-left: 12px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="theme-light">
+  <div class="shell">
+    <!-- HEADER -->
+    <header>
+      <div class="header-left">
+        <div class="brand-row">
+          <div class="logo-pill">A</div>
+          <div class="app-name">Akonocap Command Center</div>
+        </div>
+        <div class="tagline">Manage Facebook ads and Instagram posts for bulk buyers.</div>
+      </div>
+
+      <div class="header-right">
+        <button id="themeToggle" class="theme-toggle" type="button">
+          <span id="themeIcon">🌙</span>
+          <span id="themeLabel">Dark</span>
+        </button>
+
+        <button id="loginBtn" class="btn-primary" type="button">
+          <span>Connect with Facebook</span>
+        </button>
+
+        <div id="userPanel" class="user-info">
+          <img class="user-avatar" src="https://i.pravatar.cc/100>img=68" alt="User" />
+          <span class="user-name">Yohanseh | Akonocap</span>
+          <span class="logout" onclick="logout()">Log out</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+      <div class="grid">
+        <!-- FACEBOOK ADS PANEL -->
+        <section id="adsPanel" class="panel disabled">
+          <div id="adsLoading" class="loading-overlay">
+            <div class="spinner"></div>
+            <span>Loading latest insights...</span>
+          </div>
+
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="icon-circle fb">f</span>
+              Facebook Ad Accounts &amp; Performance
+              <span class="badge">Facebook Ads</span>
+            </div>
+            <span class="perm-pill">Uses: ads_read, ads_management</span>
+          </div>
+          <div class="panel-sub">
+            View aggregated performance for the Facebook ad accounts you own and use for sneaker / streetwear acquisition.
+          </div>
+
+          <div class="field-row">
+            <span>Ad account:</span>
+            <select id="adAccountSelect">
+              <option>-- Select ad account --</option>
+              <option>Akonocap - US Buyers (1234 5678 9012)</option>
+              <option>Akonocap - Test Spend (9876 5432 1000)</option>
+            </select>
+            <button id="loadBtn" class="btn-secondary" type="button">Load insights</button>
+            <button id="createCampaignBtn" class="btn-ghost" type="button">Create new Facebook campaign</button>
+          </div>
+
+          <div class="cards">
+            <div class="card">
+              <div class="card-label">Last 7 days spend</div>
+              <div class="card-value">$2,480.90</div>
+              <div class="card-delta">+19% vs previous 7 days</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Impressions</div>
+              <div class="card-value">362,410</div>
+              <div class="card-delta">+14.3% vs previous 7 days</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Cost per lead</div>
+              <div class="card-value">$2.74</div>
+              <div class="card-delta">-7.8% vs previous 7 days</div>
+            </div>
+          </div>
+
+          <div class="chart-placeholder">
+            Example: daily results pulled from the selected Facebook ad account using Ads Management APIs.
+          </div>
+
+          <div class="list">
+            <div class="list-item">
+              <div>
+                <div class="list-title">Bulk Buyer - US Sneaker Stores</div>
+                <div class="list-meta">Active | Leads | WhatsApp & DM</div>
+              </div>
+              <span class="pill">CPL $2.10</span>
+            </div>
+            <div class="list-item">
+              <div>
+                <div class="list-title">Retarget - Instagram profile visitors</div>
+                <div class="list-meta">Active | Conversions | Messages</div>
+              </div>
+              <span class="pill">ROAS 3.6x</span>
+            </div>
+            <div class="list-item">
+              <div>
+                <div class="list-title">Cold - EU bulk buyers</div>
+                <div class="list-meta">Learning | Reach</div>
+              </div>
+              <span class="pill">CPM $5.12</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- INSTAGRAM PANEL -->
+        <section id="postsPanel" class="panel disabled">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="icon-circle ig">IG</span>
+              Instagram Scheduled Posts
+              <span class="badge">Instagram</span>
+            </div>
+            <span class="perm-pill">Uses: instagram_basic, instagram_content_publish, pages_show_list</span>
+          </div>
+          <div class="panel-sub">
+            Create and schedule content to your connected Instagram Business account from the same workspace.
+          </div>
+
+          <div class="field-row">
+            <button id="createPostBtn" class="btn-secondary" type="button">Create new Instagram post</button>
+          </div>
+
+          <div class="list">
+            <div class="list-item">
+              <div>
+                <div class="list-title">New bulk slots open this week</div>
+                <div class="list-meta">Scheduled | Today | 3:00 PM | Feed photo</div>
+              </div>
+              <span class="pill">Feed</span>
+            </div>
+            <div class="list-item">
+              <div>
+                <div class="list-title">Packing 50 pairs for one shop</div>
+                <div class="list-meta">Scheduled | Today | 8:00 PM | Reel</div>
+              </div>
+              <span class="pill">Reel</span>
+            </div>
+            <div class="list-item">
+              <div>
+                <div class="list-title">First-time buyer discount story</div>
+                <div class="list-meta">Scheduled | Tomorrow | 10:00 AM | Story</div>
+              </div>
+              <span class="pill">Story</span>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- META APP REQUIREMENTS PANEL -->
+        <section class="panel full-span">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="icon-circle fb">f</span>
+              App customization and requirements
+              <span class="badge">App Review</span>
+            </div>
+            <span class="perm-pill">Tracking Marketing API &amp; Instagram permissions</span>
+          </div>
+          <div class="panel-sub">
+            Keep your Meta app tasks aligned with the sample UI shown in App Dashboard. Use this list to confirm which use cases and compliance steps are covered before submitting.
+          </div>
+
+          <div class="requirements-list">
+            <div class="req-item complete">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Customize the Create &amp; manage ads with Marketing API use case</div>
+                  <div class="req-note">Completed via Facebook Ads Management flow.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item complete">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Customize the Create &amp; manage app ads with Meta Ads Manager use case</div>
+                  <div class="req-note">Ready for reviewers; connects to the same ad account selection.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item pending">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Customize the Manage everything on your Page use case</div>
+                  <div class="req-note">Pending demonstration of Page content controls.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item pending">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Customize the Capture &amp; manage ad leads with Marketing API use case</div>
+                  <div class="req-note">Add lead access + sample webhook callback to complete.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item pending">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Customize the Measure ad performance data with Marketing API use case</div>
+                  <div class="req-note">Waiting on insights drill-down mapping.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item pending">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Customize the Engage with customers on Messenger from Meta use case</div>
+                  <div class="req-note">Needs Messenger quick-reply demo.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item pending">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Customize the Manage messaging &amp; content on Instagram use case</div>
+                  <div class="req-note">Pending Instagram DM + content scheduling proof.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item pending">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Customize the Manage products with Catalog API use case</div>
+                  <div class="req-note">Add catalog management walkthrough.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item complete">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Review and complete testing requirements</div>
+                  <div class="req-note">QA scenarios documented for App Review.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item complete">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Business verification</div>
+                  <div class="req-note">Business already verified in Meta dashboard.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item pending">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">App Review</div>
+                  <div class="req-note">Submit once all use cases are demonstrated.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+
+            <div class="req-item pending">
+              <div class="req-left">
+                <span class="status-dot"></span>
+                <div class="req-text">
+                  <div class="req-title">Check that all requirements are met, then publish your app.</div>
+                  <div class="req-note">Final readiness check before launching.</div>
+                </div>
+              </div>
+              <span class="req-chevron">></span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- LOGIN MODAL -->
+  <div id="loginModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="fb-logo">f</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;">Continue as Yohanseh</div>
+          <div style="font-size:11px;color:#6b7280;">Akonocap Command Center</div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p>Akonocap Command Center will receive your public profile, email address, and access to Pages and Instagram accounts you manage.</p>
+        <div class="modal-perms">
+          • Manage your ads and view ad performance (ads_read, ads_management)<br/>
+          • Access your Pages and connected Instagram accounts (pages_show_list, instagram_basic)<br/>
+          • Create and manage content on those assets (instagram_content_publish)
+        </div>
+        <p style="margin-top:8px;font-size:11px;color:#6b7280;">
+          You can remove this connection at any time in your Meta account settings.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn-secondary" type="button" onclick="closeModal()">Cancel</button>
+        <button class="modal-btn-primary" type="button" onclick="completeLogin()">Continue as Yohanseh</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAWER BACKDROP (shared) -->
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+
+  <!-- CREATE INSTAGRAM POST DRAWER -->
+  <aside id="postDrawer" class="drawer">
+    <div class="drawer-header">
+      <span>Create Instagram post</span>
+      <button class="drawer-close" type="button" onclick="closeDrawer('post')">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="field-label">Connected account</div>
+      <div class="field-input" style="background:rgba(24,119,242,0.04);border-style:dashed;">
+        @akonocap.bulkbuyers
+      </div>
+
+      <div class="field-label">Media</div>
+      <div class="image-placeholder">
+        Drop image or video here, or use the API to upload media for this scheduled post.
+      </div>
+
+      <div class="field-label">Caption</div>
+      <textarea class="field-textarea" placeholder="Example: Opening 20 bulk slots this week. DM BULK for pricing."></textarea>
+
+      <div class="field-label">Publish time</div>
+      <input class="field-input" type="datetime-local" value="2025-01-01T15:00" />
+
+      <div class="field-label">Destination</div>
+      <select class="field-input">
+        <option>Feed post</option>
+        <option>Reel</option>
+        <option>Story</option>
+      </select>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn-ghost" type="button" onclick="closeDrawer('post')">Cancel</button>
+      <button class="btn-primary" type="button" onclick="saveDraft()">Schedule post</button>
+    </div>
+  </aside>
+
+  <!-- CREATE FACEBOOK CAMPAIGN DRAWER -->
+  <aside id="campaignDrawer" class="drawer">
+    <div class="drawer-header">
+      <span>Create Facebook campaign</span>
+      <button class="drawer-close" type="button" onclick="closeDrawer('campaign')">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="field-label">Ad account</div>
+      <div id="campaignAdAccount" class="field-input" style="background:rgba(24,119,242,0.04);border-style:dashed;">
+        (Select an ad account in the dashboard)
+      </div>
+
+      <div class="field-label">Objective</div>
+      <select class="field-input">
+        <option>Leads</option>
+        <option>Sales</option>
+        <option>Traffic</option>
+        <option>Engagement</option>
+      </select>
+
+      <div class="field-label">Daily budget (USD)</div>
+      <input class="field-input" type="number" value="50" />
+
+      <div class="field-label">Audience</div>
+      <textarea class="field-textarea" placeholder="Example: US, age 18-35, interests in sneakers, streetwear, reselling."></textarea>
+
+      <div class="field-label">Placements</div>
+      <select class="field-input">
+        <option>Automatic placements (recommended)</option>
+        <option>Facebook & Instagram Feeds only</option>
+        <option>Instagram-only placements</option>
+      </select>
+
+      <div class="field-label">Ad creative - headline</div>
+      <input class="field-input" type="text" value="Need bulk sneaker buyers? We've got pairs ready." />
+
+      <div class="field-label">Ad creative - primary text</div>
+      <textarea class="field-textarea" placeholder="Example: We help shops and resellers secure high-demand pairs in bulk. Message us to see this week's inventory."></textarea>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn-ghost" type="button" onclick="closeDrawer('campaign')">Cancel</button>
+      <button class="btn-primary" type="button" onclick="saveCampaign()">Save campaign</button>
+    </div>
+  </aside>
+
+  <script>
+    const loginBtn = document.getElementById("loginBtn");
+    const userPanel = document.getElementById("userPanel");
+    const adsPanel = document.getElementById("adsPanel");
+    const postsPanel = document.getElementById("postsPanel");
+    const modal = document.getElementById("loginModal");
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    const themeLabel = document.getElementById("themeLabel");
+    const adsLoading = document.getElementById("adsLoading");
+    const loadBtn = document.getElementById("loadBtn");
+    const createPostBtn = document.getElementById("createPostBtn");
+    const createCampaignBtn = document.getElementById("createCampaignBtn");
+    const drawerBackdrop = document.getElementById("drawerBackdrop");
+    const postDrawer = document.getElementById("postDrawer");
+    const campaignDrawer = document.getElementById("campaignDrawer");
+    const adAccountSelect = document.getElementById("adAccountSelect");
+    const campaignAdAccount = document.getElementById("campaignAdAccount");
+
+    // Open login modal
+    loginBtn.addEventListener("click", () => {
+      modal.classList.add("visible");
+    });
+
+    function closeModal() {
+      modal.classList.remove("visible");
+    }
+
+    // Simulate successful login
+    function completeLogin() {
+      closeModal();
+      loginBtn.style.display = "none";
+      userPanel.classList.add("visible");
+      adsPanel.classList.remove("disabled");
+      postsPanel.classList.remove("disabled");
+    }
+
+    // Log out
+    function logout() {
+      userPanel.classList.remove("visible");
+      loginBtn.style.display = "inline-flex";
+      adsPanel.classList.add("disabled");
+      postsPanel.classList.add("disabled");
+    }
+
+    // Theme toggle
+    themeToggle.addEventListener("click", () => {
+      const body = document.body;
+      const dark = body.classList.contains("theme-dark");
+      if (dark) {
+        body.classList.remove("theme-dark");
+        body.classList.add("theme-light");
+        themeIcon.textContent = "🌙";
+        themeLabel.textContent = "Dark";
+      } else {
+        body.classList.remove("theme-light");
+        body.classList.add("theme-dark");
+        themeIcon.textContent = "☀️";
+        themeLabel.textContent = "Light";
+      }
+    });
+
+    // Load insights (show loading overlay briefly)
+    loadBtn.addEventListener("click", () => {
+      adsLoading.classList.add("visible");
+      setTimeout(() => {
+        adsLoading.classList.remove("visible");
+      }, 1200);
+    });
+
+    // Drawer helpers
+    function openDrawer(which) {
+      drawerBackdrop.classList.add("visible");
+      if (which === "post") {
+        postDrawer.classList.add("visible");
+      } else if (which === "campaign") {
+        // Show selected ad account inside drawer
+        const selected = adAccountSelect.value;
+        if (!selected || selected === "-- Select ad account --") {
+          campaignAdAccount.textContent = "Select an ad account in the dashboard before creating a campaign.";
+        } else {
+          campaignAdAccount.textContent = selected;
+        }
+        campaignDrawer.classList.add("visible");
+      }
+    }
+
+    function closeDrawer(which) {
+      if (which === "post") {
+        postDrawer.classList.remove("visible");
+      } else if (which === "campaign") {
+        campaignDrawer.classList.remove("visible");
+      } else {
+        postDrawer.classList.remove("visible");
+        campaignDrawer.classList.remove("visible");
+      }
+      drawerBackdrop.classList.remove("visible");
+    }
+
+    function saveDraft() {
+      closeDrawer("post");
+      alert("Instagram post scheduled (demo state for App Review).");
+    }
+
+    function saveCampaign() {
+      closeDrawer("campaign");
+      alert("Facebook campaign saved (demo state for App Review).");
+    }
+
+    drawerBackdrop.addEventListener("click", () => closeDrawer());
+
+    createPostBtn.addEventListener("click", () => openDrawer("post"));
+    createCampaignBtn.addEventListener("click", () => openDrawer("campaign"));
+  </script>
+</body>
+</html>

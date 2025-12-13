@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Akonocap Dashboard – Ads API Usage Explanation</title>
+  <meta charset="UTF-8" />
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: auto; line-height: 1.6; padding: 20px; }
+    h1 { color: #d33; }
+  </style>
+</head>
+<body>
+
+<h1>Akonocap Dashboard – Facebook Ads API Usage</h1>
+
+<p>Akonocap Dashboard connects a user’s Facebook ad accounts to provide reporting, diagnostics, and campaign warmup tools. The app uses the Meta Marketing API in the following ways:</p>
+
+<h2>Data Access</h2>
+<ul>
+  <li>GET <code>/me/adaccounts</code> – identifies which ad accounts the user has access to.</li>
+  <li>GET <code>/act_{ad_account}/insights</code> – retrieves basic analytics for display inside the dashboard.</li>
+  <li>GET <code>/act_{ad_account}/campaigns</code> – used only for warmup testing and validation.</li>
+</ul>
+
+<h2>Why the Ads API Is Used</h2>
+<p>The Ads API is used exclusively for:</p>
+<ul>
+  <li>Showing ad account insights to the logged-in user.</li>
+  <li>Confirming correct account permissions.</li>
+  <li>Testing API connectivity through a warmup process.</li>
+</ul>
+
+<h2>No Unauthorized Actions</h2>
+<p>Akonocap Dashboard does <strong>not</strong> create ads on behalf of a user without consent. Campaign warmup tests only run on reviewer test accounts or on accounts where the user explicitly authorizes the action.</p>
+
+<h2>Contact</h2>
+<p>For questions email: <strong>richhoodtraining@gmail.com</strong></p>
+
+</body>
+</html>
