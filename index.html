@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Akonocap Command Center</title>
@@ -17,7 +18,7 @@
       --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
       --shadow-strong: 0 12px 30px rgba(0, 0, 0, 0.12);
       --pill-bg: #e4e6eb;
-      --overlay: rgba(255,255,255,0.7);
+      --overlay: rgba(255, 255, 255, 0.7);
       --success: #16a34a;
       --warning: #f59e0b;
     }
@@ -31,13 +32,15 @@
       --text-muted: #9ca3af;
       --accent: #1d9bf0;
       --accent-soft: rgba(29, 155, 240, 0.12);
-      --shadow-soft: 0 8px 20px rgba(0,0,0,0.45);
-      --shadow-strong: 0 18px 40px rgba(0,0,0,0.7);
+      --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.45);
+      --shadow-strong: 0 18px 40px rgba(0, 0, 0, 0.7);
       --pill-bg: #1f2937;
-      --overlay: rgba(15,23,42,0.8);
+      --overlay: rgba(15, 23, 42, 0.8);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -101,7 +104,7 @@
       color: #ffffff;
       font-weight: 700;
       font-size: 18px;
-      box-shadow: 0 0 0 2px rgba(255,255,255,0.9);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
     }
 
     .app-name {
@@ -121,7 +124,9 @@
     }
 
     /* Buttons */
-    .btn-primary, .btn-secondary, .btn-ghost {
+    .btn-primary,
+    .btn-secondary,
+    .btn-ghost {
       border-radius: 999px;
       padding: 8px 16px;
       border: none;
@@ -136,9 +141,10 @@
     .btn-primary {
       background: var(--accent);
       color: #ffffff;
-      box-shadow: 0 3px 8px rgba(24,119,242,0.35);
+      box-shadow: 0 3px 8px rgba(24, 119, 242, 0.35);
       font-weight: 600;
     }
+
     .btn-primary:hover {
       background: #1664d8;
       transform: translateY(-1px);
@@ -147,13 +153,15 @@
     .btn-secondary {
       background: #ffffff;
       color: var(--accent);
-      border: 1px solid rgba(24,119,242,0.35);
+      border: 1px solid rgba(24, 119, 242, 0.35);
     }
+
     body.theme-dark .btn-secondary {
       background: #020617;
       color: var(--accent);
-      border-color: rgba(148,163,184,0.6);
+      border-color: rgba(148, 163, 184, 0.6);
     }
+
     .btn-secondary:hover {
       background: var(--accent-soft);
     }
@@ -165,6 +173,7 @@
       font-size: 12px;
       padding: 6px 12px;
     }
+
     .btn-ghost:hover {
       color: var(--accent);
       border-color: var(--accent);
@@ -195,6 +204,7 @@
       color: var(--text-muted);
       cursor: pointer;
     }
+
     body.theme-dark .theme-toggle {
       background: #020617;
     }
@@ -209,11 +219,13 @@
       transform: translateY(-4px);
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
+
     .user-info.visible {
       opacity: 1;
       pointer-events: auto;
       transform: translateY(0);
     }
+
     .user-avatar {
       width: 32px;
       height: 32px;
@@ -221,10 +233,12 @@
       object-fit: cover;
       border: 2px solid var(--accent);
     }
+
     .user-name {
       font-size: 13px;
       font-weight: 500;
     }
+
     .logout {
       font-size: 11px;
       color: #e11d48;
@@ -282,6 +296,7 @@
       flex-wrap: wrap;
       gap: 8px;
     }
+
     .panel-title {
       font-size: 16px;
       font-weight: 600;
@@ -289,6 +304,7 @@
       align-items: center;
       gap: 8px;
     }
+
     .panel-sub {
       font-size: 12px;
       color: var(--text-muted);
@@ -311,15 +327,16 @@
       border-radius: 999px;
       background: var(--pill-bg);
       color: var(--text-muted);
-      border: 1px solid rgba(0,0,0,0.04);
+      border: 1px solid rgba(0, 0, 0, 0.04);
       display: inline-flex;
       align-items: center;
       gap: 4px;
     }
+
     .perm-pill.active {
-      background: rgba(22,163,74,0.1);
+      background: rgba(22, 163, 74, 0.1);
       color: var(--success);
-      border-color: rgba(22,163,74,0.2);
+      border-color: rgba(22, 163, 74, 0.2);
     }
 
     .perm-group {
@@ -338,7 +355,10 @@
       font-size: 12px;
     }
 
-    select, input[type="text"], input[type="number"], input[type="datetime-local"] {
+    select,
+    input[type="text"],
+    input[type="number"],
+    input[type="datetime-local"] {
       min-width: 180px;
       padding: 6px 10px;
       border-radius: 999px;
@@ -347,6 +367,7 @@
       background: #ffffff;
       color: var(--text-main);
     }
+
     body.theme-dark select,
     body.theme-dark input[type="text"],
     body.theme-dark input[type="number"],
@@ -362,32 +383,38 @@
       gap: 10px;
       margin-bottom: 14px;
     }
+
     .card {
       background: linear-gradient(135deg, #ffffff, #f5f7fb);
       border-radius: 12px;
       padding: 10px 12px;
       border: 1px solid #dde1ea;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
       transition: transform 0.1s ease;
     }
+
     body.theme-dark .card {
       background: linear-gradient(135deg, #111827, #020617);
       border-color: #1f2937;
     }
+
     .card:hover {
       transform: translateY(-1px);
     }
+
     .card-label {
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-muted);
     }
+
     .card-value {
       margin-top: 4px;
       font-size: 18px;
       font-weight: 600;
     }
+
     .card-delta {
       margin-top: 4px;
       font-size: 11px;
@@ -398,30 +425,35 @@
     .list {
       margin-top: 6px;
       font-size: 12px;
-      border-top: 1px solid rgba(0,0,0,0.04);
+      border-top: 1px solid rgba(0, 0, 0, 0.04);
       padding-top: 8px;
     }
+
     .list-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 8px 0;
-      border-bottom: 1px solid rgba(0,0,0,0.03);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.03);
       cursor: pointer;
       transition: background 0.12s ease;
     }
+
     .list-item:hover {
-      background: rgba(24,119,242,0.03);
+      background: rgba(24, 119, 242, 0.03);
     }
+
     .list-title {
       font-size: 13px;
       font-weight: 500;
     }
+
     .list-meta {
       font-size: 11px;
       color: var(--text-muted);
       margin-top: 2px;
     }
+
     .pill {
       padding: 4px 10px;
       border-radius: 999px;
@@ -443,42 +475,52 @@
       color: var(--accent);
       backdrop-filter: blur(2px);
     }
+
     .loading-overlay.visible {
       display: flex;
     }
+
     .spinner {
       width: 18px;
       height: 18px;
       border-radius: 999px;
-      border: 2px solid rgba(24,119,242,0.25);
+      border: 2px solid rgba(24, 119, 242, 0.25);
       border-top-color: var(--accent);
       margin-right: 8px;
       animation: spin 0.75s linear infinite;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* Login modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 50;
     }
+
     .modal-backdrop.visible {
       display: flex;
       animation: fadeIn 0.18s ease-out;
     }
+
     .modal {
       width: 420px;
       max-width: 94vw;
       border-radius: 14px;
       background: #ffffff;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
       overflow: hidden;
     }
+
     .modal-header {
       padding: 16px 18px;
       border-bottom: 1px solid #e4e6eb;
@@ -486,6 +528,7 @@
       align-items: center;
       gap: 10px;
     }
+
     .fb-logo {
       width: 32px;
       height: 32px;
@@ -498,11 +541,13 @@
       font-weight: 700;
       font-size: 20px;
     }
+
     .modal-body {
       padding: 14px 18px 16px;
       font-size: 13px;
       color: #444950;
     }
+
     .modal-perms {
       margin-top: 10px;
       padding: 12px;
@@ -512,6 +557,7 @@
       font-size: 12px;
       line-height: 1.6;
     }
+
     .modal-footer {
       padding: 12px 18px 14px;
       border-top: 1px solid #e4e6eb;
@@ -519,17 +565,21 @@
       justify-content: flex-end;
       gap: 10px;
     }
-    .modal-btn-primary, .modal-btn-secondary {
+
+    .modal-btn-primary,
+    .modal-btn-secondary {
       border-radius: 8px;
       border: none;
       padding: 8px 14px;
       font-size: 13px;
       cursor: pointer;
     }
+
     .modal-btn-secondary {
       background: #e4e6eb;
       color: #050505;
     }
+
     .modal-btn-primary {
       background: #1877f2;
       color: #ffffff;
@@ -540,13 +590,15 @@
     .drawer-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.25);
+      background: rgba(0, 0, 0, 0.25);
       display: none;
       z-index: 40;
     }
+
     .drawer-backdrop.visible {
       display: block;
     }
+
     .drawer {
       position: fixed;
       top: 0;
@@ -555,7 +607,7 @@
       max-width: 100%;
       height: 100%;
       background: var(--bg-card);
-      box-shadow: -12px 0 30px rgba(0,0,0,0.18);
+      box-shadow: -12px 0 30px rgba(0, 0, 0, 0.18);
       border-left: 1px solid var(--border-subtle);
       transform: translateX(100%);
       transition: transform 0.2s ease-out;
@@ -563,9 +615,11 @@
       display: flex;
       flex-direction: column;
     }
+
     .drawer.visible {
       transform: translateX(0);
     }
+
     .drawer-header {
       padding: 16px 18px;
       border-bottom: 1px solid var(--border-subtle);
@@ -575,6 +629,7 @@
       font-size: 15px;
       font-weight: 600;
     }
+
     .drawer-close {
       border: none;
       background: transparent;
@@ -582,6 +637,7 @@
       cursor: pointer;
       color: var(--text-muted);
     }
+
     .drawer-body {
       padding: 14px 18px 18px;
       font-size: 13px;
@@ -589,6 +645,7 @@
       flex: 1;
       overflow-y: auto;
     }
+
     .drawer-footer {
       padding: 12px 18px 14px;
       border-top: 1px solid var(--border-subtle);
@@ -604,7 +661,9 @@
       margin-bottom: 4px;
       color: var(--text-main);
     }
-    .field-input, .field-textarea {
+
+    .field-input,
+    .field-textarea {
       width: 100%;
       border-radius: 8px;
       border: 1px solid var(--border-subtle);
@@ -614,15 +673,18 @@
       color: var(--text-main);
       margin-bottom: 12px;
     }
+
     body.theme-dark .field-input,
     body.theme-dark .field-textarea {
       background: #020617;
       color: var(--text-main);
     }
+
     .field-textarea {
       min-height: 80px;
       resize: vertical;
     }
+
     .image-placeholder {
       width: 100%;
       border-radius: 8px;
@@ -647,11 +709,26 @@
       color: #ffffff;
       flex-shrink: 0;
     }
-    .icon-circle.fb { background: #1877f2; }
-    .icon-circle.ig { background: radial-gradient(circle at 30% 30%, #feda75, #d62976, #962fbf, #4f5bd5); }
-    .icon-circle.msg { background: linear-gradient(135deg, #0695FF, #A334FA); }
-    .icon-circle.page { background: #1877f2; }
-    .icon-circle.biz { background: #4267B2; }
+
+    .icon-circle.fb {
+      background: #1877f2;
+    }
+
+    .icon-circle.ig {
+      background: radial-gradient(circle at 30% 30%, #feda75, #d62976, #962fbf, #4f5bd5);
+    }
+
+    .icon-circle.msg {
+      background: linear-gradient(135deg, #0695FF, #A334FA);
+    }
+
+    .icon-circle.page {
+      background: #1877f2;
+    }
+
+    .icon-circle.biz {
+      background: #4267B2;
+    }
 
     /* Requirements list */
     .requirements-list {
@@ -660,6 +737,7 @@
       gap: 10px;
       margin-top: 6px;
     }
+
     .req-item {
       display: flex;
       align-items: center;
@@ -667,17 +745,20 @@
       padding: 12px 14px;
       border: 1px solid var(--border-subtle);
       border-radius: 12px;
-      background: linear-gradient(135deg, rgba(24,119,242,0.02), rgba(66,103,178,0.01));
+      background: linear-gradient(135deg, rgba(24, 119, 242, 0.02), rgba(66, 103, 178, 0.01));
       transition: all 0.12s ease;
     }
+
     body.theme-dark .req-item {
-      background: linear-gradient(135deg, rgba(29,155,240,0.08), rgba(2,6,23,0.6));
+      background: linear-gradient(135deg, rgba(29, 155, 240, 0.08), rgba(2, 6, 23, 0.6));
     }
+
     .req-item:hover {
-      border-color: rgba(24,119,242,0.35);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      border-color: rgba(24, 119, 242, 0.35);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
       transform: translateY(-1px);
     }
+
     .req-left {
       display: flex;
       align-items: center;
@@ -685,6 +766,7 @@
       flex: 1;
       min-width: 0;
     }
+
     .status-dot {
       width: 20px;
       height: 20px;
@@ -696,35 +778,42 @@
       align-items: center;
       justify-content: center;
     }
+
     body.theme-dark .status-dot {
       background: #020617;
     }
+
     .req-item.complete .status-dot {
       background: var(--success);
       border-color: var(--success);
-      box-shadow: 0 0 0 4px rgba(22,163,74,0.15);
+      box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
     }
+
     .req-item.complete .status-dot::after {
       content: "✓";
       color: white;
       font-size: 12px;
       font-weight: 700;
     }
+
     .req-text {
       display: flex;
       flex-direction: column;
       gap: 3px;
       min-width: 0;
     }
+
     .req-title {
       font-size: 13px;
       font-weight: 600;
       line-height: 1.4;
     }
+
     .req-note {
       font-size: 12px;
       color: var(--text-muted);
     }
+
     .req-chevron {
       font-size: 18px;
       color: var(--text-muted);
@@ -740,8 +829,9 @@
       border: 1px solid var(--border-subtle);
       border-radius: 10px;
       margin-bottom: 10px;
-      background: linear-gradient(135deg, rgba(24,119,242,0.02), transparent);
+      background: linear-gradient(135deg, rgba(24, 119, 242, 0.02), transparent);
     }
+
     .page-avatar {
       width: 44px;
       height: 44px;
@@ -754,13 +844,16 @@
       font-weight: 700;
       font-size: 18px;
     }
+
     .page-info {
       flex: 1;
     }
+
     .page-name {
       font-weight: 600;
       font-size: 14px;
     }
+
     .page-stats {
       font-size: 11px;
       color: var(--text-muted);
@@ -775,14 +868,17 @@
       margin-bottom: 8px;
       font-size: 13px;
     }
+
     .message-sender {
       font-weight: 600;
       font-size: 12px;
       margin-bottom: 4px;
     }
+
     .message-text {
       color: var(--text-muted);
     }
+
     .message-time {
       font-size: 10px;
       color: var(--text-muted);
@@ -797,6 +893,7 @@
       border-bottom: 1px solid var(--border-subtle);
       padding-bottom: 8px;
     }
+
     .tab {
       padding: 6px 14px;
       border-radius: 999px;
@@ -805,10 +902,12 @@
       color: var(--text-muted);
       transition: all 0.12s ease;
     }
+
     .tab:hover {
       background: var(--accent-soft);
       color: var(--accent);
     }
+
     .tab.active {
       background: var(--accent);
       color: white;
@@ -821,23 +920,27 @@
       gap: 10px;
       margin-top: 10px;
     }
+
     .engagement-card {
       padding: 12px;
       border-radius: 10px;
       border: 1px solid var(--border-subtle);
-      background: linear-gradient(135deg, rgba(24,119,242,0.02), transparent);
+      background: linear-gradient(135deg, rgba(24, 119, 242, 0.02), transparent);
     }
+
     .engagement-label {
       font-size: 10px;
       text-transform: uppercase;
       color: var(--text-muted);
       letter-spacing: 0.05em;
     }
+
     .engagement-value {
       font-size: 20px;
       font-weight: 700;
       margin-top: 4px;
     }
+
     .engagement-delta {
       font-size: 11px;
       color: var(--success);
@@ -845,31 +948,40 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     @media (max-width: 900px) {
       .grid {
         grid-template-columns: 1fr;
       }
+
       .cards {
         grid-template-columns: repeat(2, 1fr);
       }
     }
   </style>
 </head>
+
 <body class="theme-light">
   <!-- Facebook SDK -->
   <script>
-    window.fbAsyncInit = function() {
+    window.fbAsyncInit = function () {
       FB.init({
         appId: '1185063939768948',
         cookie: true,
         xfbml: true,
         version: 'v24.0'
       });
-      FB.getLoginStatus(function(response) {
+      FB.getLoginStatus(function (response) {
         if (response.status === 'connected') {
           onFBConnected(response.authResponse);
         }
@@ -911,17 +1023,20 @@
       <div class="grid">
 
         <!-- ========== META APP REVIEWER GUIDE ========== -->
-        <section class="panel full-span" style="background: linear-gradient(135deg, #1877f2 0%, #42b72a 100%); color: white; border: none;">
+        <section class="panel full-span"
+          style="background: linear-gradient(135deg, #1877f2 0%, #42b72a 100%); color: white; border: none;">
           <div class="panel-header" style="margin-bottom: 0;">
             <div class="panel-title" style="color: white; font-size: 18px;">
               <span style="font-size: 24px;">📋</span>
               META APP REVIEWER: Testing Guide
             </div>
           </div>
-          
+
           <!-- Critical Requirements Alert -->
-          <div style="background: rgba(255,0,0,0.2); border: 2px solid rgba(255,255,255,0.5); border-radius: 10px; padding: 14px; margin-top: 12px;">
-            <p style="margin: 0 0 8px; font-size: 14px; font-weight: 700;">⚠️ CRITICAL: This App Uses REAL Facebook OAuth</p>
+          <div
+            style="background: rgba(255,0,0,0.2); border: 2px solid rgba(255,255,255,0.5); border-radius: 10px; padding: 14px; margin-top: 12px;">
+            <p style="margin: 0 0 8px; font-size: 14px; font-weight: 700;">⚠️ CRITICAL: This App Uses REAL Facebook
+              OAuth</p>
             <ul style="margin: 0; padding-left: 20px; font-size: 12px; line-height: 1.8;">
               <li>Real Facebook Login OAuth flow (not simulated)</li>
               <li>Live API calls returning real data from your account</li>
@@ -929,46 +1044,56 @@
               <li>Utility messages are TRANSACTIONAL ONLY (order updates, no promotions)</li>
             </ul>
           </div>
-          
+
           <div style="background: rgba(255,255,255,0.15); border-radius: 10px; padding: 16px; margin-top: 12px;">
             <p style="margin: 0 0 12px; font-size: 14px; font-weight: 600;">Step-by-Step Testing Instructions:</p>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
                 <div style="font-weight: 600; margin-bottom: 6px;">1️⃣ Facebook Login (OAuth)</div>
-                <div style="font-size: 12px; opacity: 0.9;">Click "Connect with Facebook" → Real OAuth popup opens → Review permissions → Click "Continue" → Redirects back authenticated</div>
+                <div style="font-size: 12px; opacity: 0.9;">Click "Connect with Facebook" → Real OAuth popup opens →
+                  Review permissions → Click "Continue" → Redirects back authenticated</div>
               </div>
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
                 <div style="font-weight: 600; margin-bottom: 6px;">2️⃣ pages_show_list</div>
-                <div style="font-size: 12px; opacity: 0.9;">After login, Pages panel shows YOUR real Pages → API: GET /me/accounts</div>
+                <div style="font-size: 12px; opacity: 0.9;">After login, Pages panel shows YOUR real Pages → API: GET
+                  /me/accounts</div>
               </div>
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
                 <div style="font-weight: 600; margin-bottom: 6px;">3️⃣ pages_read_engagement</div>
-                <div style="font-size: 12px; opacity: 0.9;">View real engagement metrics (views, reach, followers) → API: GET /{page-id}/insights</div>
+                <div style="font-size: 12px; opacity: 0.9;">View real engagement metrics (views, reach, followers) →
+                  API: GET /{page-id}/insights</div>
               </div>
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
                 <div style="font-weight: 600; margin-bottom: 6px;">4️⃣ pages_manage_metadata</div>
-                <div style="font-size: 12px; opacity: 0.9;">Click "Manage" → Edit Page info → Save → API: POST /{page-id}</div>
+                <div style="font-size: 12px; opacity: 0.9;">Click "Manage" → Edit Page info → Save → API: POST
+                  /{page-id}</div>
               </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border: 2px solid rgba(255,255,0,0.5);">
+              <div
+                style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border: 2px solid rgba(255,255,0,0.5);">
                 <div style="font-weight: 600; margin-bottom: 6px;">5️⃣ pages_messaging ⚠️</div>
-                <div style="font-size: 12px; opacity: 0.9;">"Compose Message" → Send → <strong>VERIFY: Open Messenger to see message delivered</strong></div>
+                <div style="font-size: 12px; opacity: 0.9;">"Compose Message" → Send → <strong>VERIFY: Open Messenger to
+                    see message delivered</strong></div>
               </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border: 2px solid rgba(255,255,0,0.5);">
+              <div
+                style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border: 2px solid rgba(255,255,0,0.5);">
                 <div style="font-weight: 600; margin-bottom: 6px;">6️⃣ pages_utility_messaging ⚠️</div>
-                <div style="font-size: 12px; opacity: 0.9;">"Send Order Update" → NON-PROMOTIONAL only → <strong>VERIFY: Check Messenger for delivery</strong></div>
+                <div style="font-size: 12px; opacity: 0.9;">"Send Order Update" → NON-PROMOTIONAL only → <strong>VERIFY:
+                    Check Messenger for delivery</strong></div>
               </div>
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
                 <div style="font-weight: 600; margin-bottom: 6px;">7️⃣ business_management</div>
-                <div style="font-size: 12px; opacity: 0.9;">View Business panel → Shows your real business assets → API: GET /me/businesses</div>
+                <div style="font-size: 12px; opacity: 0.9;">View Business panel → Shows your real business assets → API:
+                  GET /me/businesses</div>
               </div>
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
                 <div style="font-weight: 600; margin-bottom: 6px;">8️⃣ ads_read</div>
-                <div style="font-size: 12px; opacity: 0.9;">Select ad account → "Load insights" → Real spend/impressions → API: GET /{account}/insights</div>
+                <div style="font-size: 12px; opacity: 0.9;">Select ad account → "Load insights" → Real spend/impressions
+                  → API: GET /{account}/insights</div>
               </div>
             </div>
           </div>
         </section>
-        
+
         <!-- FACEBOOK ADS PANEL -->
         <section id="adsPanel" class="panel disabled">
           <div id="adsLoading" class="loading-overlay">
@@ -988,8 +1113,10 @@
             <span class="perm-pill active">✓ ads_management</span>
           </div>
           <div class="panel-sub">
-            <strong>Business Use:</strong> We run Facebook ads to acquire B2B wholesale leads (sneaker retailers). This panel shows campaign performance metrics.<br/>
-            <span style="font-size: 11px; color: var(--accent);">API: GET /me/adaccounts → GET /{ad-account-id}/insights (fields: spend, impressions, clicks)</span>
+            <strong>Business Use:</strong> We run Facebook ads to acquire B2B wholesale leads (sneaker retailers). This
+            panel shows campaign performance metrics.<br />
+            <span style="font-size: 11px; color: var(--accent);">API: GET /me/adaccounts → GET /{ad-account-id}/insights
+              (fields: spend, impressions, clicks)</span>
           </div>
 
           <div class="field-row">
@@ -1054,23 +1181,24 @@
             <span class="perm-pill active">✓ pages_read_engagement</span>
           </div>
           <div class="panel-sub">
-            <strong>Business Use:</strong> Manage our business Facebook Page where wholesale customers contact us. Update business info and track engagement.<br/>
+            <strong>Business Use:</strong> Manage our business Facebook Page where wholesale customers contact us.
+            Update business info and track engagement.<br />
             <span style="font-size: 11px; color: var(--accent);">
-              pages_show_list → GET /me/accounts | 
-              pages_manage_metadata → POST /{page-id} (about, website, phone) | 
+              pages_show_list → GET /me/accounts |
+              pages_manage_metadata → POST /{page-id} (about, website, phone) |
               pages_read_engagement → GET /{page-id}/insights
             </span>
           </div>
 
           <div id="pagesList">
-          <div class="page-card">
-            <div class="page-avatar">A</div>
-            <div class="page-info">
-              <div class="page-name">Akonocap Bulk Buyers</div>
-              <div class="page-stats">12,847 followers • Sneaker/Streetwear Business</div>
+            <div class="page-card">
+              <div class="page-avatar">A</div>
+              <div class="page-info">
+                <div class="page-name">Akonocap Bulk Buyers</div>
+                <div class="page-stats">12,847 followers • Sneaker/Streetwear Business</div>
+              </div>
+              <button class="btn-ghost" onclick="openDrawer('pageSettings')">Manage</button>
             </div>
-            <button class="btn-ghost" onclick="openDrawer('pageSettings')">Manage</button>
-          </div>
           </div>
 
           <div class="engagement-grid">
@@ -1111,15 +1239,18 @@
             <span class="perm-pill active">✓ pages_utility_messaging</span>
           </div>
           <div class="panel-sub">
-            <strong>Business Use:</strong> Respond to customer inquiries. Send order/shipping updates (transactional only).<br/>
+            <strong>Business Use:</strong> Respond to customer inquiries. Send order/shipping updates (transactional
+            only).<br />
             <span style="font-size: 11px; color: var(--accent);">
-              pages_messaging → POST /{page-id}/messages (RESPONSE) | 
+              pages_messaging → POST /{page-id}/messages (RESPONSE) |
               pages_utility_messaging → POST /{page-id}/messages (POST_PURCHASE_UPDATE)
             </span>
           </div>
           <!-- Messenger Verification Note -->
-          <div style="background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
-            <p style="margin: 0; font-size: 11px; color: #b45309;"><strong>📱 REVIEWER NOTE:</strong> Messages sent from this app appear in Facebook Messenger. Open Messenger to verify delivery.</p>
+          <div
+            style="background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+            <p style="margin: 0; font-size: 11px; color: #b45309;"><strong>📱 REVIEWER NOTE:</strong> Messages sent from
+              this app appear in Facebook Messenger. Open Messenger to verify delivery.</p>
           </div>
 
           <div class="tabs" id="messagingTabs">
@@ -1154,7 +1285,8 @@
             <span class="perm-pill">⏳ Pending: instagram_content_publish</span>
           </div>
           <div class="panel-sub">
-            Instagram content publishing will be available after additional permissions are approved. This feature is not part of the current app review request.
+            Instagram content publishing will be available after additional permissions are approved. This feature is
+            not part of the current app review request.
           </div>
         </section>
 
@@ -1171,7 +1303,8 @@
             <span class="perm-pill active">✓ business_management</span>
           </div>
           <div class="panel-sub">
-            <strong>Business Use:</strong> View all connected business assets (ad accounts, pages) to manage our wholesale marketing operations from one dashboard.<br/>
+            <strong>Business Use:</strong> View all connected business assets (ad accounts, pages) to manage our
+            wholesale marketing operations from one dashboard.<br />
             <span style="font-size: 11px; color: var(--accent);">
               API: GET /me/businesses → GET /{business-id}/owned_ad_accounts → GET /{business-id}/owned_pages
             </span>
@@ -1212,21 +1345,26 @@
             </div>
           </div>
           <div class="panel-sub" style="font-size: 13px; line-height: 1.6;">
-            <strong>About Akonocap:</strong> We are a wholesale sneaker/streetwear distributor based in the US. We sell bulk inventory to retail stores nationwide. 
-            This dashboard is used by our internal team (3 employees) to manage customer communications, track ad performance, and maintain our Facebook presence.
+            <strong>About Akonocap:</strong> We are a wholesale sneaker/streetwear distributor based in the US. We sell
+            bulk inventory to retail stores nationwide.
+            This dashboard is used by our internal team (3 employees) to manage customer communications, track ad
+            performance, and maintain our Facebook presence.
           </div>
 
           <div class="requirements-list" style="margin-top: 16px;">
-            
+
             <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
               <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                 <span class="status-dot"></span>
                 <div class="req-title" style="font-size: 14px;">pages_show_list</div>
               </div>
-              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To display the user's Facebook Pages so they can select which Page to manage.<br/>
-                <strong>How we use it:</strong> Call GET /me/accounts to retrieve Page list. Displayed in "Facebook Pages Management" panel.<br/>
-                <strong>Data accessed:</strong> Page ID, name, category, follower count, profile picture.<br/>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To display the user's Facebook Pages so they can select which Page to
+                manage.<br />
+                <strong>How we use it:</strong> Call GET /me/accounts to retrieve Page list. Displayed in "Facebook
+                Pages Management" panel.<br />
+                <strong>Data accessed:</strong> Page ID, name, category, follower count, profile picture.<br />
                 <strong>User benefit:</strong> Users can see and select their business Pages without leaving our app.
               </div>
             </div>
@@ -1236,10 +1374,13 @@
                 <span class="status-dot"></span>
                 <div class="req-title" style="font-size: 14px;">pages_manage_metadata</div>
               </div>
-              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To allow users to update their Page's business information from our dashboard.<br/>
-                <strong>How we use it:</strong> POST /{page-id} with fields: about, website, phone. Accessed via "Manage" button → Page Settings drawer.<br/>
-                <strong>Data modified:</strong> Page description (about), website URL, phone number only.<br/>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To allow users to update their Page's business information from our
+                dashboard.<br />
+                <strong>How we use it:</strong> POST /{page-id} with fields: about, website, phone. Accessed via
+                "Manage" button → Page Settings drawer.<br />
+                <strong>Data modified:</strong> Page description (about), website URL, phone number only.<br />
                 <strong>User benefit:</strong> Keep business info up-to-date without switching to Facebook.
               </div>
             </div>
@@ -1249,10 +1390,14 @@
                 <span class="status-dot"></span>
                 <div class="req-title" style="font-size: 14px;">pages_read_engagement</div>
               </div>
-              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To show Page performance metrics so users can track their business growth.<br/>
-                <strong>How we use it:</strong> GET /{page-id}/insights with metrics: page_views_total, page_post_engagements, page_fan_adds.<br/>
-                <strong>Data accessed:</strong> Page views, post reach, engagements, new follower count (read-only).<br/>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To show Page performance metrics so users can track their business
+                growth.<br />
+                <strong>How we use it:</strong> GET /{page-id}/insights with metrics: page_views_total,
+                page_post_engagements, page_fan_adds.<br />
+                <strong>Data accessed:</strong> Page views, post reach, engagements, new follower count
+                (read-only).<br />
                 <strong>User benefit:</strong> Monitor business Page performance and engagement trends.
               </div>
             </div>
@@ -1262,10 +1407,13 @@
                 <span class="status-dot"></span>
                 <div class="req-title" style="font-size: 14px;">pages_messaging</div>
               </div>
-              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To respond to wholesale customer inquiries about bulk pricing and product availability.<br/>
-                <strong>How we use it:</strong> GET /{page-id}/conversations to read messages. POST /{page-id}/messages with messaging_type: RESPONSE to reply.<br/>
-                <strong>Data accessed:</strong> Conversations from customers who initiated contact with our Page.<br/>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To respond to wholesale customer inquiries about bulk pricing and
+                product availability.<br />
+                <strong>How we use it:</strong> GET /{page-id}/conversations to read messages. POST /{page-id}/messages
+                with messaging_type: RESPONSE to reply.<br />
+                <strong>Data accessed:</strong> Conversations from customers who initiated contact with our Page.<br />
                 <strong>User benefit:</strong> Respond to B2B customer inquiries directly from our dashboard.
               </div>
             </div>
@@ -1275,10 +1423,14 @@
                 <span class="status-dot"></span>
                 <div class="req-title" style="font-size: 14px;">pages_utility_messaging</div>
               </div>
-              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To send order confirmations, shipping updates, and delivery notifications to customers.<br/>
-                <strong>How we use it:</strong> POST /{page-id}/messages with messaging_type: MESSAGE_TAG and tag: POST_PURCHASE_UPDATE.<br/>
-                <strong>Data sent:</strong> Order number, tracking number, delivery status (transactional only, no promotional content).<br/>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To send order confirmations, shipping updates, and delivery
+                notifications to customers.<br />
+                <strong>How we use it:</strong> POST /{page-id}/messages with messaging_type: MESSAGE_TAG and tag:
+                POST_PURCHASE_UPDATE.<br />
+                <strong>Data sent:</strong> Order number, tracking number, delivery status (transactional only, no
+                promotional content).<br />
                 <strong>User benefit:</strong> Keep customers informed about their wholesale orders automatically.
               </div>
             </div>
@@ -1288,20 +1440,26 @@
                 <span class="status-dot"></span>
                 <div class="req-title" style="font-size: 14px;">business_management</div>
               </div>
-              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To access the user's Business Manager and retrieve connected ad accounts.<br/>
-                <strong>How we use it:</strong> GET /me/businesses → GET /{business-id}/owned_ad_accounts to populate ad account dropdown.<br/>
-                <strong>Data accessed:</strong> Business name, connected ad accounts, connected Pages (read-only).<br/>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To access the user's Business Manager and retrieve connected ad
+                accounts.<br />
+                <strong>How we use it:</strong> GET /me/businesses → GET /{business-id}/owned_ad_accounts to populate ad
+                account dropdown.<br />
+                <strong>Data accessed:</strong> Business name, connected ad accounts, connected Pages (read-only).<br />
                 <strong>User benefit:</strong> Access all business assets from one unified dashboard.
               </div>
             </div>
 
           </div>
-          
-          <div style="margin-top: 20px; padding: 14px; background: rgba(24,119,242,0.08); border-radius: 10px; border: 1px solid rgba(24,119,242,0.2);">
+
+          <div
+            style="margin-top: 20px; padding: 14px; background: rgba(24,119,242,0.08); border-radius: 10px; border: 1px solid rgba(24,119,242,0.2);">
             <p style="margin: 0; font-size: 12px; color: var(--text-main);">
-              <strong>🔒 Data Privacy:</strong> We only access data necessary for the features described above. We do not store Facebook data on external servers. 
-              All API calls are made client-side using the Facebook JavaScript SDK. Users can revoke access at any time via Facebook Settings → Apps and Websites.
+              <strong>🔒 Data Privacy:</strong> We only access data necessary for the features described above. We do
+              not store Facebook data on external servers.
+              All API calls are made client-side using the Facebook JavaScript SDK. Users can revoke access at any time
+              via Facebook Settings → Apps and Websites.
             </p>
           </div>
         </section>
@@ -1321,19 +1479,20 @@
         </div>
       </div>
       <div class="modal-body">
-        <p>Akonocap Command Center will receive access to your public profile, email address, and the following permissions:</p>
+        <p>Akonocap Command Center will receive access to your public profile, email address, and the following
+          permissions:</p>
         <div class="modal-perms">
-          <strong>Ads Management:</strong><br/>
-          • ads_read, ads_management — View and manage your Facebook ads<br/><br/>
-          <strong>Pages:</strong><br/>
-          • pages_show_list — View list of Pages you manage<br/>
-          • pages_manage_metadata — Update Page settings and info<br/>
-          • pages_read_engagement — View Page insights and metrics<br/><br/>
-          <strong>Messaging:</strong><br/>
-          • pages_messaging — Respond to Page messages<br/>
-          • pages_utility_messaging — Send order updates<br/><br/>
-          <strong>Business:</strong><br/>
-          • business_management — Manage business assets<br/><br/>
+          <strong>Ads Management:</strong><br />
+          • ads_read, ads_management — View and manage your Facebook ads<br /><br />
+          <strong>Pages:</strong><br />
+          • pages_show_list — View list of Pages you manage<br />
+          • pages_manage_metadata — Update Page settings and info<br />
+          • pages_read_engagement — View Page insights and metrics<br /><br />
+          <strong>Messaging:</strong><br />
+          • pages_messaging — Respond to Page messages<br />
+          • pages_utility_messaging — Send order updates<br /><br />
+          <strong>Business:</strong><br />
+          • business_management — Manage business assets<br /><br />
         </div>
         <p style="margin-top:10px;font-size:11px;color:#6b7280;">
           You can remove this connection at any time in your Meta account settings.
@@ -1367,7 +1526,8 @@
       </div>
 
       <div class="field-label">Caption</div>
-      <textarea class="field-textarea" placeholder="Example: Opening 20 bulk slots this week. DM BULK for pricing."></textarea>
+      <textarea class="field-textarea"
+        placeholder="Example: Opening 20 bulk slots this week. DM BULK for pricing."></textarea>
 
       <div class="field-label">Publish Time</div>
       <input class="field-input" type="datetime-local" value="2025-01-01T15:00" />
@@ -1409,7 +1569,8 @@
       <input class="field-input" type="number" value="50" />
 
       <div class="field-label">Target Audience</div>
-      <textarea class="field-textarea" placeholder="Example: US, age 18-35, interests in sneakers, streetwear, reselling."></textarea>
+      <textarea class="field-textarea"
+        placeholder="Example: US, age 18-35, interests in sneakers, streetwear, reselling."></textarea>
 
       <div class="field-label">Placements</div>
       <select class="field-input">
@@ -1445,8 +1606,9 @@
 
       <div class="field-label">Phone</div>
       <input id="settingsPhone" class="field-input" type="text" placeholder="+1 (555) 123-4567" />
-      
-      <p style="font-size: 11px; color: var(--success); margin-top: 12px;">✓ Changes are saved via the Pages API using pages_manage_metadata permission</p>
+
+      <p style="font-size: 11px; color: var(--success); margin-top: 12px;">✓ Changes are saved via the Pages API using
+        pages_manage_metadata permission</p>
     </div>
     <div class="drawer-footer">
       <button class="btn-ghost" type="button" onclick="closeDrawer('pageSettings')">Cancel</button>
@@ -1462,12 +1624,15 @@
     </div>
     <div class="drawer-body">
       <!-- Messenger Verification Alert -->
-      <div style="padding: 12px; border-radius: 10px; background: rgba(24,119,242,0.1); border: 1px solid rgba(24,119,242,0.3); margin-bottom: 12px;">
+      <div
+        style="padding: 12px; border-radius: 10px; background: rgba(24,119,242,0.1); border: 1px solid rgba(24,119,242,0.3); margin-bottom: 12px;">
         <strong style="color: #1877f2;">📱 Verify in Messenger</strong>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">After sending, open Facebook Messenger to confirm the message was delivered to the recipient.</p>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">After sending, open Facebook Messenger to confirm the
+          message was delivered to the recipient.</p>
       </div>
-      
-      <div id="messageSentConfirm" style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
+
+      <div id="messageSentConfirm"
+        style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
         <strong style="color: #16a34a;">✓ Message Sent Successfully</strong>
         <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Now open Facebook Messenger to verify delivery.</p>
       </div>
@@ -1481,7 +1646,8 @@
       <select id="messageRecipient" class="field-input">
         <option value="">-- Select a Page first --</option>
       </select>
-      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Last 3 people who messaged your Page (loaded via API)</p>
+      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Last 3 people who messaged your
+        Page (loaded via API)</p>
 
       <div class="field-label">Message</div>
       <textarea id="messageText" class="field-textarea" placeholder="Type your response message here..."></textarea>
@@ -1500,21 +1666,25 @@
     </div>
     <div class="drawer-body">
       <!-- Non-Promotional Warning -->
-      <div style="padding: 12px; border-radius: 10px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); margin-bottom: 12px;">
+      <div
+        style="padding: 12px; border-radius: 10px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); margin-bottom: 12px;">
         <strong style="color: #dc2626;">⚠️ TRANSACTIONAL ONLY - No Promotional Content</strong>
         <p style="margin: 4px 0 0; font-size: 11px; color: #666;">
-          ❌ NOT allowed: Sales, discounts, promotions, marketing<br/>
+          ❌ NOT allowed: Sales, discounts, promotions, marketing<br />
           ✅ Allowed: Order confirmations, shipping updates, delivery status
         </p>
       </div>
-      
+
       <!-- Messenger Verification Alert -->
-      <div style="padding: 12px; border-radius: 10px; background: rgba(24,119,242,0.1); border: 1px solid rgba(24,119,242,0.3); margin-bottom: 12px;">
+      <div
+        style="padding: 12px; border-radius: 10px; background: rgba(24,119,242,0.1); border: 1px solid rgba(24,119,242,0.3); margin-bottom: 12px;">
         <strong style="color: #1877f2;">📱 Verify in Messenger</strong>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">After sending, open Facebook Messenger to confirm the update was delivered.</p>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">After sending, open Facebook Messenger to confirm the
+          update was delivered.</p>
       </div>
-      
-      <div id="utilitySentConfirm" style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
+
+      <div id="utilitySentConfirm"
+        style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
         <strong style="color: #16a34a;">✓ Order Update Sent</strong>
         <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Now open Facebook Messenger to verify delivery.</p>
       </div>
@@ -1528,7 +1698,8 @@
       <select id="utilityRecipient" class="field-input">
         <option value="">-- Select a Page first --</option>
       </select>
-      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Last 3 customers who messaged your Page (loaded via API)</p>
+      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Last 3 customers who messaged your
+        Page (loaded via API)</p>
 
       <div class="field-label">Update Type (Transactional Only)</div>
       <select id="utilityType" class="field-input" onchange="updateUtilityPreview()">
@@ -1538,16 +1709,20 @@
       </select>
 
       <div class="field-label">Order Number</div>
-      <input id="utilityOrderNum" class="field-input" type="text" placeholder="#12345" oninput="updateUtilityPreview()" />
+      <input id="utilityOrderNum" class="field-input" type="text" placeholder="#12345"
+        oninput="updateUtilityPreview()" />
 
       <div class="field-label">Tracking Number (for shipped orders)</div>
-      <input id="utilityTracking" class="field-input" type="text" placeholder="1Z999AA10123456784" oninput="updateUtilityPreview()" />
+      <input id="utilityTracking" class="field-input" type="text" placeholder="1Z999AA10123456784"
+        oninput="updateUtilityPreview()" />
 
       <div class="field-label">Message Preview (Non-Promotional)</div>
-      <div id="utilityPreview" style="padding: 12px; background: #f5f6f7; border-radius: 8px; font-size: 13px; margin-bottom: 8px; border: 2px solid #16a34a;">
+      <div id="utilityPreview"
+        style="padding: 12px; background: #f5f6f7; border-radius: 8px; font-size: 13px; margin-bottom: 8px; border: 2px solid #16a34a;">
         Your order #[order] has shipped. Tracking number: [tracking]. Estimated delivery: 3-5 business days.
       </div>
-      <p style="font-size: 11px; color: #16a34a; margin: 0;">✓ POST_PURCHASE_UPDATE tag - Transactional message only, no promotional content</p>
+      <p style="font-size: 11px; color: #16a34a; margin: 0;">✓ POST_PURCHASE_UPDATE tag - Transactional message only, no
+        promotional content</p>
     </div>
     <div class="drawer-footer">
       <button class="btn-ghost" type="button" onclick="closeDrawer('utilityMessage')">Cancel</button>
@@ -1566,10 +1741,10 @@
       if (response.error) {
         const errorCode = response.error.code;
         const errorMsg = response.error.message || 'Unknown error';
-        
+
         // Token errors: 190 = invalid token, 102 = session expired, 463 = token expired
-        if (errorCode === 190 || errorCode === 102 || errorCode === 463 || 
-            errorMsg.includes('session') || errorMsg.includes('token') || errorMsg.includes('invalidated')) {
+        if (errorCode === 190 || errorCode === 102 || errorCode === 463 ||
+          errorMsg.includes('session') || errorMsg.includes('token') || errorMsg.includes('invalidated')) {
           alert('Your Facebook session has expired. Please reconnect your account.');
           facebookLogout();
           return true; // Error was handled
@@ -1600,7 +1775,7 @@
 
     // Facebook Login - REAL OAuth Flow
     function facebookLogin() {
-      FB.login(function(response) {
+      FB.login(function (response) {
         if (response.authResponse) {
           onFBConnected(response.authResponse);
         } else {
@@ -1615,11 +1790,11 @@
     // On Facebook Connected
     function onFBConnected(authResponse) {
       accessToken = authResponse.accessToken;
-      
+
       // Update UI
       loginBtn.style.display = "none";
       userPanel.classList.add("visible");
-      
+
       // Enable all panels (except Instagram which requires additional permissions)
       adsPanel.classList.remove("disabled");
       pagesPanel.classList.remove("disabled");
@@ -1628,7 +1803,7 @@
       // Note: postsPanel (Instagram) is disabled - requires instagram_content_publish permission
 
       // Load user info
-      FB.api('/me', {fields: 'name,picture'}, function(response) {
+      FB.api('/me', { fields: 'name,picture' }, function (response) {
         if (handleApiError(response)) return;
         if (response && !response.error) {
           document.querySelector('.user-name').textContent = response.name;
@@ -1640,14 +1815,14 @@
 
       // Load pages (pages_show_list)
       loadPages();
-      
+
       // Load ad accounts (business_management)
       loadAdAccounts();
     }
 
     // Facebook Logout
     function facebookLogout() {
-      FB.logout(function(response) {
+      FB.logout(function (response) {
         accessToken = null;
         pages = [];
         userPanel.classList.remove("visible");
@@ -1663,14 +1838,14 @@
     function loadPages() {
       FB.api('/me/accounts', {
         fields: 'id,name,access_token,picture,fan_count,category,instagram_business_account{id,username}'
-      }, function(response) {
+      }, function (response) {
         if (handleApiError(response)) return;
-        
+
         if (response && response.data) {
           pages = response.data;
           renderPagesList();
           populatePageSelects();
-          
+
           // Load engagement for first page (pages_read_engagement)
           if (pages.length > 0) {
             loadPageEngagement(pages[0].id, pages[0].access_token);
@@ -1684,13 +1859,13 @@
     function renderPagesList() {
       const container = document.getElementById('pagesList');
       if (!container) return;
-      
+
       container.innerHTML = '';
       pages.forEach(page => {
         const pic = page.picture && page.picture.data ? page.picture.data.url : '';
         container.innerHTML += `
           <div class="page-card">
-            <div class="page-avatar">${pic ? '<img src="'+pic+'" alt="">' : page.name.charAt(0)}</div>
+            <div class="page-avatar">${pic ? '<img src="' + pic + '" alt="">' : page.name.charAt(0)}</div>
             <div class="page-info">
               <div class="page-name">${page.name}</div>
               <div class="page-stats">${page.fan_count ? page.fan_count.toLocaleString() + ' followers • ' : ''}${page.category || 'Page'}</div>
@@ -1721,7 +1896,7 @@
         metric: 'page_views_total,page_post_engagements,page_fan_adds',
         period: 'week',
         access_token: pageToken
-      }, function(response) {
+      }, function (response) {
         if (handleApiError(response)) return;
         if (response && response.data) {
           response.data.forEach(metric => {
@@ -1740,7 +1915,7 @@
     // Load Conversations (pages_messaging)
     function loadConversations(pageId, pageToken) {
       currentPageInfo = { id: pageId, token: pageToken };
-      
+
       // Find page name
       const page = pages.find(p => p.id === pageId);
       if (page) currentPageInfo.name = page.name;
@@ -1749,18 +1924,18 @@
         fields: 'participants,messages.limit(10){message,from,created_time}',
         access_token: pageToken,
         limit: 10
-      }, function(response) {
+      }, function (response) {
         if (handleApiError(response)) return;
-        
+
         // Reset messages
         allMessages = { inbox: [], sent: [], utility: [] };
-        
+
         if (response && response.data && response.data.length > 0) {
           response.data.forEach(conv => {
             const participants = conv.participants?.data || [];
             const customer = participants.find(p => p.id !== pageId);
             const messages = conv.messages?.data || [];
-            
+
             messages.forEach(msg => {
               const isFromPage = msg.from?.id === pageId;
               const msgObj = {
@@ -1771,7 +1946,7 @@
                 customer: customer?.name || 'Unknown',
                 customerId: customer?.id
               };
-              
+
               if (isFromPage) {
                 // Message sent BY the page
                 allMessages.sent.push(msgObj);
@@ -1782,10 +1957,10 @@
             });
           });
         }
-        
+
         // Update inbox count
         updateInboxCount();
-        
+
         // Show inbox by default
         showMessageTab('inbox');
       });
@@ -1803,19 +1978,19 @@
     function showMessageTab(tab) {
       const container = document.getElementById('conversationsList');
       if (!container) return;
-      
+
       const messages = allMessages[tab] || [];
-      
+
       container.innerHTML = '';
-      
+
       if (messages.length > 0) {
-        // Show last 5 messages, most recent first
-        const recentMessages = messages.slice(0, 5);
+        // Show last 3 messages, most recent first
+        const recentMessages = messages.slice(0, 3);
         recentMessages.forEach(msg => {
           const timeAgo = getTimeAgo(msg.time);
           const icon = tab === 'sent' ? '↗️ Sent to' : (tab === 'utility' ? '📦 Update to' : '📩 From');
           const displayName = tab === 'inbox' ? msg.sender : msg.customer;
-          
+
           container.innerHTML += `
             <div class="message-preview" style="border-left: 3px solid ${tab === 'inbox' ? '#1877f2' : (tab === 'sent' ? '#16a34a' : '#f59e0b')};">
               <div class="message-sender">${icon} ${displayName}</div>
@@ -1825,8 +2000,8 @@
           `;
         });
       } else {
-        const emptyMsg = tab === 'inbox' ? 'No messages received yet' : 
-                        (tab === 'sent' ? 'No messages sent yet' : 'No utility messages sent yet');
+        const emptyMsg = tab === 'inbox' ? 'No messages received yet' :
+          (tab === 'sent' ? 'No messages sent yet' : 'No utility messages sent yet');
         container.innerHTML = `<div class="message-preview"><div class="message-sender">No messages</div><div class="message-text">${emptyMsg}</div></div>`;
       }
     }
@@ -1839,7 +2014,7 @@
       const diffMins = Math.floor(diffMs / 60000);
       const diffHours = Math.floor(diffMs / 3600000);
       const diffDays = Math.floor(diffMs / 86400000);
-      
+
       if (diffMins < 1) return 'Just now';
       if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
       if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
@@ -1853,7 +2028,7 @@
         t.classList.remove('active');
         if (t.dataset.tab === tab) t.classList.add('active');
       });
-      
+
       // Show messages for selected tab
       showMessageTab(tab);
     }
@@ -1868,7 +2043,7 @@
         customer: recipientName,
         customerId: recipientId
       };
-      
+
       if (isUtility) {
         allMessages.utility.unshift(msgObj);
       } else {
@@ -1896,27 +2071,27 @@
         fields: 'participants,messages.limit(1){message,from,created_time}',
         access_token: pageToken,
         limit: 3
-      }, function(response) {
+      }, function (response) {
         if (handleApiError(response)) {
           recipientSelect.innerHTML = '<option value="">Error loading - reconnect</option>';
           return;
         }
 
         recipientSelect.innerHTML = '<option value="">-- Select recipient --</option>';
-        
+
         if (response && response.data && response.data.length > 0) {
           response.data.forEach((conv, index) => {
             // Get the participant who is NOT the page
             const participants = conv.participants?.data || [];
             const customer = participants.find(p => p.id !== pageId);
             const lastMsg = conv.messages?.data?.[0];
-            
+
             if (customer) {
               const preview = lastMsg?.message ? lastMsg.message.substring(0, 30) + '...' : '';
               recipientSelect.innerHTML += `<option value="${customer.id}">${customer.name} (${preview})</option>`;
             }
           });
-          
+
           if (recipientSelect.options.length === 1) {
             recipientSelect.innerHTML = '<option value="">No conversations found</option>';
           }
@@ -1946,14 +2121,14 @@
         message: { text: message },
         messaging_type: 'RESPONSE',
         access_token: pageToken
-      }, function(response) {
+      }, function (response) {
         if (response && response.message_id) {
           document.getElementById('messageSentConfirm').style.display = 'block';
           document.getElementById('messageText').value = '';
-          
+
           // Track sent message locally
           trackSentMessage(recipientName.split(' (')[0], recipient, message, false);
-          
+
           alert('✓ Message sent! ID: ' + response.message_id + '\n\nNow open Facebook Messenger to verify delivery.');
         } else {
           if (!handleApiError(response)) {
@@ -1969,9 +2144,9 @@
       const type = document.getElementById('utilityType').value;
       const orderNum = document.getElementById('utilityOrderNum').value || '#[order]';
       const tracking = document.getElementById('utilityTracking').value || '[tracking]';
-      
+
       let preview = '';
-      switch(type) {
+      switch (type) {
         case 'shipped':
           // Transactional: Shipping notification with tracking
           preview = `Your order ${orderNum} has shipped. Tracking number: ${tracking}. Estimated delivery: 3-5 business days.`;
@@ -2009,13 +2184,13 @@
         messaging_type: 'MESSAGE_TAG',
         tag: 'POST_PURCHASE_UPDATE',
         access_token: pageToken
-      }, function(response) {
+      }, function (response) {
         if (response && response.message_id) {
           document.getElementById('utilitySentConfirm').style.display = 'block';
-          
+
           // Track utility message locally
           trackSentMessage(recipientName.split(' (')[0], recipient, message, true);
-          
+
           alert('✓ Order update sent! ID: ' + response.message_id + '\n\nNow open Facebook Messenger to verify delivery.');
         } else {
           if (!handleApiError(response)) {
@@ -2027,7 +2202,7 @@
 
     // Load Ad Accounts (business_management)
     function loadAdAccounts() {
-      FB.api('/me/adaccounts', {fields: 'id,name,account_status'}, function(response) {
+      FB.api('/me/adaccounts', { fields: 'id,name,account_status' }, function (response) {
         if (handleApiError(response)) return;
         if (response && response.data) {
           adAccounts = response.data;
@@ -2048,11 +2223,11 @@
       }
 
       adsLoading.classList.add("visible");
-      
+
       FB.api('/' + accountId + '/insights', {
         fields: 'spend,impressions,clicks',
         date_preset: 'last_7d'
-      }, function(response) {
+      }, function (response) {
         adsLoading.classList.remove("visible");
         if (handleApiError(response)) return;
         if (response && response.data && response.data[0]) {
@@ -2070,18 +2245,18 @@
       if (page) {
         document.getElementById('settingsPageId').value = page.id;
         document.getElementById('settingsPageName').value = page.name;
-        
+
         FB.api('/' + pageId, {
           fields: 'about,website,phone',
           access_token: page.access_token
-        }, function(response) {
+        }, function (response) {
           if (response) {
             document.getElementById('settingsAbout').value = response.about || '';
             document.getElementById('settingsWebsite').value = response.website || '';
             document.getElementById('settingsPhone').value = response.phone || '';
           }
         });
-        
+
         openDrawer('pageSettings');
       }
     }
@@ -2097,7 +2272,7 @@
         website: document.getElementById('settingsWebsite').value,
         phone: document.getElementById('settingsPhone').value,
         access_token: page.access_token
-      }, function(response) {
+      }, function (response) {
         if (response && response.success) {
           alert('✓ Page settings updated successfully!');
           closeDrawer('pageSettings');
@@ -2157,7 +2332,7 @@
 
     // Tab switching (for non-messaging tabs only - messaging tabs have onclick handlers)
     document.querySelectorAll('.tabs:not(#messagingTabs) .tab').forEach(tab => {
-      tab.addEventListener('click', function() {
+      tab.addEventListener('click', function () {
         this.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         this.classList.add('active');
       });
@@ -2167,4 +2342,5 @@
     updateUtilityPreview();
   </script>
 </body>
+
 </html>
