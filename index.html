@@ -1133,35 +1133,24 @@
           <div class="cards">
             <div class="card">
               <div class="card-label">Last 7 days spend</div>
-              <div class="card-value">$2,480.90</div>
+              <div class="card-value" id="adInsightsAccSpend">$0.00</div>
               <div class="card-delta">+19% vs previous</div>
             </div>
             <div class="card">
               <div class="card-label">Impressions</div>
-              <div class="card-value">362,410</div>
+              <div class="card-value" id="adInsightsAccImpressions">0</div>
               <div class="card-delta">+14.3% vs previous</div>
             </div>
             <div class="card">
               <div class="card-label">Cost per lead</div>
-              <div class="card-value">$2.74</div>
+              <div class="card-value" id="adInsightsAccCPL">$0.00</div>
               <div class="card-delta">-7.8% improvement</div>
             </div>
           </div>
 
-          <div class="list">
-            <div class="list-item">
-              <div>
-                <div class="list-title">Bulk Buyer - US Sneaker Stores</div>
-                <div class="list-meta">Active | Leads | WhatsApp & DM</div>
-              </div>
-              <span class="pill">CPL $2.10</span>
-            </div>
-            <div class="list-item">
-              <div>
-                <div class="list-title">Retarget - Instagram profile visitors</div>
-                <div class="list-meta">Active | Conversions | Messages</div>
-              </div>
-              <span class="pill">ROAS 3.6x</span>
+          <div class="list" id="campaignsList">
+            <div class="list-item" style="justify-content: center; color: var(--text-muted);">
+              Select an ad account to load campaigns...
             </div>
           </div>
         </section>
@@ -2224,17 +2213,95 @@
 
       adsLoading.classList.add("visible");
 
+      // 1. Fetch Account-level Insights
       FB.api('/' + accountId + '/insights', {
-        fields: 'spend,impressions,clicks',
+        fields: 'spend,impressions,clicks,actions',
         date_preset: 'last_7d'
       }, function (response) {
         adsLoading.classList.remove("visible");
         if (handleApiError(response)) return;
+
         if (response && response.data && response.data[0]) {
           const data = response.data[0];
-          document.querySelector('[data-metric="spend"]').textContent = '$' + parseFloat(data.spend || 0).toFixed(2);
-          document.querySelector('[data-metric="impressions"]').textContent = parseInt(data.impressions || 0).toLocaleString();
-          document.querySelector('[data-metric="clicks"]').textContent = parseInt(data.clicks || 0).toLocaleString();
+          const spend = parseFloat(data.spend || 0);
+          const impressions = parseInt(data.impressions || 0);
+
+          // Calculate Leads (actions with value 'lead')
+          let leads = 0;
+          if (data.actions) {
+            data.actions.forEach(action => {
+              if (action.action_type === 'lead' || action.action_type === 'contact' || action.action_type === 'landing_page_view') {
+                leads += parseInt(action.value);
+              }
+            });
+          }
+
+          // Calculate CPL
+          const cpl = leads > 0 ? (spend / leads) : 0;
+
+          // Update UI with IDs
+          const spendEl = document.getElementById('adInsightsAccSpend');
+          const impEl = document.getElementById('adInsightsAccImpressions');
+          const cplEl = document.getElementById('adInsightsAccCPL');
+
+          if (spendEl) spendEl.textContent = '$' + spend.toFixed(2);
+          if (impEl) impEl.textContent = impressions.toLocaleString();
+          if (cplEl) cplEl.textContent = cpl > 0 ? '$' + cpl.toFixed(2) : '$ -';
+        }
+      });
+
+      // 2. Load Campaigns for this account
+      loadActiveCampaigns(accountId);
+    }
+
+    // Load Active Campaigns
+    function loadActiveCampaigns(accountId) {
+      const container = document.getElementById('campaignsList');
+      if (!container) return;
+
+      container.innerHTML = '<div class="list-item" style="justify-content: center; color: var(--text-muted);"><div class="spinner" style="width:14px;height:14px;border-width:2px;"></div> Loading campaigns...</div>';
+
+      // Fetch Campaign Insights directly to get metrics + names
+      FB.api('/' + accountId + '/insights', {
+        level: 'campaign',
+        fields: 'campaign_name,campaign_id,spend,impressions,actions,objective,buying_type',
+        date_preset: 'last_7d',
+        limit: 5
+      }, function (response) {
+        if (handleApiError(response)) return;
+
+        container.innerHTML = '';
+
+        if (response && response.data && response.data.length > 0) {
+          response.data.forEach(camp => {
+            const spend = parseFloat(camp.spend || 0);
+
+            // Calculate Leads/CPL for this campaign
+            let leads = 0;
+            if (camp.actions) {
+              camp.actions.forEach(action => {
+                if (action.action_type === 'lead' || action.action_type === 'contact') {
+                  leads += parseInt(action.value);
+                }
+              });
+            }
+            const cpl = leads > 0 ? (spend / leads) : 0;
+
+            // Status/Meta string
+            const meta = `Active | ${leads} Leads | ${camp.objective || ' conversions'}`;
+
+            container.innerHTML += `
+              <div class="list-item">
+                <div>
+                  <div class="list-title">${camp.campaign_name}</div>
+                  <div class="list-meta">${meta}</div>
+                </div>
+                <span class="pill">${cpl > 0 ? 'CPL $' + cpl.toFixed(2) : 'Spend $' + spend.toFixed(0)}</span>
+              </div>
+            `;
+          });
+        } else {
+          container.innerHTML = '<div class="list-item" style="justify-content: center; color: var(--text-muted);">No active campaigns in last 7 days</div>';
         }
       });
     }
