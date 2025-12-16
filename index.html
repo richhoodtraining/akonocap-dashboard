@@ -1122,28 +1122,17 @@
             <p style="margin: 0; font-size: 11px; color: #b45309;"><strong>📱 REVIEWER NOTE:</strong> Messages sent from this app appear in Facebook Messenger. Open Messenger to verify delivery.</p>
           </div>
 
-          <div class="tabs">
-            <div class="tab active">Inbox (5)</div>
-            <div class="tab">Sent</div>
-            <div class="tab">Utility Messages</div>
+          <div class="tabs" id="messagingTabs">
+            <div class="tab active" data-tab="inbox" onclick="switchMessageTab('inbox')">Inbox (0)</div>
+            <div class="tab" data-tab="sent" onclick="switchMessageTab('sent')">Sent</div>
+            <div class="tab" data-tab="utility" onclick="switchMessageTab('utility')">Utility Messages</div>
           </div>
 
           <div id="conversationsList">
-          <div class="message-preview">
-            <div class="message-sender">John Martinez</div>
-            <div class="message-text">"Hey, do you have any Jordan 4s in size 10 available for bulk order?"</div>
-            <div class="message-time">2 minutes ago</div>
-          </div>
-          <div class="message-preview">
-            <div class="message-sender">SneakerShop NYC</div>
-            <div class="message-text">"Can you send tracking info for order #2847?"</div>
-            <div class="message-time">15 minutes ago</div>
-          </div>
-          <div class="message-preview">
-            <div class="message-sender">Mike's Kicks LA</div>
-            <div class="message-text">"What's your pricing for 50+ pairs?"</div>
-            <div class="message-time">1 hour ago</div>
-          </div>
+            <div class="message-preview">
+              <div class="message-sender">Loading...</div>
+              <div class="message-text">Fetching messages from API...</div>
+            </div>
           </div>
 
           <div class="field-row" style="margin-top: 12px;">
@@ -1744,35 +1733,147 @@
       });
     }
 
+    // Store messages globally for tab switching
+    let allMessages = { inbox: [], sent: [], utility: [] };
+    let currentPageInfo = { id: null, token: null, name: null };
+
     // Load Conversations (pages_messaging)
     function loadConversations(pageId, pageToken) {
+      currentPageInfo = { id: pageId, token: pageToken };
+      
+      // Find page name
+      const page = pages.find(p => p.id === pageId);
+      if (page) currentPageInfo.name = page.name;
+
       FB.api('/' + pageId + '/conversations', {
-        fields: 'participants,messages{message,from,created_time}',
+        fields: 'participants,messages.limit(10){message,from,created_time}',
         access_token: pageToken,
-        limit: 5
+        limit: 10
       }, function(response) {
         if (handleApiError(response)) return;
-        const container = document.getElementById('conversationsList');
-        if (!container) return;
         
-        container.innerHTML = '';
+        // Reset messages
+        allMessages = { inbox: [], sent: [], utility: [] };
+        
         if (response && response.data && response.data.length > 0) {
           response.data.forEach(conv => {
-            const msg = conv.messages && conv.messages.data && conv.messages.data[0];
-            if (msg) {
-              container.innerHTML += `
-                <div class="message-preview">
-                  <div class="message-sender">${msg.from ? msg.from.name : 'Unknown'}</div>
-                  <div class="message-text">"${msg.message ? msg.message.substring(0,80) : ''}"</div>
-                  <div class="message-time">${new Date(msg.created_time).toLocaleString()}</div>
-                </div>
-              `;
-            }
+            const participants = conv.participants?.data || [];
+            const customer = participants.find(p => p.id !== pageId);
+            const messages = conv.messages?.data || [];
+            
+            messages.forEach(msg => {
+              const isFromPage = msg.from?.id === pageId;
+              const msgObj = {
+                sender: msg.from?.name || 'Unknown',
+                senderId: msg.from?.id,
+                text: msg.message || '',
+                time: msg.created_time,
+                customer: customer?.name || 'Unknown',
+                customerId: customer?.id
+              };
+              
+              if (isFromPage) {
+                // Message sent BY the page
+                allMessages.sent.push(msgObj);
+              } else {
+                // Message received FROM customer
+                allMessages.inbox.push(msgObj);
+              }
+            });
           });
-        } else {
-          container.innerHTML = '<div class="message-preview"><div class="message-sender">No conversations</div><div class="message-text">No recent messages found</div></div>';
         }
+        
+        // Update inbox count
+        updateInboxCount();
+        
+        // Show inbox by default
+        showMessageTab('inbox');
       });
+    }
+
+    // Update inbox count in tab
+    function updateInboxCount() {
+      const inboxTab = document.querySelector('.tab[data-tab="inbox"]');
+      if (inboxTab) {
+        inboxTab.textContent = `Inbox (${allMessages.inbox.length})`;
+      }
+    }
+
+    // Show messages for specific tab
+    function showMessageTab(tab) {
+      const container = document.getElementById('conversationsList');
+      if (!container) return;
+      
+      const messages = allMessages[tab] || [];
+      
+      container.innerHTML = '';
+      
+      if (messages.length > 0) {
+        // Show last 5 messages, most recent first
+        const recentMessages = messages.slice(0, 5);
+        recentMessages.forEach(msg => {
+          const timeAgo = getTimeAgo(msg.time);
+          const icon = tab === 'sent' ? '↗️ Sent to' : (tab === 'utility' ? '📦 Update to' : '📩 From');
+          const displayName = tab === 'inbox' ? msg.sender : msg.customer;
+          
+          container.innerHTML += `
+            <div class="message-preview" style="border-left: 3px solid ${tab === 'inbox' ? '#1877f2' : (tab === 'sent' ? '#16a34a' : '#f59e0b')};">
+              <div class="message-sender">${icon} ${displayName}</div>
+              <div class="message-text">"${msg.text.substring(0, 80)}${msg.text.length > 80 ? '...' : ''}"</div>
+              <div class="message-time">${timeAgo}</div>
+            </div>
+          `;
+        });
+      } else {
+        const emptyMsg = tab === 'inbox' ? 'No messages received yet' : 
+                        (tab === 'sent' ? 'No messages sent yet' : 'No utility messages sent yet');
+        container.innerHTML = `<div class="message-preview"><div class="message-sender">No messages</div><div class="message-text">${emptyMsg}</div></div>`;
+      }
+    }
+
+    // Helper: Get relative time
+    function getTimeAgo(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+      
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+      if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    }
+
+    // Switch message tabs
+    function switchMessageTab(tab) {
+      // Update active tab styling
+      document.querySelectorAll('#messagingTabs .tab').forEach(t => {
+        t.classList.remove('active');
+        if (t.dataset.tab === tab) t.classList.add('active');
+      });
+      
+      // Show messages for selected tab
+      showMessageTab(tab);
+    }
+
+    // Add sent message to local tracking
+    function trackSentMessage(recipientName, recipientId, message, isUtility) {
+      const msgObj = {
+        sender: currentPageInfo.name || 'Page',
+        senderId: currentPageInfo.id,
+        text: message,
+        time: new Date().toISOString(),
+        customer: recipientName,
+        customerId: recipientId
+      };
+      
+      if (isUtility) {
+        allMessages.utility.unshift(msgObj);
+      } else {
+        allMessages.sent.unshift(msgObj);
+      }
     }
 
     // Load PSIDs for message recipient dropdown (last 3 conversations)
@@ -1830,7 +1931,9 @@
       const pageSelect = document.getElementById('messagePageSelect');
       const pageId = pageSelect.value;
       const pageToken = pageSelect.options[pageSelect.selectedIndex].dataset.token;
-      const recipient = document.getElementById('messageRecipient').value;
+      const recipientSelect = document.getElementById('messageRecipient');
+      const recipient = recipientSelect.value;
+      const recipientName = recipientSelect.options[recipientSelect.selectedIndex]?.text || 'Customer';
       const message = document.getElementById('messageText').value;
 
       if (!pageId || !recipient || !message) {
@@ -1847,6 +1950,10 @@
         if (response && response.message_id) {
           document.getElementById('messageSentConfirm').style.display = 'block';
           document.getElementById('messageText').value = '';
+          
+          // Track sent message locally
+          trackSentMessage(recipientName.split(' (')[0], recipient, message, false);
+          
           alert('✓ Message sent! ID: ' + response.message_id + '\n\nNow open Facebook Messenger to verify delivery.');
         } else {
           if (!handleApiError(response)) {
@@ -1886,11 +1993,13 @@
       const pageSelect = document.getElementById('utilityPageSelect');
       const pageId = pageSelect.value;
       const pageToken = pageSelect.options[pageSelect.selectedIndex].dataset.token;
-      const recipient = document.getElementById('utilityRecipient').value;
+      const recipientSelect = document.getElementById('utilityRecipient');
+      const recipient = recipientSelect.value;
+      const recipientName = recipientSelect.options[recipientSelect.selectedIndex]?.text || 'Customer';
       const message = document.getElementById('utilityPreview').textContent;
 
       if (!pageId || !recipient) {
-        alert('Please select a page and enter recipient PSID');
+        alert('Please select a page and select a recipient');
         return;
       }
 
@@ -1903,6 +2012,10 @@
       }, function(response) {
         if (response && response.message_id) {
           document.getElementById('utilitySentConfirm').style.display = 'block';
+          
+          // Track utility message locally
+          trackSentMessage(recipientName.split(' (')[0], recipient, message, true);
+          
           alert('✓ Order update sent! ID: ' + response.message_id + '\n\nNow open Facebook Messenger to verify delivery.');
         } else {
           if (!handleApiError(response)) {
@@ -2042,8 +2155,8 @@
     // createPostBtn.addEventListener("click", () => openDrawer("post")); // Instagram - coming soon
     createCampaignBtn.addEventListener("click", () => openDrawer("campaign"));
 
-    // Tab switching
-    document.querySelectorAll('.tab').forEach(tab => {
+    // Tab switching (for non-messaging tabs only - messaging tabs have onclick handlers)
+    document.querySelectorAll('.tabs:not(#messagingTabs) .tab').forEach(tab => {
       tab.addEventListener('click', function() {
         this.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         this.classList.add('active');
