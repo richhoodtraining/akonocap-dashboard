@@ -909,6 +909,64 @@
     <!-- MAIN -->
     <main>
       <div class="grid">
+
+        <!-- ========== META APP REVIEWER GUIDE ========== -->
+        <section class="panel full-span" style="background: linear-gradient(135deg, #1877f2 0%, #42b72a 100%); color: white; border: none;">
+          <div class="panel-header" style="margin-bottom: 0;">
+            <div class="panel-title" style="color: white; font-size: 18px;">
+              <span style="font-size: 24px;">📋</span>
+              META APP REVIEWER: Testing Guide for Akonocap Command Center
+            </div>
+          </div>
+          <div style="background: rgba(255,255,255,0.15); border-radius: 10px; padding: 16px; margin-top: 12px;">
+            <p style="margin: 0 0 12px; font-size: 14px; font-weight: 600;">Business Purpose:</p>
+            <p style="margin: 0 0 16px; font-size: 13px; line-height: 1.6;">
+              Akonocap is a <strong>sneaker/streetwear wholesale business</strong> that sells bulk inventory to retail stores across the US. 
+              This dashboard allows our team to: (1) manage Facebook ad campaigns to acquire B2B leads, (2) respond to customer inquiries via Messenger, 
+              (3) send order/shipping updates to customers, and (4) monitor our Facebook Page performance.
+            </p>
+            
+            <p style="margin: 0 0 12px; font-size: 14px; font-weight: 600;">Step-by-Step Testing Instructions:</p>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 600; margin-bottom: 6px;">1️⃣ Connect Facebook Account</div>
+                <div style="font-size: 12px; opacity: 0.9;">Click "Connect with Facebook" → Grant all requested permissions → You'll see all panels become active</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 600; margin-bottom: 6px;">2️⃣ Test pages_show_list</div>
+                <div style="font-size: 12px; opacity: 0.9;">Look at "Facebook Pages Management" panel → Your connected Pages will appear automatically via GET /me/accounts</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 600; margin-bottom: 6px;">3️⃣ Test pages_manage_metadata</div>
+                <div style="font-size: 12px; opacity: 0.9;">Click "Manage" on any Page → Edit About/Website/Phone → Click "Save Changes" → Uses POST /{page-id}</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 600; margin-bottom: 6px;">4️⃣ Test pages_read_engagement</div>
+                <div style="font-size: 12px; opacity: 0.9;">View engagement metrics (Page Views, Post Reach, etc.) → Data loaded via GET /{page-id}/insights</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 600; margin-bottom: 6px;">5️⃣ Test pages_messaging</div>
+                <div style="font-size: 12px; opacity: 0.9;">Go to "Messaging Center" → Click "Compose Message" → Enter PSID & message → Uses POST /{page-id}/messages</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 600; margin-bottom: 6px;">6️⃣ Test pages_utility_messaging</div>
+                <div style="font-size: 12px; opacity: 0.9;">Click "Send Order Update" → Fill order details → Sends POST with MESSAGE_TAG: POST_PURCHASE_UPDATE</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 600; margin-bottom: 6px;">7️⃣ Test business_management</div>
+                <div style="font-size: 12px; opacity: 0.9;">View "Business Management" panel → Shows business assets loaded via GET /me/businesses</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 600; margin-bottom: 6px;">8️⃣ Test ads_read + ads_management</div>
+                <div style="font-size: 12px; opacity: 0.9;">Select ad account → Click "Load insights" → View spend/impressions via GET /{ad-account-id}/insights</div>
+              </div>
+            </div>
+            
+            <div style="margin-top: 16px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+              <p style="margin: 0; font-size: 12px;"><strong>⚠️ Note for Reviewers:</strong> This is a B2B wholesale management tool. We use pages_messaging to respond to wholesale inquiries and pages_utility_messaging to send order confirmations and shipping updates to our business customers. All messaging is transactional/customer service related.</p>
+            </div>
+          </div>
+        </section>
         
         <!-- FACEBOOK ADS PANEL -->
         <section id="adsPanel" class="panel disabled">
@@ -929,7 +987,8 @@
             <span class="perm-pill active">✓ ads_management</span>
           </div>
           <div class="panel-sub">
-            View performance metrics, manage campaigns, and optimize ad spend across your Facebook ad accounts.
+            <strong>Business Use:</strong> We run Facebook ads to acquire B2B wholesale leads (sneaker retailers). This panel shows campaign performance metrics.<br/>
+            <span style="font-size: 11px; color: var(--accent);">API: GET /me/adaccounts → GET /{ad-account-id}/insights (fields: spend, impressions, clicks)</span>
           </div>
 
           <div class="field-row">
@@ -994,7 +1053,12 @@
             <span class="perm-pill active">✓ pages_read_engagement</span>
           </div>
           <div class="panel-sub">
-            View and manage your connected Facebook Pages. Update page info, view engagement, and manage settings.
+            <strong>Business Use:</strong> Manage our business Facebook Page where wholesale customers contact us. Update business info and track engagement.<br/>
+            <span style="font-size: 11px; color: var(--accent);">
+              pages_show_list → GET /me/accounts | 
+              pages_manage_metadata → POST /{page-id} (about, website, phone) | 
+              pages_read_engagement → GET /{page-id}/insights
+            </span>
           </div>
 
           <div id="pagesList">
@@ -1046,7 +1110,11 @@
             <span class="perm-pill active">✓ pages_utility_messaging</span>
           </div>
           <div class="panel-sub">
-            Manage customer conversations from your Facebook Page. Send order updates, respond to inquiries, and handle customer service.
+            <strong>Business Use:</strong> Respond to wholesale customer inquiries about bulk pricing and availability. Send order confirmations and shipping tracking.<br/>
+            <span style="font-size: 11px; color: var(--accent);">
+              pages_messaging → POST /{page-id}/messages (messaging_type: RESPONSE) | 
+              pages_utility_messaging → POST /{page-id}/messages (tag: POST_PURCHASE_UPDATE)
+            </span>
           </div>
 
           <div class="tabs">
@@ -1079,49 +1147,20 @@
           </div>
         </section>
 
-        <!-- INSTAGRAM PANEL -->
-        <section id="postsPanel" class="panel disabled">
+        <!-- INSTAGRAM PANEL - FUTURE FEATURE -->
+        <section id="postsPanel" class="panel" style="opacity: 0.5;">
           <div class="panel-header">
             <div class="panel-title">
               <span class="icon-circle ig">IG</span>
               Instagram Content
-              <span class="badge">Instagram API</span>
+              <span class="badge" style="background: #f59e0b; color: white;">Coming Soon</span>
             </div>
           </div>
           <div class="perm-group">
-            <span class="perm-pill active">✓ instagram_business_basic</span>
-            <span class="perm-pill active">✓ instagram_business_content_publish</span>
+            <span class="perm-pill">⏳ Pending: instagram_content_publish</span>
           </div>
           <div class="panel-sub">
-            Schedule and publish content to your connected Instagram Business account.
-          </div>
-
-          <div class="field-row">
-            <button id="createPostBtn" class="btn-secondary" type="button">+ Create Instagram Post</button>
-          </div>
-
-          <div class="list">
-            <div class="list-item">
-              <div>
-                <div class="list-title">New bulk slots open this week</div>
-                <div class="list-meta">Scheduled | Today 3:00 PM | Feed photo</div>
-              </div>
-              <span class="pill">Feed</span>
-            </div>
-            <div class="list-item">
-              <div>
-                <div class="list-title">Packing 50 pairs for one shop</div>
-                <div class="list-meta">Scheduled | Today 8:00 PM | Reel</div>
-              </div>
-              <span class="pill">Reel</span>
-            </div>
-            <div class="list-item">
-              <div>
-                <div class="list-title">First-time buyer discount story</div>
-                <div class="list-meta">Scheduled | Tomorrow 10:00 AM</div>
-              </div>
-              <span class="pill">Story</span>
-            </div>
+            Instagram content publishing will be available after additional permissions are approved. This feature is not part of the current app review request.
           </div>
         </section>
 
@@ -1138,7 +1177,10 @@
             <span class="perm-pill active">✓ business_management</span>
           </div>
           <div class="panel-sub">
-            Access and manage your Meta Business account assets, including ad accounts, pages, and connected apps.
+            <strong>Business Use:</strong> View all connected business assets (ad accounts, pages) to manage our wholesale marketing operations from one dashboard.<br/>
+            <span style="font-size: 11px; color: var(--accent);">
+              API: GET /me/businesses → GET /{business-id}/owned_ad_accounts → GET /{business-id}/owned_pages
+            </span>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 12px;">
@@ -1166,107 +1208,107 @@
           </div>
         </section>
 
-        <!-- APP REQUIREMENTS PANEL -->
-        <section class="panel full-span">
+        <!-- APP REQUIREMENTS PANEL - DETAILED FOR REVIEWERS -->
+        <section class="panel full-span" style="border: 2px solid var(--accent);">
           <div class="panel-header">
             <div class="panel-title">
-              <span class="icon-circle fb">✓</span>
-              App Review Requirements
-              <span class="badge">Permissions Status</span>
+              <span class="icon-circle fb">📄</span>
+              Permission Usage Documentation (For Meta Reviewers)
+              <span class="badge" style="background: var(--accent); color: white;">APP REVIEW</span>
             </div>
           </div>
-          <div class="panel-sub">
-            All required permissions for Akonocap Command Center. Each permission is demonstrated in the corresponding panel above.
+          <div class="panel-sub" style="font-size: 13px; line-height: 1.6;">
+            <strong>About Akonocap:</strong> We are a wholesale sneaker/streetwear distributor based in the US. We sell bulk inventory to retail stores nationwide. 
+            This dashboard is used by our internal team (3 employees) to manage customer communications, track ad performance, and maintain our Facebook presence.
           </div>
 
-          <div class="requirements-list">
-            <div class="req-item complete">
-              <div class="req-left">
+          <div class="requirements-list" style="margin-top: 16px;">
+            
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                 <span class="status-dot"></span>
-                <div class="req-text">
-                  <div class="req-title">Ads Management Standard Access (ads_read, ads_management)</div>
-                  <div class="req-note">✓ Approved — View ad performance and create/manage campaigns in the Ads panel.</div>
-                </div>
+                <div class="req-title" style="font-size: 14px;">pages_show_list</div>
               </div>
-              <span class="req-chevron">›</span>
+              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To display the user's Facebook Pages so they can select which Page to manage.<br/>
+                <strong>How we use it:</strong> Call GET /me/accounts to retrieve Page list. Displayed in "Facebook Pages Management" panel.<br/>
+                <strong>Data accessed:</strong> Page ID, name, category, follower count, profile picture.<br/>
+                <strong>User benefit:</strong> Users can see and select their business Pages without leaving our app.
+              </div>
             </div>
 
-            <div class="req-item complete">
-              <div class="req-left">
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                 <span class="status-dot"></span>
-                <div class="req-text">
-                  <div class="req-title">pages_show_list</div>
-                  <div class="req-note">Demonstrated in Pages panel — displays list of connected Facebook Pages.</div>
-                </div>
+                <div class="req-title" style="font-size: 14px;">pages_manage_metadata</div>
               </div>
-              <span class="req-chevron">›</span>
+              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To allow users to update their Page's business information from our dashboard.<br/>
+                <strong>How we use it:</strong> POST /{page-id} with fields: about, website, phone. Accessed via "Manage" button → Page Settings drawer.<br/>
+                <strong>Data modified:</strong> Page description (about), website URL, phone number only.<br/>
+                <strong>User benefit:</strong> Keep business info up-to-date without switching to Facebook.
+              </div>
             </div>
 
-            <div class="req-item complete">
-              <div class="req-left">
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                 <span class="status-dot"></span>
-                <div class="req-text">
-                  <div class="req-title">pages_manage_metadata</div>
-                  <div class="req-note">Demonstrated in Pages panel — update page description, hours, and settings.</div>
-                </div>
+                <div class="req-title" style="font-size: 14px;">pages_read_engagement</div>
               </div>
-              <span class="req-chevron">›</span>
+              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To show Page performance metrics so users can track their business growth.<br/>
+                <strong>How we use it:</strong> GET /{page-id}/insights with metrics: page_views_total, page_post_engagements, page_fan_adds.<br/>
+                <strong>Data accessed:</strong> Page views, post reach, engagements, new follower count (read-only).<br/>
+                <strong>User benefit:</strong> Monitor business Page performance and engagement trends.
+              </div>
             </div>
 
-            <div class="req-item complete">
-              <div class="req-left">
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                 <span class="status-dot"></span>
-                <div class="req-text">
-                  <div class="req-title">pages_read_engagement</div>
-                  <div class="req-note">Demonstrated in Pages panel — view page insights, reach, and engagement metrics.</div>
-                </div>
+                <div class="req-title" style="font-size: 14px;">pages_messaging</div>
               </div>
-              <span class="req-chevron">›</span>
+              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To respond to wholesale customer inquiries about bulk pricing and product availability.<br/>
+                <strong>How we use it:</strong> GET /{page-id}/conversations to read messages. POST /{page-id}/messages with messaging_type: RESPONSE to reply.<br/>
+                <strong>Data accessed:</strong> Conversations from customers who initiated contact with our Page.<br/>
+                <strong>User benefit:</strong> Respond to B2B customer inquiries directly from our dashboard.
+              </div>
             </div>
 
-            <div class="req-item complete">
-              <div class="req-left">
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                 <span class="status-dot"></span>
-                <div class="req-text">
-                  <div class="req-title">pages_messaging</div>
-                  <div class="req-note">Demonstrated in Messaging panel — respond to customer inquiries and DMs.</div>
-                </div>
+                <div class="req-title" style="font-size: 14px;">pages_utility_messaging</div>
               </div>
-              <span class="req-chevron">›</span>
+              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To send order confirmations, shipping updates, and delivery notifications to customers.<br/>
+                <strong>How we use it:</strong> POST /{page-id}/messages with messaging_type: MESSAGE_TAG and tag: POST_PURCHASE_UPDATE.<br/>
+                <strong>Data sent:</strong> Order number, tracking number, delivery status (transactional only, no promotional content).<br/>
+                <strong>User benefit:</strong> Keep customers informed about their wholesale orders automatically.
+              </div>
             </div>
 
-            <div class="req-item complete">
-              <div class="req-left">
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                 <span class="status-dot"></span>
-                <div class="req-text">
-                  <div class="req-title">pages_utility_messaging</div>
-                  <div class="req-note">Demonstrated in Messaging panel — send order updates and shipping notifications.</div>
-                </div>
+                <div class="req-title" style="font-size: 14px;">business_management</div>
               </div>
-              <span class="req-chevron">›</span>
+              <div style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To access the user's Business Manager and retrieve connected ad accounts.<br/>
+                <strong>How we use it:</strong> GET /me/businesses → GET /{business-id}/owned_ad_accounts to populate ad account dropdown.<br/>
+                <strong>Data accessed:</strong> Business name, connected ad accounts, connected Pages (read-only).<br/>
+                <strong>User benefit:</strong> Access all business assets from one unified dashboard.
+              </div>
             </div>
 
-            <div class="req-item complete">
-              <div class="req-left">
-                <span class="status-dot"></span>
-                <div class="req-text">
-                  <div class="req-title">business_management</div>
-                  <div class="req-note">Demonstrated in Business panel — access and manage business assets and team.</div>
-                </div>
-              </div>
-              <span class="req-chevron">›</span>
-            </div>
-
-            <div class="req-item complete">
-              <div class="req-left">
-                <span class="status-dot"></span>
-                <div class="req-text">
-                  <div class="req-title">Business Verification</div>
-                  <div class="req-note">✓ Completed — Business identity verified in Meta Business Suite.</div>
-                </div>
-              </div>
-              <span class="req-chevron">›</span>
-            </div>
+          </div>
+          
+          <div style="margin-top: 20px; padding: 14px; background: rgba(24,119,242,0.08); border-radius: 10px; border: 1px solid rgba(24,119,242,0.2);">
+            <p style="margin: 0; font-size: 12px; color: var(--text-main);">
+              <strong>🔒 Data Privacy:</strong> We only access data necessary for the features described above. We do not store Facebook data on external servers. 
+              All API calls are made client-side using the Facebook JavaScript SDK. Users can revoke access at any time via Facebook Settings → Apps and Websites.
+            </p>
           </div>
         </section>
 
@@ -1298,9 +1340,6 @@
           • pages_utility_messaging — Send order updates<br/><br/>
           <strong>Business:</strong><br/>
           • business_management — Manage business assets<br/><br/>
-          <strong>Instagram:</strong><br/>
-          • instagram_business_basic — Access Instagram Business account info<br/>
-          • instagram_business_content_publish — Publish content to Instagram
         </div>
         <p style="margin-top:10px;font-size:11px;color:#6b7280;">
           You can remove this connection at any time in your Meta account settings.
@@ -1509,14 +1548,14 @@
     const adsPanel = document.getElementById("adsPanel");
     const pagesPanel = document.getElementById("pagesPanel");
     const messagingPanel = document.getElementById("messagingPanel");
-    const postsPanel = document.getElementById("postsPanel");
+    // const postsPanel = document.getElementById("postsPanel"); // Instagram - coming soon
     const businessPanel = document.getElementById("businessPanel");
     const themeToggle = document.getElementById("themeToggle");
     const themeIcon = document.getElementById("themeIcon");
     const themeLabel = document.getElementById("themeLabel");
     const adsLoading = document.getElementById("adsLoading");
     const loadBtn = document.getElementById("loadBtn");
-    const createPostBtn = document.getElementById("createPostBtn");
+    // const createPostBtn = document.getElementById("createPostBtn"); // Instagram - coming soon
     const createCampaignBtn = document.getElementById("createCampaignBtn");
     const drawerBackdrop = document.getElementById("drawerBackdrop");
     const adAccountSelect = document.getElementById("adAccountSelect");
@@ -1531,7 +1570,7 @@
           alert('Facebook login was cancelled or failed.');
         }
       }, {
-        scope: 'pages_show_list,pages_manage_metadata,pages_read_engagement,pages_messaging,business_management,ads_read,ads_management,instagram_business_basic,instagram_business_content_publish',
+        scope: 'pages_show_list,pages_manage_metadata,pages_read_engagement,pages_messaging,pages_utility_messaging,business_management,ads_read,ads_management',
         return_scopes: true
       });
     }
@@ -1544,12 +1583,12 @@
       loginBtn.style.display = "none";
       userPanel.classList.add("visible");
       
-      // Enable all panels
+      // Enable all panels (except Instagram which requires additional permissions)
       adsPanel.classList.remove("disabled");
       pagesPanel.classList.remove("disabled");
       messagingPanel.classList.remove("disabled");
-      postsPanel.classList.remove("disabled");
       businessPanel.classList.remove("disabled");
+      // Note: postsPanel (Instagram) is disabled - requires instagram_content_publish permission
 
       // Load user info
       FB.api('/me', {fields: 'name,picture'}, function(response) {
@@ -1578,7 +1617,6 @@
         adsPanel.classList.add("disabled");
         pagesPanel.classList.add("disabled");
         messagingPanel.classList.add("disabled");
-        postsPanel.classList.add("disabled");
         businessPanel.classList.add("disabled");
       });
     }
@@ -1888,7 +1926,7 @@
     }
 
     drawerBackdrop.addEventListener("click", () => closeDrawer());
-    createPostBtn.addEventListener("click", () => openDrawer("post"));
+    // createPostBtn.addEventListener("click", () => openDrawer("post")); // Instagram - coming soon
     createCampaignBtn.addEventListener("click", () => openDrawer("campaign"));
 
     // Tab switching
