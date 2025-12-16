@@ -1484,13 +1484,15 @@
       </div>
 
       <div class="field-label">Select Page</div>
-      <select id="messagePageSelect" class="field-input">
+      <select id="messagePageSelect" class="field-input" onchange="loadPSIDsForPage('message')">
         <option value="">-- Select a Page --</option>
       </select>
 
-      <div class="field-label">Recipient PSID</div>
-      <input id="messageRecipient" class="field-input" type="text" placeholder="Enter recipient's Page-Scoped ID" />
-      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">The PSID of someone who has messaged your Page</p>
+      <div class="field-label">Recipient (Recent Conversations)</div>
+      <select id="messageRecipient" class="field-input">
+        <option value="">-- Select a Page first --</option>
+      </select>
+      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Last 3 people who messaged your Page (loaded via API)</p>
 
       <div class="field-label">Message</div>
       <textarea id="messageText" class="field-textarea" placeholder="Type your response message here..."></textarea>
@@ -1529,13 +1531,15 @@
       </div>
 
       <div class="field-label">Select Page</div>
-      <select id="utilityPageSelect" class="field-input">
+      <select id="utilityPageSelect" class="field-input" onchange="loadPSIDsForPage('utility')">
         <option value="">-- Select a Page --</option>
       </select>
 
-      <div class="field-label">Customer PSID</div>
-      <input id="utilityRecipient" class="field-input" type="text" placeholder="Page-Scoped ID of customer" />
-      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Must be someone who previously messaged your Page</p>
+      <div class="field-label">Customer (Recent Conversations)</div>
+      <select id="utilityRecipient" class="field-input">
+        <option value="">-- Select a Page first --</option>
+      </select>
+      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Last 3 customers who messaged your Page (loaded via API)</p>
 
       <div class="field-label">Update Type (Transactional Only)</div>
       <select id="utilityType" class="field-input" onchange="updateUtilityPreview()">
@@ -1567,6 +1571,24 @@
     let accessToken = null;
     let pages = [];
     let adAccounts = [];
+
+    // Handle API errors - check for invalid/expired tokens
+    function handleApiError(response) {
+      if (response.error) {
+        const errorCode = response.error.code;
+        const errorMsg = response.error.message || 'Unknown error';
+        
+        // Token errors: 190 = invalid token, 102 = session expired, 463 = token expired
+        if (errorCode === 190 || errorCode === 102 || errorCode === 463 || 
+            errorMsg.includes('session') || errorMsg.includes('token') || errorMsg.includes('invalidated')) {
+          alert('Your Facebook session has expired. Please reconnect your account.');
+          facebookLogout();
+          return true; // Error was handled
+        }
+        return false; // Error not handled
+      }
+      return false;
+    }
 
     // DOM Elements
     const loginBtn = document.getElementById("loginBtn");
@@ -1618,6 +1640,7 @@
 
       // Load user info
       FB.api('/me', {fields: 'name,picture'}, function(response) {
+        if (handleApiError(response)) return;
         if (response && !response.error) {
           document.querySelector('.user-name').textContent = response.name;
           if (response.picture && response.picture.data) {
@@ -1652,6 +1675,8 @@
       FB.api('/me/accounts', {
         fields: 'id,name,access_token,picture,fan_count,category,instagram_business_account{id,username}'
       }, function(response) {
+        if (handleApiError(response)) return;
+        
         if (response && response.data) {
           pages = response.data;
           renderPagesList();
@@ -1708,6 +1733,7 @@
         period: 'week',
         access_token: pageToken
       }, function(response) {
+        if (handleApiError(response)) return;
         if (response && response.data) {
           response.data.forEach(metric => {
             const value = metric.values && metric.values[0] ? metric.values[0].value : 0;
@@ -1725,6 +1751,7 @@
         access_token: pageToken,
         limit: 5
       }, function(response) {
+        if (handleApiError(response)) return;
         const container = document.getElementById('conversationsList');
         if (!container) return;
         
@@ -1744,6 +1771,56 @@
           });
         } else {
           container.innerHTML = '<div class="message-preview"><div class="message-sender">No conversations</div><div class="message-text">No recent messages found</div></div>';
+        }
+      });
+    }
+
+    // Load PSIDs for message recipient dropdown (last 3 conversations)
+    function loadPSIDsForPage(type) {
+      const pageSelect = document.getElementById(type === 'message' ? 'messagePageSelect' : 'utilityPageSelect');
+      const recipientSelect = document.getElementById(type === 'message' ? 'messageRecipient' : 'utilityRecipient');
+      const pageId = pageSelect.value;
+      const pageToken = pageSelect.options[pageSelect.selectedIndex]?.dataset?.token;
+
+      // Reset dropdown
+      recipientSelect.innerHTML = '<option value="">Loading conversations...</option>';
+
+      if (!pageId || !pageToken) {
+        recipientSelect.innerHTML = '<option value="">-- Select a Page first --</option>';
+        return;
+      }
+
+      // Fetch conversations to get PSIDs
+      FB.api('/' + pageId + '/conversations', {
+        fields: 'participants,messages.limit(1){message,from,created_time}',
+        access_token: pageToken,
+        limit: 3
+      }, function(response) {
+        if (handleApiError(response)) {
+          recipientSelect.innerHTML = '<option value="">Error loading - reconnect</option>';
+          return;
+        }
+
+        recipientSelect.innerHTML = '<option value="">-- Select recipient --</option>';
+        
+        if (response && response.data && response.data.length > 0) {
+          response.data.forEach((conv, index) => {
+            // Get the participant who is NOT the page
+            const participants = conv.participants?.data || [];
+            const customer = participants.find(p => p.id !== pageId);
+            const lastMsg = conv.messages?.data?.[0];
+            
+            if (customer) {
+              const preview = lastMsg?.message ? lastMsg.message.substring(0, 30) + '...' : '';
+              recipientSelect.innerHTML += `<option value="${customer.id}">${customer.name} (${preview})</option>`;
+            }
+          });
+          
+          if (recipientSelect.options.length === 1) {
+            recipientSelect.innerHTML = '<option value="">No conversations found</option>';
+          }
+        } else {
+          recipientSelect.innerHTML = '<option value="">No conversations found - someone must message your Page first</option>';
         }
       });
     }
@@ -1770,9 +1847,11 @@
         if (response && response.message_id) {
           document.getElementById('messageSentConfirm').style.display = 'block';
           document.getElementById('messageText').value = '';
-          alert('✓ Message sent! ID: ' + response.message_id + '\n\nCheck Facebook Messenger to verify delivery.');
+          alert('✓ Message sent! ID: ' + response.message_id + '\n\nNow open Facebook Messenger to verify delivery.');
         } else {
-          alert('Error: ' + (response.error ? response.error.message : 'Failed to send'));
+          if (!handleApiError(response)) {
+            alert('Error: ' + (response.error ? response.error.message : 'Failed to send'));
+          }
         }
       });
     }
@@ -1824,9 +1903,11 @@
       }, function(response) {
         if (response && response.message_id) {
           document.getElementById('utilitySentConfirm').style.display = 'block';
-          alert('✓ Order update sent! ID: ' + response.message_id + '\n\nCheck Facebook Messenger to verify delivery.');
+          alert('✓ Order update sent! ID: ' + response.message_id + '\n\nNow open Facebook Messenger to verify delivery.');
         } else {
-          alert('Error: ' + (response.error ? response.error.message : 'Failed to send'));
+          if (!handleApiError(response)) {
+            alert('Error: ' + (response.error ? response.error.message : 'Failed to send'));
+          }
         }
       });
     }
@@ -1834,6 +1915,7 @@
     // Load Ad Accounts (business_management)
     function loadAdAccounts() {
       FB.api('/me/adaccounts', {fields: 'id,name,account_status'}, function(response) {
+        if (handleApiError(response)) return;
         if (response && response.data) {
           adAccounts = response.data;
           adAccountSelect.innerHTML = '<option>-- Select ad account --</option>';
@@ -1859,6 +1941,7 @@
         date_preset: 'last_7d'
       }, function(response) {
         adsLoading.classList.remove("visible");
+        if (handleApiError(response)) return;
         if (response && response.data && response.data[0]) {
           const data = response.data[0];
           document.querySelector('[data-metric="spend"]').textContent = '$' + parseFloat(data.spend || 0).toFixed(2);
