@@ -860,6 +860,23 @@
   </style>
 </head>
 <body class="theme-light">
+  <!-- Facebook SDK -->
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId: '1185063939768948',
+        cookie: true,
+        xfbml: true,
+        version: 'v18.0'
+      });
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+          onFBConnected(response.authResponse);
+        }
+      });
+    };
+  </script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
   <div class="shell">
     <!-- HEADER -->
     <header>
@@ -877,14 +894,14 @@
           <span id="themeLabel">Dark</span>
         </button>
 
-        <button id="loginBtn" class="btn-primary" type="button">
-          <span>Connect with Facebook</span>
+        <button id="loginBtn" class="btn-primary" type="button" onclick="facebookLogin()">
+          <span>🔗 Connect with Facebook</span>
         </button>
 
         <div id="userPanel" class="user-info">
           <img class="user-avatar" src="https://i.pravatar.cc/100?img=68" alt="User" />
           <span class="user-name">Yohanseh | Akonocap</span>
-          <span class="logout" onclick="logout()">Log out</span>
+          <span class="logout" onclick="facebookLogout()">Disconnect</span>
         </div>
       </div>
     </header>
@@ -980,6 +997,7 @@
             View and manage your connected Facebook Pages. Update page info, view engagement, and manage settings.
           </div>
 
+          <div id="pagesList">
           <div class="page-card">
             <div class="page-avatar">A</div>
             <div class="page-info">
@@ -987,6 +1005,7 @@
               <div class="page-stats">12,847 followers • Sneaker/Streetwear Business</div>
             </div>
             <button class="btn-ghost" onclick="openDrawer('pageSettings')">Manage</button>
+          </div>
           </div>
 
           <div class="engagement-grid">
@@ -1036,6 +1055,7 @@
             <div class="tab">Utility Messages</div>
           </div>
 
+          <div id="conversationsList">
           <div class="message-preview">
             <div class="message-sender">John Martinez</div>
             <div class="message-text">"Hey, do you have any Jordan 4s in size 10 available for bulk order?"</div>
@@ -1050,6 +1070,7 @@
             <div class="message-sender">Mike's Kicks LA</div>
             <div class="message-text">"What's your pricing for 50+ pairs?"</div>
             <div class="message-time">1 hour ago</div>
+          </div>
           </div>
 
           <div class="field-row" style="margin-top: 12px;">
@@ -1373,31 +1394,26 @@
   <!-- PAGE SETTINGS DRAWER -->
   <aside id="pageSettingsDrawer" class="drawer">
     <div class="drawer-header">
-      <span>Manage Page Settings</span>
+      <span>Manage Page Settings (pages_manage_metadata)</span>
       <button class="drawer-close" type="button" onclick="closeDrawer('pageSettings')">×</button>
     </div>
     <div class="drawer-body">
+      <div class="field-label">Page ID</div>
+      <input id="settingsPageId" class="field-input" type="text" readonly style="background: #f5f6f7;" />
+
       <div class="field-label">Page Name</div>
-      <input class="field-input" type="text" value="Akonocap Bulk Buyers" />
+      <input id="settingsPageName" class="field-input" type="text" readonly style="background: #f5f6f7;" />
 
-      <div class="field-label">Category</div>
-      <select class="field-input">
-        <option selected>Sneaker/Streetwear Business</option>
-        <option>E-Commerce</option>
-        <option>Retail Company</option>
-      </select>
-
-      <div class="field-label">Description</div>
-      <textarea class="field-textarea">Premium bulk sneaker supplier for resellers and shops. Specializing in high-demand releases and hard-to-find pairs.</textarea>
-
-      <div class="field-label">Business Hours</div>
-      <input class="field-input" type="text" value="Mon-Fri: 9 AM - 6 PM EST" />
+      <div class="field-label">About / Description</div>
+      <textarea id="settingsAbout" class="field-textarea" placeholder="Page description..."></textarea>
 
       <div class="field-label">Website</div>
-      <input class="field-input" type="text" value="https://akonocap.com" />
+      <input id="settingsWebsite" class="field-input" type="text" placeholder="https://yourwebsite.com" />
 
-      <div class="field-label">Contact Email</div>
-      <input class="field-input" type="text" value="bulk@akonocap.com" />
+      <div class="field-label">Phone</div>
+      <input id="settingsPhone" class="field-input" type="text" placeholder="+1 (555) 123-4567" />
+      
+      <p style="font-size: 11px; color: var(--success); margin-top: 12px;">✓ Changes are saved via the Pages API using pages_manage_metadata permission</p>
     </div>
     <div class="drawer-footer">
       <button class="btn-ghost" type="button" onclick="closeDrawer('pageSettings')">Cancel</button>
@@ -1408,64 +1424,86 @@
   <!-- SEND MESSAGE DRAWER -->
   <aside id="sendMessageDrawer" class="drawer">
     <div class="drawer-header">
-      <span>Compose Message</span>
+      <span>Send Message via Pages API</span>
       <button class="drawer-close" type="button" onclick="closeDrawer('sendMessage')">×</button>
     </div>
     <div class="drawer-body">
-      <div class="field-label">To</div>
-      <input class="field-input" type="text" placeholder="Search conversation or enter name..." />
+      <div id="messageSentConfirm" style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
+        <strong style="color: #16a34a;">✓ Message Sent Successfully</strong>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Check Facebook Messenger to verify delivery.</p>
+      </div>
+
+      <div class="field-label">Select Page</div>
+      <select id="messagePageSelect" class="field-input">
+        <option value="">-- Select a Page --</option>
+      </select>
+
+      <div class="field-label">Recipient PSID</div>
+      <input id="messageRecipient" class="field-input" type="text" placeholder="Enter recipient's Page-Scoped ID" />
+      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">The PSID of someone who has messaged your Page</p>
 
       <div class="field-label">Message</div>
-      <textarea class="field-textarea" placeholder="Type your message here..."></textarea>
-
-      <div class="field-label">Quick Replies (optional)</div>
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <span class="pill" style="cursor:pointer;">Check availability</span>
-        <span class="pill" style="cursor:pointer;">Request pricing</span>
-        <span class="pill" style="cursor:pointer;">View catalog</span>
-      </div>
+      <textarea id="messageText" class="field-textarea" placeholder="Type your response message here..."></textarea>
     </div>
     <div class="drawer-footer">
       <button class="btn-ghost" type="button" onclick="closeDrawer('sendMessage')">Cancel</button>
-      <button class="btn-primary" type="button" onclick="sendMessage()">Send Message</button>
+      <button class="btn-primary" type="button" onclick="sendPageMessage()">Send Message</button>
     </div>
   </aside>
 
   <!-- UTILITY MESSAGE DRAWER -->
   <aside id="utilityMessageDrawer" class="drawer">
     <div class="drawer-header">
-      <span>Send Order Update</span>
+      <span>Send Order Update (Utility Message)</span>
       <button class="drawer-close" type="button" onclick="closeDrawer('utilityMessage')">×</button>
     </div>
     <div class="drawer-body">
-      <div class="field-label">Customer</div>
-      <input class="field-input" type="text" placeholder="Search by name or order number..." />
+      <div id="utilitySentConfirm" style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
+        <strong style="color: #16a34a;">✓ Order Update Sent</strong>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Check Facebook Messenger to verify delivery.</p>
+      </div>
+
+      <div class="field-label">Select Page</div>
+      <select id="utilityPageSelect" class="field-input">
+        <option value="">-- Select a Page --</option>
+      </select>
+
+      <div class="field-label">Customer PSID</div>
+      <input id="utilityRecipient" class="field-input" type="text" placeholder="Page-Scoped ID of customer" />
+      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Must be someone who previously messaged your Page</p>
 
       <div class="field-label">Update Type</div>
-      <select class="field-input">
-        <option>Order Confirmed</option>
-        <option>Shipped - Tracking Available</option>
-        <option>Out for Delivery</option>
-        <option>Delivered</option>
-        <option>Payment Received</option>
+      <select id="utilityType" class="field-input" onchange="updateUtilityPreview()">
+        <option value="shipped">Order Shipped</option>
+        <option value="delivered">Order Delivered</option>
+        <option value="confirmed">Order Confirmed</option>
       </select>
 
       <div class="field-label">Order Number</div>
-      <input class="field-input" type="text" placeholder="#2847" />
+      <input id="utilityOrderNum" class="field-input" type="text" placeholder="#12345" oninput="updateUtilityPreview()" />
 
-      <div class="field-label">Tracking Number (optional)</div>
-      <input class="field-input" type="text" placeholder="1Z999AA10123456784" />
+      <div class="field-label">Tracking Number</div>
+      <input id="utilityTracking" class="field-input" type="text" placeholder="1Z999AA10123456784" oninput="updateUtilityPreview()" />
 
-      <div class="field-label">Additional Notes</div>
-      <textarea class="field-textarea" placeholder="Optional message to include with the update..."></textarea>
+      <div class="field-label">Message Preview</div>
+      <div id="utilityPreview" style="padding: 12px; background: #f5f6f7; border-radius: 8px; font-size: 13px; margin-bottom: 8px;">
+        Your order #12345 has shipped. Tracking: 1Z999AA10123456784. Estimated delivery: 3-5 business days.
+      </div>
+      <p style="font-size: 11px; color: #16a34a; margin: 0;">✓ This is a transactional message only - no promotional content</p>
     </div>
     <div class="drawer-footer">
       <button class="btn-ghost" type="button" onclick="closeDrawer('utilityMessage')">Cancel</button>
-      <button class="btn-primary" type="button" onclick="sendUtilityMessage()">Send Update</button>
+      <button class="btn-primary" type="button" onclick="sendUtilityMessage()">Send Order Update</button>
     </div>
   </aside>
 
   <script>
+    // Global state
+    let accessToken = null;
+    let pages = [];
+    let adAccounts = [];
+
+    // DOM Elements
     const loginBtn = document.getElementById("loginBtn");
     const userPanel = document.getElementById("userPanel");
     const adsPanel = document.getElementById("adsPanel");
@@ -1473,7 +1511,6 @@
     const messagingPanel = document.getElementById("messagingPanel");
     const postsPanel = document.getElementById("postsPanel");
     const businessPanel = document.getElementById("businessPanel");
-    const modal = document.getElementById("loginModal");
     const themeToggle = document.getElementById("themeToggle");
     const themeIcon = document.getElementById("themeIcon");
     const themeLabel = document.getElementById("themeLabel");
@@ -1485,18 +1522,25 @@
     const adAccountSelect = document.getElementById("adAccountSelect");
     const campaignAdAccount = document.getElementById("campaignAdAccount");
 
-    // Open login modal
-    loginBtn.addEventListener("click", () => {
-      modal.classList.add("visible");
-    });
-
-    function closeModal() {
-      modal.classList.remove("visible");
+    // Facebook Login - REAL OAuth Flow
+    function facebookLogin() {
+      FB.login(function(response) {
+        if (response.authResponse) {
+          onFBConnected(response.authResponse);
+        } else {
+          alert('Facebook login was cancelled or failed.');
+        }
+      }, {
+        scope: 'pages_show_list,pages_manage_metadata,pages_read_engagement,pages_messaging,business_management,ads_read,ads_management,instagram_basic,instagram_content_publish',
+        return_scopes: true
+      });
     }
 
-    // Complete login - enable all panels
-    function completeLogin() {
-      closeModal();
+    // On Facebook Connected
+    function onFBConnected(authResponse) {
+      accessToken = authResponse.accessToken;
+      
+      // Update UI
       loginBtn.style.display = "none";
       userPanel.classList.add("visible");
       
@@ -1506,17 +1550,298 @@
       messagingPanel.classList.remove("disabled");
       postsPanel.classList.remove("disabled");
       businessPanel.classList.remove("disabled");
+
+      // Load user info
+      FB.api('/me', {fields: 'name,picture'}, function(response) {
+        if (response && !response.error) {
+          document.querySelector('.user-name').textContent = response.name;
+          if (response.picture && response.picture.data) {
+            document.querySelector('.user-avatar').src = response.picture.data.url;
+          }
+        }
+      });
+
+      // Load pages (pages_show_list)
+      loadPages();
+      
+      // Load ad accounts (business_management)
+      loadAdAccounts();
     }
 
-    // Log out
-    function logout() {
-      userPanel.classList.remove("visible");
-      loginBtn.style.display = "inline-flex";
-      adsPanel.classList.add("disabled");
-      pagesPanel.classList.add("disabled");
-      messagingPanel.classList.add("disabled");
-      postsPanel.classList.add("disabled");
-      businessPanel.classList.add("disabled");
+    // Facebook Logout
+    function facebookLogout() {
+      FB.logout(function(response) {
+        accessToken = null;
+        pages = [];
+        userPanel.classList.remove("visible");
+        loginBtn.style.display = "inline-flex";
+        adsPanel.classList.add("disabled");
+        pagesPanel.classList.add("disabled");
+        messagingPanel.classList.add("disabled");
+        postsPanel.classList.add("disabled");
+        businessPanel.classList.add("disabled");
+      });
+    }
+
+    // Load Pages (pages_show_list)
+    function loadPages() {
+      FB.api('/me/accounts', {
+        fields: 'id,name,access_token,picture,fan_count,category,instagram_business_account{id,username}'
+      }, function(response) {
+        if (response && response.data) {
+          pages = response.data;
+          renderPagesList();
+          populatePageSelects();
+          
+          // Load engagement for first page (pages_read_engagement)
+          if (pages.length > 0) {
+            loadPageEngagement(pages[0].id, pages[0].access_token);
+            loadConversations(pages[0].id, pages[0].access_token);
+          }
+        }
+      });
+    }
+
+    // Render Pages List
+    function renderPagesList() {
+      const container = document.getElementById('pagesList');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      pages.forEach(page => {
+        const pic = page.picture && page.picture.data ? page.picture.data.url : '';
+        container.innerHTML += `
+          <div class="page-card">
+            <div class="page-avatar">${pic ? '<img src="'+pic+'" alt="">' : page.name.charAt(0)}</div>
+            <div class="page-info">
+              <div class="page-name">${page.name}</div>
+              <div class="page-stats">${page.fan_count ? page.fan_count.toLocaleString() + ' followers • ' : ''}${page.category || 'Page'}</div>
+            </div>
+            <button class="btn-ghost" onclick="openPageSettings('${page.id}')">Manage</button>
+          </div>
+        `;
+      });
+    }
+
+    // Populate Page Selects
+    function populatePageSelects() {
+      const selects = ['messagePageSelect', 'utilityPageSelect'];
+      selects.forEach(id => {
+        const select = document.getElementById(id);
+        if (select) {
+          select.innerHTML = '<option value="">-- Select a Page --</option>';
+          pages.forEach(page => {
+            select.innerHTML += `<option value="${page.id}" data-token="${page.access_token}">${page.name}</option>`;
+          });
+        }
+      });
+    }
+
+    // Load Page Engagement (pages_read_engagement)
+    function loadPageEngagement(pageId, pageToken) {
+      FB.api('/' + pageId + '/insights', {
+        metric: 'page_views_total,page_post_engagements,page_fan_adds',
+        period: 'week',
+        access_token: pageToken
+      }, function(response) {
+        if (response && response.data) {
+          response.data.forEach(metric => {
+            const value = metric.values && metric.values[0] ? metric.values[0].value : 0;
+            const el = document.querySelector(`[data-metric="${metric.name}"]`);
+            if (el) el.textContent = value.toLocaleString();
+          });
+        }
+      });
+    }
+
+    // Load Conversations (pages_messaging)
+    function loadConversations(pageId, pageToken) {
+      FB.api('/' + pageId + '/conversations', {
+        fields: 'participants,messages{message,from,created_time}',
+        access_token: pageToken,
+        limit: 5
+      }, function(response) {
+        const container = document.getElementById('conversationsList');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        if (response && response.data && response.data.length > 0) {
+          response.data.forEach(conv => {
+            const msg = conv.messages && conv.messages.data && conv.messages.data[0];
+            if (msg) {
+              container.innerHTML += `
+                <div class="message-preview">
+                  <div class="message-sender">${msg.from ? msg.from.name : 'Unknown'}</div>
+                  <div class="message-text">"${msg.message ? msg.message.substring(0,80) : ''}"</div>
+                  <div class="message-time">${new Date(msg.created_time).toLocaleString()}</div>
+                </div>
+              `;
+            }
+          });
+        } else {
+          container.innerHTML = '<div class="message-preview"><div class="message-sender">No conversations</div><div class="message-text">No recent messages found</div></div>';
+        }
+      });
+    }
+
+    // Send Page Message (pages_messaging)
+    function sendPageMessage() {
+      const pageSelect = document.getElementById('messagePageSelect');
+      const pageId = pageSelect.value;
+      const pageToken = pageSelect.options[pageSelect.selectedIndex].dataset.token;
+      const recipient = document.getElementById('messageRecipient').value;
+      const message = document.getElementById('messageText').value;
+
+      if (!pageId || !recipient || !message) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      FB.api('/' + pageId + '/messages', 'POST', {
+        recipient: { id: recipient },
+        message: { text: message },
+        messaging_type: 'RESPONSE',
+        access_token: pageToken
+      }, function(response) {
+        if (response && response.message_id) {
+          document.getElementById('messageSentConfirm').style.display = 'block';
+          document.getElementById('messageText').value = '';
+          alert('✓ Message sent! ID: ' + response.message_id + '\n\nCheck Facebook Messenger to verify delivery.');
+        } else {
+          alert('Error: ' + (response.error ? response.error.message : 'Failed to send'));
+        }
+      });
+    }
+
+    // Update Utility Message Preview
+    function updateUtilityPreview() {
+      const type = document.getElementById('utilityType').value;
+      const orderNum = document.getElementById('utilityOrderNum').value || '#[order]';
+      const tracking = document.getElementById('utilityTracking').value || '[tracking]';
+      
+      let preview = '';
+      switch(type) {
+        case 'shipped':
+          preview = `Your order ${orderNum} has shipped. Tracking: ${tracking}. Estimated delivery: 3-5 business days.`;
+          break;
+        case 'delivered':
+          preview = `Your order ${orderNum} has been delivered. Thank you for your purchase.`;
+          break;
+        case 'confirmed':
+          preview = `Your order ${orderNum} has been confirmed and is being prepared for shipment.`;
+          break;
+      }
+      document.getElementById('utilityPreview').textContent = preview;
+    }
+
+    // Send Utility Message (pages_utility_messaging)
+    function sendUtilityMessage() {
+      const pageSelect = document.getElementById('utilityPageSelect');
+      const pageId = pageSelect.value;
+      const pageToken = pageSelect.options[pageSelect.selectedIndex].dataset.token;
+      const recipient = document.getElementById('utilityRecipient').value;
+      const message = document.getElementById('utilityPreview').textContent;
+
+      if (!pageId || !recipient) {
+        alert('Please select a page and enter recipient PSID');
+        return;
+      }
+
+      FB.api('/' + pageId + '/messages', 'POST', {
+        recipient: { id: recipient },
+        message: { text: message },
+        messaging_type: 'MESSAGE_TAG',
+        tag: 'POST_PURCHASE_UPDATE',
+        access_token: pageToken
+      }, function(response) {
+        if (response && response.message_id) {
+          document.getElementById('utilitySentConfirm').style.display = 'block';
+          alert('✓ Order update sent! ID: ' + response.message_id + '\n\nCheck Facebook Messenger to verify delivery.');
+        } else {
+          alert('Error: ' + (response.error ? response.error.message : 'Failed to send'));
+        }
+      });
+    }
+
+    // Load Ad Accounts (business_management)
+    function loadAdAccounts() {
+      FB.api('/me/adaccounts', {fields: 'id,name,account_status'}, function(response) {
+        if (response && response.data) {
+          adAccounts = response.data;
+          adAccountSelect.innerHTML = '<option>-- Select ad account --</option>';
+          adAccounts.forEach(acc => {
+            adAccountSelect.innerHTML += `<option value="${acc.id}">${acc.name || acc.id}</option>`;
+          });
+        }
+      });
+    }
+
+    // Load Ad Insights (ads_read)
+    function loadAdInsights() {
+      const accountId = adAccountSelect.value;
+      if (!accountId || accountId === '-- Select ad account --') {
+        alert('Please select an ad account');
+        return;
+      }
+
+      adsLoading.classList.add("visible");
+      
+      FB.api('/' + accountId + '/insights', {
+        fields: 'spend,impressions,clicks',
+        date_preset: 'last_7d'
+      }, function(response) {
+        adsLoading.classList.remove("visible");
+        if (response && response.data && response.data[0]) {
+          const data = response.data[0];
+          document.querySelector('[data-metric="spend"]').textContent = '$' + parseFloat(data.spend || 0).toFixed(2);
+          document.querySelector('[data-metric="impressions"]').textContent = parseInt(data.impressions || 0).toLocaleString();
+          document.querySelector('[data-metric="clicks"]').textContent = parseInt(data.clicks || 0).toLocaleString();
+        }
+      });
+    }
+
+    // Open Page Settings (pages_manage_metadata)
+    function openPageSettings(pageId) {
+      const page = pages.find(p => p.id === pageId);
+      if (page) {
+        document.getElementById('settingsPageId').value = page.id;
+        document.getElementById('settingsPageName').value = page.name;
+        
+        FB.api('/' + pageId, {
+          fields: 'about,website,phone',
+          access_token: page.access_token
+        }, function(response) {
+          if (response) {
+            document.getElementById('settingsAbout').value = response.about || '';
+            document.getElementById('settingsWebsite').value = response.website || '';
+            document.getElementById('settingsPhone').value = response.phone || '';
+          }
+        });
+        
+        openDrawer('pageSettings');
+      }
+    }
+
+    // Save Page Settings (pages_manage_metadata)
+    function savePageSettings() {
+      const pageId = document.getElementById('settingsPageId').value;
+      const page = pages.find(p => p.id === pageId);
+      if (!page) return;
+
+      FB.api('/' + pageId, 'POST', {
+        about: document.getElementById('settingsAbout').value,
+        website: document.getElementById('settingsWebsite').value,
+        phone: document.getElementById('settingsPhone').value,
+        access_token: page.access_token
+      }, function(response) {
+        if (response && response.success) {
+          alert('✓ Page settings updated successfully!');
+          closeDrawer('pageSettings');
+          loadPages();
+        } else {
+          alert('Error: ' + (response.error ? response.error.message : 'Failed to update'));
+        }
+      });
     }
 
     // Theme toggle
@@ -1536,32 +1861,14 @@
       }
     });
 
-    // Load insights
-    loadBtn.addEventListener("click", () => {
-      adsLoading.classList.add("visible");
-      setTimeout(() => {
-        adsLoading.classList.remove("visible");
-      }, 1200);
-    });
+    // Load insights button
+    loadBtn.addEventListener("click", loadAdInsights);
 
-    // Drawer management
+    // Drawer helpers
     function openDrawer(which) {
       drawerBackdrop.classList.add("visible");
-      const drawerId = which + "Drawer";
-      const drawer = document.getElementById(drawerId);
-      if (drawer) {
-        drawer.classList.add("visible");
-      }
-      
-      // Special handling for campaign drawer
-      if (which === "campaign") {
-        const selected = adAccountSelect.value;
-        if (!selected || selected === "-- Select ad account --") {
-          campaignAdAccount.textContent = "Select an ad account first";
-        } else {
-          campaignAdAccount.textContent = selected;
-        }
-      }
+      const drawer = document.getElementById(which + "Drawer");
+      if (drawer) drawer.classList.add("visible");
     }
 
     function closeDrawer(which) {
@@ -1580,23 +1887,7 @@
       alert("✓ Facebook campaign created successfully!");
     }
 
-    function savePageSettings() {
-      closeDrawer('pageSettings');
-      alert("✓ Page settings updated successfully!");
-    }
-
-    function sendMessage() {
-      closeDrawer('sendMessage');
-      alert("✓ Message sent successfully!");
-    }
-
-    function sendUtilityMessage() {
-      closeDrawer('utilityMessage');
-      alert("✓ Order update sent to customer!");
-    }
-
     drawerBackdrop.addEventListener("click", () => closeDrawer());
-
     createPostBtn.addEventListener("click", () => openDrawer("post"));
     createCampaignBtn.addEventListener("click", () => openDrawer("campaign"));
 
@@ -1607,6 +1898,9 @@
         this.classList.add('active');
       });
     });
+
+    // Initialize
+    updateUtilityPreview();
   </script>
 </body>
 </html>
