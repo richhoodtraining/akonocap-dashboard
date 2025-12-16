@@ -915,48 +915,56 @@
           <div class="panel-header" style="margin-bottom: 0;">
             <div class="panel-title" style="color: white; font-size: 18px;">
               <span style="font-size: 24px;">📋</span>
-              META APP REVIEWER: Testing Guide for Akonocap Command Center
+              META APP REVIEWER: Testing Guide
             </div>
           </div>
+          
+          <!-- Critical Requirements Alert -->
+          <div style="background: rgba(255,0,0,0.2); border: 2px solid rgba(255,255,255,0.5); border-radius: 10px; padding: 14px; margin-top: 12px;">
+            <p style="margin: 0 0 8px; font-size: 14px; font-weight: 700;">⚠️ CRITICAL: This App Uses REAL Facebook OAuth</p>
+            <ul style="margin: 0; padding-left: 20px; font-size: 12px; line-height: 1.8;">
+              <li>Real Facebook Login OAuth flow (not simulated)</li>
+              <li>Live API calls returning real data from your account</li>
+              <li>Messages sent here WILL appear in Facebook Messenger</li>
+              <li>Utility messages are TRANSACTIONAL ONLY (order updates, no promotions)</li>
+            </ul>
+          </div>
+          
           <div style="background: rgba(255,255,255,0.15); border-radius: 10px; padding: 16px; margin-top: 12px;">
             <p style="margin: 0 0 12px; font-size: 14px; font-weight: 600;">Step-by-Step Testing Instructions:</p>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">1️⃣ Connect Facebook Account</div>
-                <div style="font-size: 12px; opacity: 0.9;">Click "Connect with Facebook" → Grant all requested permissions → You'll see all panels become active</div>
+                <div style="font-weight: 600; margin-bottom: 6px;">1️⃣ Facebook Login (OAuth)</div>
+                <div style="font-size: 12px; opacity: 0.9;">Click "Connect with Facebook" → Real OAuth popup opens → Review permissions → Click "Continue" → Redirects back authenticated</div>
               </div>
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">2️⃣ Test pages_show_list</div>
-                <div style="font-size: 12px; opacity: 0.9;">Look at "Facebook Pages Management" panel → Your connected Pages will appear automatically via GET /me/accounts</div>
+                <div style="font-weight: 600; margin-bottom: 6px;">2️⃣ pages_show_list</div>
+                <div style="font-size: 12px; opacity: 0.9;">After login, Pages panel shows YOUR real Pages → API: GET /me/accounts</div>
               </div>
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">3️⃣ Test pages_manage_metadata</div>
-                <div style="font-size: 12px; opacity: 0.9;">Click "Manage" on any Page → Edit About/Website/Phone → Click "Save Changes" → Uses POST /{page-id}</div>
+                <div style="font-weight: 600; margin-bottom: 6px;">3️⃣ pages_read_engagement</div>
+                <div style="font-size: 12px; opacity: 0.9;">View real engagement metrics (views, reach, followers) → API: GET /{page-id}/insights</div>
               </div>
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">4️⃣ Test pages_read_engagement</div>
-                <div style="font-size: 12px; opacity: 0.9;">View engagement metrics (Page Views, Post Reach, etc.) → Data loaded via GET /{page-id}/insights</div>
+                <div style="font-weight: 600; margin-bottom: 6px;">4️⃣ pages_manage_metadata</div>
+                <div style="font-size: 12px; opacity: 0.9;">Click "Manage" → Edit Page info → Save → API: POST /{page-id}</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border: 2px solid rgba(255,255,0,0.5);">
+                <div style="font-weight: 600; margin-bottom: 6px;">5️⃣ pages_messaging ⚠️</div>
+                <div style="font-size: 12px; opacity: 0.9;">"Compose Message" → Send → <strong>VERIFY: Open Messenger to see message delivered</strong></div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border: 2px solid rgba(255,255,0,0.5);">
+                <div style="font-weight: 600; margin-bottom: 6px;">6️⃣ pages_utility_messaging ⚠️</div>
+                <div style="font-size: 12px; opacity: 0.9;">"Send Order Update" → NON-PROMOTIONAL only → <strong>VERIFY: Check Messenger for delivery</strong></div>
               </div>
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">5️⃣ Test pages_messaging</div>
-                <div style="font-size: 12px; opacity: 0.9;">Go to "Messaging Center" → Click "Compose Message" → Enter PSID & message → Uses POST /{page-id}/messages</div>
+                <div style="font-weight: 600; margin-bottom: 6px;">7️⃣ business_management</div>
+                <div style="font-size: 12px; opacity: 0.9;">View Business panel → Shows your real business assets → API: GET /me/businesses</div>
               </div>
               <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">6️⃣ Test pages_utility_messaging</div>
-                <div style="font-size: 12px; opacity: 0.9;">Click "Send Order Update" → Fill order details → Sends POST with MESSAGE_TAG: POST_PURCHASE_UPDATE</div>
+                <div style="font-weight: 600; margin-bottom: 6px;">8️⃣ ads_read</div>
+                <div style="font-size: 12px; opacity: 0.9;">Select ad account → "Load insights" → Real spend/impressions → API: GET /{account}/insights</div>
               </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">7️⃣ Test business_management</div>
-                <div style="font-size: 12px; opacity: 0.9;">View "Business Management" panel → Shows business assets loaded via GET /me/businesses</div>
-              </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">8️⃣ Test ads_read + ads_management</div>
-                <div style="font-size: 12px; opacity: 0.9;">Select ad account → Click "Load insights" → View spend/impressions via GET /{ad-account-id}/insights</div>
-              </div>
-            </div>
-            
-            <div style="margin-top: 16px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-              <p style="margin: 0; font-size: 12px;"><strong>⚠️ Note for Reviewers:</strong> This is a B2B wholesale management tool. We use pages_messaging to respond to wholesale inquiries and pages_utility_messaging to send order confirmations and shipping updates to our business customers. All messaging is transactional/customer service related.</p>
             </div>
           </div>
         </section>
@@ -1103,11 +1111,15 @@
             <span class="perm-pill active">✓ pages_utility_messaging</span>
           </div>
           <div class="panel-sub">
-            <strong>Business Use:</strong> Respond to wholesale customer inquiries about bulk pricing and availability. Send order confirmations and shipping tracking.<br/>
+            <strong>Business Use:</strong> Respond to customer inquiries. Send order/shipping updates (transactional only).<br/>
             <span style="font-size: 11px; color: var(--accent);">
-              pages_messaging → POST /{page-id}/messages (messaging_type: RESPONSE) | 
-              pages_utility_messaging → POST /{page-id}/messages (tag: POST_PURCHASE_UPDATE)
+              pages_messaging → POST /{page-id}/messages (RESPONSE) | 
+              pages_utility_messaging → POST /{page-id}/messages (POST_PURCHASE_UPDATE)
             </span>
+          </div>
+          <!-- Messenger Verification Note -->
+          <div style="background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+            <p style="margin: 0; font-size: 11px; color: #b45309;"><strong>📱 REVIEWER NOTE:</strong> Messages sent from this app appear in Facebook Messenger. Open Messenger to verify delivery.</p>
           </div>
 
           <div class="tabs">
@@ -1456,13 +1468,19 @@
   <!-- SEND MESSAGE DRAWER -->
   <aside id="sendMessageDrawer" class="drawer">
     <div class="drawer-header">
-      <span>Send Message via Pages API</span>
+      <span>Send Message (pages_messaging)</span>
       <button class="drawer-close" type="button" onclick="closeDrawer('sendMessage')">×</button>
     </div>
     <div class="drawer-body">
+      <!-- Messenger Verification Alert -->
+      <div style="padding: 12px; border-radius: 10px; background: rgba(24,119,242,0.1); border: 1px solid rgba(24,119,242,0.3); margin-bottom: 12px;">
+        <strong style="color: #1877f2;">📱 Verify in Messenger</strong>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">After sending, open Facebook Messenger to confirm the message was delivered to the recipient.</p>
+      </div>
+      
       <div id="messageSentConfirm" style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
         <strong style="color: #16a34a;">✓ Message Sent Successfully</strong>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Check Facebook Messenger to verify delivery.</p>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Now open Facebook Messenger to verify delivery.</p>
       </div>
 
       <div class="field-label">Select Page</div>
@@ -1486,13 +1504,28 @@
   <!-- UTILITY MESSAGE DRAWER -->
   <aside id="utilityMessageDrawer" class="drawer">
     <div class="drawer-header">
-      <span>Send Order Update (Utility Message)</span>
+      <span>Send Order Update (pages_utility_messaging)</span>
       <button class="drawer-close" type="button" onclick="closeDrawer('utilityMessage')">×</button>
     </div>
     <div class="drawer-body">
+      <!-- Non-Promotional Warning -->
+      <div style="padding: 12px; border-radius: 10px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); margin-bottom: 12px;">
+        <strong style="color: #dc2626;">⚠️ TRANSACTIONAL ONLY - No Promotional Content</strong>
+        <p style="margin: 4px 0 0; font-size: 11px; color: #666;">
+          ❌ NOT allowed: Sales, discounts, promotions, marketing<br/>
+          ✅ Allowed: Order confirmations, shipping updates, delivery status
+        </p>
+      </div>
+      
+      <!-- Messenger Verification Alert -->
+      <div style="padding: 12px; border-radius: 10px; background: rgba(24,119,242,0.1); border: 1px solid rgba(24,119,242,0.3); margin-bottom: 12px;">
+        <strong style="color: #1877f2;">📱 Verify in Messenger</strong>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">After sending, open Facebook Messenger to confirm the update was delivered.</p>
+      </div>
+      
       <div id="utilitySentConfirm" style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
         <strong style="color: #16a34a;">✓ Order Update Sent</strong>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Check Facebook Messenger to verify delivery.</p>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Now open Facebook Messenger to verify delivery.</p>
       </div>
 
       <div class="field-label">Select Page</div>
@@ -1504,24 +1537,24 @@
       <input id="utilityRecipient" class="field-input" type="text" placeholder="Page-Scoped ID of customer" />
       <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Must be someone who previously messaged your Page</p>
 
-      <div class="field-label">Update Type</div>
+      <div class="field-label">Update Type (Transactional Only)</div>
       <select id="utilityType" class="field-input" onchange="updateUtilityPreview()">
-        <option value="shipped">Order Shipped</option>
+        <option value="shipped">Order Shipped - Tracking Available</option>
         <option value="delivered">Order Delivered</option>
-        <option value="confirmed">Order Confirmed</option>
+        <option value="confirmed">Order Confirmed - Payment Received</option>
       </select>
 
       <div class="field-label">Order Number</div>
       <input id="utilityOrderNum" class="field-input" type="text" placeholder="#12345" oninput="updateUtilityPreview()" />
 
-      <div class="field-label">Tracking Number</div>
+      <div class="field-label">Tracking Number (for shipped orders)</div>
       <input id="utilityTracking" class="field-input" type="text" placeholder="1Z999AA10123456784" oninput="updateUtilityPreview()" />
 
-      <div class="field-label">Message Preview</div>
-      <div id="utilityPreview" style="padding: 12px; background: #f5f6f7; border-radius: 8px; font-size: 13px; margin-bottom: 8px;">
-        Your order #12345 has shipped. Tracking: 1Z999AA10123456784. Estimated delivery: 3-5 business days.
+      <div class="field-label">Message Preview (Non-Promotional)</div>
+      <div id="utilityPreview" style="padding: 12px; background: #f5f6f7; border-radius: 8px; font-size: 13px; margin-bottom: 8px; border: 2px solid #16a34a;">
+        Your order #[order] has shipped. Tracking number: [tracking]. Estimated delivery: 3-5 business days.
       </div>
-      <p style="font-size: 11px; color: #16a34a; margin: 0;">✓ This is a transactional message only - no promotional content</p>
+      <p style="font-size: 11px; color: #16a34a; margin: 0;">✓ POST_PURCHASE_UPDATE tag - Transactional message only, no promotional content</p>
     </div>
     <div class="drawer-footer">
       <button class="btn-ghost" type="button" onclick="closeDrawer('utilityMessage')">Cancel</button>
@@ -1745,6 +1778,7 @@
     }
 
     // Update Utility Message Preview
+    // Update Utility Message Preview - NON-PROMOTIONAL ONLY
     function updateUtilityPreview() {
       const type = document.getElementById('utilityType').value;
       const orderNum = document.getElementById('utilityOrderNum').value || '#[order]';
@@ -1753,13 +1787,16 @@
       let preview = '';
       switch(type) {
         case 'shipped':
-          preview = `Your order ${orderNum} has shipped. Tracking: ${tracking}. Estimated delivery: 3-5 business days.`;
+          // Transactional: Shipping notification with tracking
+          preview = `Your order ${orderNum} has shipped. Tracking number: ${tracking}. Estimated delivery: 3-5 business days.`;
           break;
         case 'delivered':
-          preview = `Your order ${orderNum} has been delivered. Thank you for your purchase.`;
+          // Transactional: Delivery confirmation
+          preview = `Your order ${orderNum} has been delivered.`;
           break;
         case 'confirmed':
-          preview = `Your order ${orderNum} has been confirmed and is being prepared for shipment.`;
+          // Transactional: Payment/order confirmation
+          preview = `Payment received. Your order ${orderNum} is confirmed and being prepared for shipment.`;
           break;
       }
       document.getElementById('utilityPreview').textContent = preview;
