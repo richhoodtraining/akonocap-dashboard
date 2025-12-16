@@ -867,7 +867,7 @@
         appId: '1185063939768948',
         cookie: true,
         xfbml: true,
-        version: 'v18.0'
+        version: 'v24.0'
       });
       FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
@@ -1089,8 +1089,8 @@
             </div>
           </div>
           <div class="perm-group">
-            <span class="perm-pill active">✓ instagram_basic</span>
-            <span class="perm-pill active">✓ instagram_content_publish</span>
+            <span class="perm-pill active">✓ instagram_business_basic</span>
+            <span class="perm-pill active">✓ instagram_business_content_publish</span>
           </div>
           <div class="panel-sub">
             Schedule and publish content to your connected Instagram Business account.
@@ -1299,8 +1299,8 @@
           <strong>Business:</strong><br/>
           • business_management — Manage business assets<br/><br/>
           <strong>Instagram:</strong><br/>
-          • instagram_basic — Access Instagram account info<br/>
-          • instagram_content_publish — Publish content to Instagram
+          • instagram_business_basic — Access Instagram Business account info<br/>
+          • instagram_business_content_publish — Publish content to Instagram
         </div>
         <p style="margin-top:10px;font-size:11px;color:#6b7280;">
           You can remove this connection at any time in your Meta account settings.
@@ -1531,7 +1531,7 @@
           alert('Facebook login was cancelled or failed.');
         }
       }, {
-        scope: 'pages_show_list,pages_manage_metadata,pages_read_engagement,pages_messaging,business_management,ads_read,ads_management,instagram_basic,instagram_content_publish',
+        scope: 'pages_show_list,pages_manage_metadata,pages_read_engagement,pages_messaging,business_management,ads_read,ads_management,instagram_business_basic,instagram_business_content_publish',
         return_scopes: true
       });
     }
