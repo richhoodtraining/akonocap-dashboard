@@ -1647,75 +1647,174 @@
     </div>
   </aside>
 
-  <!-- UTILITY MESSAGE DRAWER -->
-  <aside id="utilityMessageDrawer" class="drawer">
+  <!-- UTILITY MESSAGE DRAWER - WITH TEMPLATE SELECTION -->
+  <aside id="utilityMessageDrawer" class="drawer" style="width: 500px;">
     <div class="drawer-header">
-      <span>Send Order Update (pages_utility_messaging)</span>
+      <span>📋 Send Order Update (pages_utility_messaging)</span>
       <button class="drawer-close" type="button" onclick="closeDrawer('utilityMessage')">×</button>
     </div>
     <div class="drawer-body">
+      <!-- STEP INDICATOR -->
+      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+        <div id="step1Indicator" style="flex:1; padding: 8px; background: #1877f2; color: white; border-radius: 8px; text-align: center; font-size: 11px; font-weight: 600;">
+          1. Select Template
+        </div>
+        <div id="step2Indicator" style="flex:1; padding: 8px; background: #e4e6eb; color: #666; border-radius: 8px; text-align: center; font-size: 11px;">
+          2. Fill Details
+        </div>
+        <div id="step3Indicator" style="flex:1; padding: 8px; background: #e4e6eb; color: #666; border-radius: 8px; text-align: center; font-size: 11px;">
+          3. Send
+        </div>
+      </div>
+
       <!-- Non-Promotional Warning -->
-      <div
-        style="padding: 12px; border-radius: 10px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); margin-bottom: 12px;">
-        <strong style="color: #dc2626;">⚠️ TRANSACTIONAL ONLY - No Promotional Content</strong>
-        <p style="margin: 4px 0 0; font-size: 11px; color: #666;">
-          ❌ NOT allowed: Sales, discounts, promotions, marketing<br />
-          ✅ Allowed: Order confirmations, shipping updates, delivery status
+      <div style="padding: 10px; border-radius: 8px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); margin-bottom: 12px;">
+        <strong style="color: #dc2626; font-size: 11px;">⚠️ TRANSACTIONAL ONLY - No Promotional Content</strong>
+        <p style="margin: 2px 0 0; font-size: 10px; color: #666;">
+          Uses MESSAGE_TAG: POST_PURCHASE_UPDATE for order-related updates only.
         </p>
       </div>
 
-      <!-- Messenger Verification Alert -->
-      <div
-        style="padding: 12px; border-radius: 10px; background: rgba(24,119,242,0.1); border: 1px solid rgba(24,119,242,0.3); margin-bottom: 12px;">
-        <strong style="color: #1877f2;">📱 Verify in Messenger</strong>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">After sending, open Facebook Messenger to confirm the
-          update was delivered.</p>
+      <div id="utilitySentConfirm" style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
+        <strong style="color: #16a34a;">✓ Order Update Sent Successfully!</strong>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Now open Facebook Messenger to verify the message was delivered.</p>
       </div>
 
-      <div id="utilitySentConfirm"
-        style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
-        <strong style="color: #16a34a;">✓ Order Update Sent</strong>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Now open Facebook Messenger to verify delivery.</p>
+      <!-- STEP 1: TEMPLATE SELECTION -->
+      <div id="templateSelectionStep">
+        <div class="field-label" style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">
+          📝 Step 1: Select a Message Template
+        </div>
+        
+        <!-- Template Cards -->
+        <div id="templateCards" style="display: flex; flex-direction: column; gap: 8px;">
+          
+          <!-- Template 1: Order Shipped -->
+          <div class="template-card" onclick="selectTemplate('shipped')" id="template-shipped" 
+               style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span style="font-size: 18px;">📦</span>
+              <strong style="font-size: 13px;">Order Shipped</strong>
+              <span style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
+            </div>
+            <div style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
+              Your order <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> has shipped!
+              Tracking: <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{tracking_number}}</span>
+            </div>
+          </div>
+
+          <!-- Template 2: Order Delivered -->
+          <div class="template-card" onclick="selectTemplate('delivered')" id="template-delivered"
+               style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span style="font-size: 18px;">✅</span>
+              <strong style="font-size: 13px;">Order Delivered</strong>
+              <span style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
+            </div>
+            <div style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
+              Your order <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> has been delivered. Thank you!
+            </div>
+          </div>
+
+          <!-- Template 3: Order Confirmed -->
+          <div class="template-card" onclick="selectTemplate('confirmed')" id="template-confirmed"
+               style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span style="font-size: 18px;">🧾</span>
+              <strong style="font-size: 13px;">Order Confirmed</strong>
+              <span style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
+            </div>
+            <div style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
+              Your order <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> is confirmed and being prepared.
+            </div>
+          </div>
+
+        </div>
+        
+        <p style="font-size: 10px; color: #666; margin-top: 10px; text-align: center;">
+          Click a template to select it and proceed to fill in placeholders
+        </p>
       </div>
 
-      <div class="field-label">Select Page</div>
-      <select id="utilityPageSelect" class="field-input" onchange="loadPSIDsForPage('utility')">
-        <option value="">-- Select a Page --</option>
-      </select>
+      <!-- STEP 2: FILL PLACEHOLDERS (Initially Hidden) -->
+      <div id="fillPlaceholdersStep" style="display: none;">
+        <div class="field-label" style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">
+          ✏️ Step 2: Fill in Placeholder Values
+        </div>
 
-      <div class="field-label">Customer (Recent Conversations)</div>
-      <select id="utilityRecipient" class="field-input">
-        <option value="">-- Select a Page first --</option>
-      </select>
-      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Last 3 customers who messaged your
-        Page (loaded via API)</p>
+        <div style="padding: 10px; background: rgba(24,119,242,0.05); border-radius: 8px; border: 1px solid rgba(24,119,242,0.2); margin-bottom: 12px;">
+          <div style="font-size: 11px; color: #1877f2; font-weight: 600;">Selected Template:</div>
+          <div id="selectedTemplateName" style="font-size: 13px; font-weight: 600; margin-top: 2px;"></div>
+        </div>
 
-      <div class="field-label">Update Type (Transactional Only)</div>
-      <select id="utilityType" class="field-input" onchange="updateUtilityPreview()">
-        <option value="shipped">Order Shipped - Tracking Available</option>
-        <option value="delivered">Order Delivered</option>
-        <option value="confirmed">Order Confirmed - Payment Received</option>
-      </select>
+        <div class="field-label">Select Page</div>
+        <select id="utilityPageSelect" class="field-input" onchange="loadPSIDsForPage('utility')">
+          <option value="">-- Select a Page --</option>
+        </select>
 
-      <div class="field-label">Order Number</div>
-      <input id="utilityOrderNum" class="field-input" type="text" placeholder="#12345"
-        oninput="updateUtilityPreview()" />
+        <div class="field-label">Recipient (Customer)</div>
+        <select id="utilityRecipient" class="field-input" onchange="checkManualPSID()">
+          <option value="">-- Select a Page first --</option>
+        </select>
+        <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
+          <span style="font-size: 11px; color: #666;">Or enter PSID manually:</span>
+        </div>
+        <input id="manualPSID" class="field-input" type="text" placeholder="Enter PSID (e.g., 25237327232600073)" oninput="useManualPSID()" />
+        <p style="font-size: 10px; color: #666; margin-top: -8px; margin-bottom: 10px;">PSID of customer who messaged your Page</p>
 
-      <div class="field-label">Tracking Number (for shipped orders)</div>
-      <input id="utilityTracking" class="field-input" type="text" placeholder="1Z999AA10123456784"
-        oninput="updateUtilityPreview()" />
+        <div class="field-label">Order Number <span style="color: #dc2626;">*</span></div>
+        <input id="utilityOrderNum" class="field-input" type="text" placeholder="#12345" oninput="updateTemplatePreview()" />
 
-      <div class="field-label">Message Preview (Non-Promotional)</div>
-      <div id="utilityPreview"
-        style="padding: 12px; background: #f5f6f7; border-radius: 8px; font-size: 13px; margin-bottom: 8px; border: 2px solid #16a34a;">
-        Your order #[order] has shipped. Tracking number: [tracking]. Estimated delivery: 3-5 business days.
+        <div id="trackingField">
+          <div class="field-label">Tracking Number</div>
+          <input id="utilityTracking" class="field-input" type="text" placeholder="1Z999AA10123456784" oninput="updateTemplatePreview()" />
+        </div>
+
+        <div class="field-label" style="margin-top: 12px;">📱 Message Preview</div>
+        <div id="utilityPreview" style="padding: 12px; background: #f0fff4; border-radius: 8px; font-size: 12px; border: 2px solid #16a34a; line-height: 1.5;">
+          Select a template and fill in the placeholders above
+        </div>
+        <p style="font-size: 10px; color: #16a34a; margin: 6px 0 0;">✓ POST_PURCHASE_UPDATE - Transactional only</p>
+
+        <div style="display: flex; gap: 8px; margin-top: 14px;">
+          <button class="btn-ghost" type="button" onclick="backToTemplates()" style="flex: 1;">← Back</button>
+          <button class="btn-primary" type="button" onclick="goToSendStep()" style="flex: 1;">Preview & Send →</button>
+        </div>
       </div>
-      <p style="font-size: 11px; color: #16a34a; margin: 0;">✓ POST_PURCHASE_UPDATE tag - Transactional message only, no
-        promotional content</p>
-    </div>
-    <div class="drawer-footer">
-      <button class="btn-ghost" type="button" onclick="closeDrawer('utilityMessage')">Cancel</button>
-      <button class="btn-primary" type="button" onclick="sendUtilityMessage()">Send Order Update</button>
+
+      <!-- STEP 3: CONFIRM & SEND (Initially Hidden) -->
+      <div id="sendStep" style="display: none;">
+        <div class="field-label" style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">
+          🚀 Step 3: Review & Send
+        </div>
+
+        <div style="padding: 10px; background: rgba(24,119,242,0.1); border-radius: 8px; margin-bottom: 12px;">
+          <strong style="color: #1877f2; font-size: 12px;">📱 Verify in Messenger After Sending</strong>
+          <p style="margin: 4px 0 0; font-size: 11px; color: #666;">
+            Open Facebook Messenger after sending to confirm delivery.
+          </p>
+        </div>
+
+        <div class="field-label">Sending To:</div>
+        <div id="sendToSummary" style="padding: 8px; background: #f5f6f7; border-radius: 8px; margin-bottom: 10px; font-size: 12px;"></div>
+
+        <div class="field-label">Final Message:</div>
+        <div id="finalMessagePreview" style="padding: 12px; background: white; border-radius: 8px; font-size: 12px; border: 2px solid #16a34a; line-height: 1.5; margin-bottom: 10px;"></div>
+
+        <div style="padding: 8px; background: rgba(22,163,74,0.1); border-radius: 8px; margin-bottom: 14px;">
+          <div style="font-size: 10px; color: #16a34a; font-family: monospace;">
+            POST /{page-id}/messages<br>
+            messaging_type: MESSAGE_TAG<br>
+            tag: POST_PURCHASE_UPDATE
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-ghost" type="button" onclick="backToFillStep()" style="flex: 1;">← Edit</button>
+          <button class="btn-primary" type="button" onclick="sendUtilityMessage()" style="flex: 1; background: #16a34a;">📤 Send Update</button>
+        </div>
+      </div>
+
     </div>
   </aside>
 
@@ -2127,29 +2226,234 @@
       });
     }
 
-    // Update Utility Message Preview
-    // Update Utility Message Preview - NON-PROMOTIONAL ONLY
+    // Template Selection State
+    let selectedTemplate = null;
+    const templateMessages = {
+      shipped: 'Your order {{order_number}} has shipped! Tracking number: {{tracking_number}}. Estimated delivery: 3-5 business days.',
+      delivered: 'Great news! Your order {{order_number}} has been delivered. Thank you for your purchase!',
+      confirmed: 'Your order {{order_number}} is confirmed! We are preparing it for shipment. You will receive tracking information soon.'
+    };
+    const templateNames = {
+      shipped: '📦 Order Shipped',
+      delivered: '✅ Order Delivered', 
+      confirmed: '🧾 Order Confirmed'
+    };
+
+    // Select Template (Step 1)
+    function selectTemplate(type) {
+      selectedTemplate = type;
+      
+      // Update visual selection
+      document.querySelectorAll('.template-card').forEach(card => {
+        card.style.borderColor = '#e4e6eb';
+        card.style.background = 'white';
+      });
+      const selectedCard = document.getElementById('template-' + type);
+      if (selectedCard) {
+        selectedCard.style.borderColor = '#1877f2';
+        selectedCard.style.background = 'rgba(24,119,242,0.05)';
+      }
+      
+      // Show/hide tracking field based on template
+      const trackingField = document.getElementById('trackingField');
+      if (trackingField) {
+        trackingField.style.display = (type === 'shipped') ? 'block' : 'none';
+      }
+      
+      // Update selected template name
+      const templateNameEl = document.getElementById('selectedTemplateName');
+      if (templateNameEl) {
+        templateNameEl.textContent = templateNames[type];
+      }
+      
+      // Move to step 2 after a brief delay
+      setTimeout(() => {
+        goToFillStep();
+      }, 300);
+    }
+
+    // Go to Fill Step (Step 2)
+    function goToFillStep() {
+      const step1 = document.getElementById('templateSelectionStep');
+      const step2 = document.getElementById('fillPlaceholdersStep');
+      const step3 = document.getElementById('sendStep');
+      
+      if (step1) step1.style.display = 'none';
+      if (step2) step2.style.display = 'block';
+      if (step3) step3.style.display = 'none';
+      
+      // Update step indicators
+      const ind1 = document.getElementById('step1Indicator');
+      const ind2 = document.getElementById('step2Indicator');
+      const ind3 = document.getElementById('step3Indicator');
+      if (ind1) { ind1.style.background = '#16a34a'; ind1.style.color = 'white'; }
+      if (ind2) { ind2.style.background = '#1877f2'; ind2.style.color = 'white'; }
+      if (ind3) { ind3.style.background = '#e4e6eb'; ind3.style.color = '#666'; }
+      
+      updateTemplatePreview();
+    }
+
+    // Back to Templates (Step 1)
+    function backToTemplates() {
+      const step1 = document.getElementById('templateSelectionStep');
+      const step2 = document.getElementById('fillPlaceholdersStep');
+      const step3 = document.getElementById('sendStep');
+      
+      if (step1) step1.style.display = 'block';
+      if (step2) step2.style.display = 'none';
+      if (step3) step3.style.display = 'none';
+      
+      // Update step indicators
+      const ind1 = document.getElementById('step1Indicator');
+      const ind2 = document.getElementById('step2Indicator');
+      if (ind1) { ind1.style.background = '#1877f2'; ind1.style.color = 'white'; }
+      if (ind2) { ind2.style.background = '#e4e6eb'; ind2.style.color = '#666'; }
+    }
+
+    // Go to Send Step (Step 3)
+    function goToSendStep() {
+      const pageSelect = document.getElementById('utilityPageSelect');
+      const orderNum = document.getElementById('utilityOrderNum')?.value;
+      const recipient = getRecipientPSID();
+      
+      if (!pageSelect?.value) {
+        alert('Please select a Page');
+        return;
+      }
+      if (!recipient) {
+        alert('Please select a recipient from dropdown or enter a PSID manually');
+        return;
+      }
+      if (!orderNum) {
+        alert('Please enter an order number');
+        return;
+      }
+      
+      const step1 = document.getElementById('templateSelectionStep');
+      const step2 = document.getElementById('fillPlaceholdersStep');
+      const step3 = document.getElementById('sendStep');
+      
+      if (step1) step1.style.display = 'none';
+      if (step2) step2.style.display = 'none';
+      if (step3) step3.style.display = 'block';
+      
+      // Update step indicators
+      const ind1 = document.getElementById('step1Indicator');
+      const ind2 = document.getElementById('step2Indicator');
+      const ind3 = document.getElementById('step3Indicator');
+      if (ind1) { ind1.style.background = '#16a34a'; }
+      if (ind2) { ind2.style.background = '#16a34a'; }
+      if (ind3) { ind3.style.background = '#1877f2'; ind3.style.color = 'white'; }
+      
+      // Update send summary
+      const pageName = pageSelect.options[pageSelect.selectedIndex]?.text || 'Page';
+      const summaryEl = document.getElementById('sendToSummary');
+      const finalPreviewEl = document.getElementById('finalMessagePreview');
+      const utilityPreviewEl = document.getElementById('utilityPreview');
+      
+      if (summaryEl) summaryEl.innerHTML = `<strong>Page:</strong> ${pageName}<br><strong>Customer:</strong> ${recipient.name}<br><strong>PSID:</strong> <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;">${recipient.id}</code>`;
+      if (finalPreviewEl && utilityPreviewEl) finalPreviewEl.textContent = utilityPreviewEl.textContent;
+    }
+
+    // Back to Fill Step (from Step 3)
+    function backToFillStep() {
+      goToFillStep();
+    }
+
+    // Update Template Preview with placeholders filled in
+    function updateTemplatePreview() {
+      if (!selectedTemplate) return;
+      
+      const orderNumEl = document.getElementById('utilityOrderNum');
+      const trackingEl = document.getElementById('utilityTracking');
+      const previewEl = document.getElementById('utilityPreview');
+      
+      const orderNum = orderNumEl?.value || '{{order_number}}';
+      const tracking = trackingEl?.value || '{{tracking_number}}';
+      
+      let message = templateMessages[selectedTemplate] || '';
+      message = message.replace('{{order_number}}', orderNum);
+      message = message.replace('{{tracking_number}}', tracking);
+      
+      if (previewEl) previewEl.textContent = message;
+    }
+
+    // Legacy function for compatibility
     function updateUtilityPreview() {
-      const type = document.getElementById('utilityType').value;
-      const orderNum = document.getElementById('utilityOrderNum').value || '#[order]';
-      const tracking = document.getElementById('utilityTracking').value || '[tracking]';
+      if (selectedTemplate) {
+        updateTemplatePreview();
+        return;
+      }
+      // Fallback for old flow
+      const typeEl = document.getElementById('utilityType');
+      const orderNumEl = document.getElementById('utilityOrderNum');
+      const trackingEl = document.getElementById('utilityTracking');
+      const previewEl = document.getElementById('utilityPreview');
+      
+      if (!typeEl || !previewEl) return;
+      
+      const type = typeEl.value;
+      const orderNum = orderNumEl?.value || '#[order]';
+      const tracking = trackingEl?.value || '[tracking]';
 
       let preview = '';
       switch (type) {
         case 'shipped':
-          // Transactional: Shipping notification with tracking
           preview = `Your order ${orderNum} has shipped. Tracking number: ${tracking}. Estimated delivery: 3-5 business days.`;
           break;
         case 'delivered':
-          // Transactional: Delivery confirmation
           preview = `Your order ${orderNum} has been delivered.`;
           break;
         case 'confirmed':
-          // Transactional: Payment/order confirmation
           preview = `Payment received. Your order ${orderNum} is confirmed and being prepared for shipment.`;
           break;
       }
-      document.getElementById('utilityPreview').textContent = preview;
+      previewEl.textContent = preview;
+    }
+
+    // Manual PSID handling
+    function useManualPSID() {
+      const manualInput = document.getElementById('manualPSID');
+      const selectDropdown = document.getElementById('utilityRecipient');
+      
+      if (manualInput && manualInput.value.trim()) {
+        // Clear dropdown selection when manual PSID is entered
+        if (selectDropdown) selectDropdown.value = '';
+      }
+    }
+
+    function checkManualPSID() {
+      const manualInput = document.getElementById('manualPSID');
+      const selectDropdown = document.getElementById('utilityRecipient');
+      
+      if (selectDropdown && selectDropdown.value) {
+        // Clear manual input when dropdown is selected
+        if (manualInput) manualInput.value = '';
+      }
+    }
+
+    // Get the recipient PSID (from dropdown or manual input)
+    function getRecipientPSID() {
+      const manualInput = document.getElementById('manualPSID');
+      const selectDropdown = document.getElementById('utilityRecipient');
+      
+      // Prefer manual input if filled
+      if (manualInput && manualInput.value.trim()) {
+        return {
+          id: manualInput.value.trim(),
+          name: 'Customer (PSID: ' + manualInput.value.trim().substring(0, 8) + '...)'
+        };
+      }
+      
+      // Otherwise use dropdown
+      if (selectDropdown && selectDropdown.value) {
+        return {
+          id: selectDropdown.value,
+          name: selectDropdown.options[selectDropdown.selectedIndex]?.text || 'Customer'
+        };
+      }
+      
+      return null;
     }
 
     // Send Utility Message (pages_utility_messaging)
@@ -2157,18 +2461,24 @@
       const pageSelect = document.getElementById('utilityPageSelect');
       const pageId = pageSelect.value;
       const pageToken = pageSelect.options[pageSelect.selectedIndex].dataset.token;
-      const recipientSelect = document.getElementById('utilityRecipient');
-      const recipient = recipientSelect.value;
-      const recipientName = recipientSelect.options[recipientSelect.selectedIndex]?.text || 'Customer';
+      const recipient = getRecipientPSID();
       const message = document.getElementById('utilityPreview').textContent;
 
-      if (!pageId || !recipient) {
-        alert('Please select a page and select a recipient');
+      if (!pageId) {
+        alert('Please select a page');
+        return;
+      }
+      
+      if (!recipient) {
+        alert('Please select a recipient or enter a PSID manually');
         return;
       }
 
+      console.log('Sending utility message to PSID:', recipient.id);
+      console.log('Message:', message);
+
       FB.api('/' + pageId + '/messages', 'POST', {
-        recipient: { id: recipient },
+        recipient: { id: recipient.id },
         message: { text: message },
         messaging_type: 'MESSAGE_TAG',
         tag: 'POST_PURCHASE_UPDATE',
@@ -2178,9 +2488,9 @@
           document.getElementById('utilitySentConfirm').style.display = 'block';
 
           // Track utility message locally
-          trackSentMessage(recipientName.split(' (')[0], recipient, message, true);
+          trackSentMessage(recipient.name.split(' (')[0], recipient.id, message, true);
 
-          alert('✓ Order update sent! ID: ' + response.message_id + '\n\nNow open Facebook Messenger to verify delivery.');
+          alert('✓ Order update sent successfully!\n\nMessage ID: ' + response.message_id + '\n\nPSID: ' + recipient.id + '\n\nNow open Facebook Messenger to verify delivery.');
         } else {
           if (!handleApiError(response)) {
             alert('Error: ' + (response.error ? response.error.message : 'Failed to send'));
