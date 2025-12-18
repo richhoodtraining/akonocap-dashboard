@@ -1632,11 +1632,18 @@
       </select>
 
       <div class="field-label">Recipient (Recent Conversations)</div>
-      <select id="messageRecipient" class="field-input">
+      <select id="messageRecipient" class="field-input" onchange="checkManualMessagePSID()">
         <option value="">-- Select a Page first --</option>
       </select>
-      <p style="font-size: 11px; color: #666; margin-top: -8px; margin-bottom: 12px;">Last 3 people who messaged your
-        Page (loaded via API)</p>
+      
+      <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
+        <div style="flex: 1; height: 1px; background: #e4e6eb;"></div>
+        <span style="font-size: 11px; color: #666;">OR enter PSID manually</span>
+        <div style="flex: 1; height: 1px; background: #e4e6eb;"></div>
+      </div>
+      
+      <input id="manualMessagePSID" class="field-input" type="text" placeholder="Enter PSID (e.g., 25237327232600073)" oninput="useManualMessagePSID()" />
+      <p style="font-size: 10px; color: #666; margin-top: -8px; margin-bottom: 12px;">PSID of someone who has messaged your Page</p>
 
       <div class="field-label">Message</div>
       <textarea id="messageText" class="field-textarea" placeholder="Type your response message here..."></textarea>
@@ -2194,18 +2201,29 @@
       const pageSelect = document.getElementById('messagePageSelect');
       const pageId = pageSelect.value;
       const pageToken = pageSelect.options[pageSelect.selectedIndex].dataset.token;
-      const recipientSelect = document.getElementById('messageRecipient');
-      const recipient = recipientSelect.value;
-      const recipientName = recipientSelect.options[recipientSelect.selectedIndex]?.text || 'Customer';
+      const recipient = getMessageRecipientPSID();
       const message = document.getElementById('messageText').value;
 
-      if (!pageId || !recipient || !message) {
-        alert('Please fill in all fields');
+      if (!pageId) {
+        alert('Please select a Page');
+        return;
+      }
+      
+      if (!recipient) {
+        alert('Please select a recipient from dropdown or enter a PSID manually');
+        return;
+      }
+      
+      if (!message) {
+        alert('Please enter a message');
         return;
       }
 
+      console.log('Sending message to PSID:', recipient.id);
+      console.log('Message:', message);
+
       FB.api('/' + pageId + '/messages', 'POST', {
-        recipient: { id: recipient },
+        recipient: { id: recipient.id },
         message: { text: message },
         messaging_type: 'RESPONSE',
         access_token: pageToken
@@ -2215,9 +2233,9 @@
           document.getElementById('messageText').value = '';
 
           // Track sent message locally
-          trackSentMessage(recipientName.split(' (')[0], recipient, message, false);
+          trackSentMessage(recipient.name.split(' (')[0], recipient.id, message, false);
 
-          alert('✓ Message sent! ID: ' + response.message_id + '\n\nNow open Facebook Messenger to verify delivery.');
+          alert('✓ Message sent successfully!\n\nMessage ID: ' + response.message_id + '\n\nPSID: ' + recipient.id + '\n\nNow open Facebook Messenger to verify delivery.');
         } else {
           if (!handleApiError(response)) {
             alert('Error: ' + (response.error ? response.error.message : 'Failed to send'));
@@ -2411,7 +2429,7 @@
       previewEl.textContent = preview;
     }
 
-    // Manual PSID handling
+    // Manual PSID handling for Utility Messages
     function useManualPSID() {
       const manualInput = document.getElementById('manualPSID');
       const selectDropdown = document.getElementById('utilityRecipient');
@@ -2432,10 +2450,55 @@
       }
     }
 
-    // Get the recipient PSID (from dropdown or manual input)
+    // Get the recipient PSID for Utility Messages (from dropdown or manual input)
     function getRecipientPSID() {
       const manualInput = document.getElementById('manualPSID');
       const selectDropdown = document.getElementById('utilityRecipient');
+      
+      // Prefer manual input if filled
+      if (manualInput && manualInput.value.trim()) {
+        return {
+          id: manualInput.value.trim(),
+          name: 'Customer (PSID: ' + manualInput.value.trim().substring(0, 8) + '...)'
+        };
+      }
+      
+      // Otherwise use dropdown
+      if (selectDropdown && selectDropdown.value) {
+        return {
+          id: selectDropdown.value,
+          name: selectDropdown.options[selectDropdown.selectedIndex]?.text || 'Customer'
+        };
+      }
+      
+      return null;
+    }
+
+    // Manual PSID handling for Regular Messages
+    function useManualMessagePSID() {
+      const manualInput = document.getElementById('manualMessagePSID');
+      const selectDropdown = document.getElementById('messageRecipient');
+      
+      if (manualInput && manualInput.value.trim()) {
+        // Clear dropdown selection when manual PSID is entered
+        if (selectDropdown) selectDropdown.value = '';
+      }
+    }
+
+    function checkManualMessagePSID() {
+      const manualInput = document.getElementById('manualMessagePSID');
+      const selectDropdown = document.getElementById('messageRecipient');
+      
+      if (selectDropdown && selectDropdown.value) {
+        // Clear manual input when dropdown is selected
+        if (manualInput) manualInput.value = '';
+      }
+    }
+
+    // Get the recipient PSID for Regular Messages (from dropdown or manual input)
+    function getMessageRecipientPSID() {
+      const manualInput = document.getElementById('manualMessagePSID');
+      const selectDropdown = document.getElementById('messageRecipient');
       
       // Prefer manual input if filled
       if (manualInput && manualInput.value.trim()) {
