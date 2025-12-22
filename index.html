@@ -1190,26 +1190,77 @@
             </div>
           </div>
 
-          <div class="engagement-grid">
+          <div class="engagement-grid" id="engagementMetrics">
             <div class="engagement-card">
               <div class="engagement-label">Page Views (7d)</div>
-              <div class="engagement-value">8,432</div>
-              <div class="engagement-delta">+23% vs previous week</div>
+              <div class="engagement-value" data-metric="page_views_total">Loading...</div>
+              <div class="engagement-delta" id="viewsDelta"></div>
             </div>
             <div class="engagement-card">
               <div class="engagement-label">Post Reach (7d)</div>
-              <div class="engagement-value">45,891</div>
-              <div class="engagement-delta">+18% vs previous week</div>
+              <div class="engagement-value" data-metric="page_post_impressions">Loading...</div>
+              <div class="engagement-delta" id="reachDelta"></div>
             </div>
             <div class="engagement-card">
               <div class="engagement-label">Engagements</div>
-              <div class="engagement-value">2,156</div>
-              <div class="engagement-delta">+31% vs previous week</div>
+              <div class="engagement-value" data-metric="page_post_engagements">Loading...</div>
+              <div class="engagement-delta" id="engagementsDelta"></div>
             </div>
             <div class="engagement-card">
               <div class="engagement-label">New Followers</div>
-              <div class="engagement-value">342</div>
-              <div class="engagement-delta">+12% vs previous week</div>
+              <div class="engagement-value" data-metric="page_fan_adds">Loading...</div>
+              <div class="engagement-delta" id="followersDelta"></div>
+            </div>
+          </div>
+
+          <!-- Detailed Post Engagement Section -->
+          <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-subtle);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <div style="font-weight: 600; font-size: 14px;">
+                <span>📊</span>
+                <span>Post-Level Engagement Analytics</span>
+              </div>
+              <button class="btn-ghost" onclick="loadDetailedEngagement()" style="font-size: 12px;">
+                🔄 Refresh Posts
+              </button>
+            </div>
+            
+            <div id="detailedEngagementLoader" style="display: none; text-align: center; padding: 20px; color: var(--text-muted);">
+              <div class="spinner" style="margin: 0 auto 8px;"></div>
+              <div style="font-size: 13px;">Loading post engagement data...</div>
+            </div>
+
+            <div id="postEngagementList" style="max-height: 400px; overflow-y: auto;">
+              <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">
+                Click "Refresh Posts" to load detailed post engagement metrics
+              </div>
+            </div>
+
+            <!-- Engagement Summary -->
+            <div id="engagementSummary" style="margin-top: 16px; display: none;">
+              <div style="background: var(--pill-bg); padding: 14px; border-radius: 8px;">
+                <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--text-main);">
+                  📈 Total Engagement Breakdown
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 12px;">
+                  <div style="text-align: center;">
+                    <div style="font-size: 20px; font-weight: 700; color: #1877f2;" id="summaryReactions">0</div>
+                    <div style="color: var(--text-muted); font-size: 11px;">Reactions</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="font-size: 20px; font-weight: 700; color: #16a34a;" id="summaryComments">0</div>
+                    <div style="color: var(--text-muted); font-size: 11px;">Comments</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="font-size: 20px; font-weight: 700; color: #f59e0b;" id="summaryShares">0</div>
+                    <div style="color: var(--text-muted); font-size: 11px;">Shares</div>
+                  </div>
+                </div>
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-subtle); text-align: center;">
+                  <span style="font-size: 12px; color: var(--text-muted);">Avg. Engagement Rate: </span>
+                  <span style="font-size: 14px; font-weight: 600; color: var(--success);" id="avgEngagementRate">0%</span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -1987,18 +2038,162 @@
 
     // Load Page Engagement (pages_read_engagement)
     function loadPageEngagement(pageId, pageToken) {
+      // Load page-level insights
       FB.api('/' + pageId + '/insights', {
-        metric: 'page_views_total,page_post_engagements,page_fan_adds',
-        period: 'week',
+        metric: 'page_views_total,page_post_impressions,page_post_engagements,page_fan_adds,page_impressions,page_engaged_users',
+        period: 'day',
+        since: Math.floor((Date.now() - 7 * 24 * 60 * 60 * 1000) / 1000),
+        until: Math.floor(Date.now() / 1000),
         access_token: pageToken
       }, function (response) {
         if (handleApiError(response)) return;
         if (response && response.data) {
           response.data.forEach(metric => {
-            const value = metric.values && metric.values[0] ? metric.values[0].value : 0;
-            const el = document.querySelector(`[data-metric="${metric.name}"]`);
-            if (el) el.textContent = value.toLocaleString();
+            const values = metric.values || [];
+            if (values.length > 0) {
+              // Sum up values for the period
+              const total = values.reduce((sum, item) => sum + (parseInt(item.value) || 0), 0);
+              const el = document.querySelector(`[data-metric="${metric.name}"]`);
+              if (el) {
+                el.textContent = total.toLocaleString();
+              }
+            }
           });
+        }
+      });
+
+      // Also load follower count
+      FB.api('/' + pageId, {
+        fields: 'fan_count,name,category',
+        access_token: pageToken
+      }, function (response) {
+        if (response && response.fan_count) {
+          // Update follower count if there's a display element for it
+          const followerEl = document.querySelector('[data-metric="fan_count"]');
+          if (followerEl) {
+            followerEl.textContent = response.fan_count.toLocaleString();
+          }
+        }
+      });
+    }
+
+    // Load Detailed Post-Level Engagement
+    function loadDetailedEngagement() {
+      // Get the first page to load posts from
+      if (!pages || pages.length === 0) {
+        alert('No pages available. Please connect your Facebook account first.');
+        return;
+      }
+
+      const page = pages[0];
+      const loader = document.getElementById('detailedEngagementLoader');
+      const container = document.getElementById('postEngagementList');
+      const summaryDiv = document.getElementById('engagementSummary');
+
+      if (loader) loader.style.display = 'block';
+      if (container) container.innerHTML = '';
+
+      // Load posts with engagement metrics
+      FB.api('/' + page.id + '/posts', {
+        fields: 'message,created_time,likes.summary(true),comments.summary(true),shares,reactions.summary(true),full_picture,permalink_url',
+        limit: 10,
+        access_token: page.access_token
+      }, function (response) {
+        if (loader) loader.style.display = 'none';
+
+        if (handleApiError(response)) return;
+
+        if (response && response.data && response.data.length > 0) {
+          let totalReactions = 0;
+          let totalComments = 0;
+          let totalShares = 0;
+          let totalPosts = response.data.length;
+
+          container.innerHTML = '';
+
+          response.data.forEach((post, index) => {
+            const reactions = post.reactions?.summary?.total_count || 0;
+            const comments = post.comments?.summary?.total_count || 0;
+            const shares = post.shares?.count || 0;
+            const totalEngagement = reactions + comments + shares;
+
+            totalReactions += reactions;
+            totalComments += comments;
+            totalShares += shares;
+
+            const message = post.message || 'No text content';
+            const preview = message.length > 100 ? message.substring(0, 100) + '...' : message;
+            const dateStr = new Date(post.created_time).toLocaleDateString();
+            const hasImage = post.full_picture ? '🖼️' : '';
+
+            // Determine performance level
+            let performanceColor = '#94a3b8';
+            let performanceLabel = 'Low';
+            if (totalEngagement > 100) {
+              performanceColor = '#16a34a';
+              performanceLabel = 'High';
+            } else if (totalEngagement > 30) {
+              performanceColor = '#f59e0b';
+              performanceLabel = 'Medium';
+            }
+
+            container.innerHTML += `
+              <div class="post-card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div style="flex: 1;">
+                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">
+                      ${hasImage} Post #${index + 1} • ${dateStr}
+                    </div>
+                    <div style="font-size: 13px; color: var(--text-main); line-height: 1.4;">
+                      "${preview}"
+                    </div>
+                  </div>
+                  <div style="margin-left: 12px;">
+                    <span style="background: ${performanceColor}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap;">
+                      ${performanceLabel}
+                    </span>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 8px; border-top: 1px solid var(--border-subtle);">
+                  <div style="text-align: center;">
+                    <div style="font-size: 16px; font-weight: 700; color: #1877f2;">${reactions}</div>
+                    <div style="font-size: 10px; color: var(--text-muted);">Reactions</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="font-size: 16px; font-weight: 700; color: #16a34a;">${comments}</div>
+                    <div style="font-size: 10px; color: var(--text-muted);">Comments</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="font-size: 16px; font-weight: 700; color: #f59e0b;">${shares}</div>
+                    <div style="font-size: 10px; color: var(--text-muted);">Shares</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="font-size: 16px; font-weight: 700; color: #a855f7;">${totalEngagement}</div>
+                    <div style="font-size: 10px; color: var(--text-muted);">Total</div>
+                  </div>
+                </div>
+                ${post.permalink_url ? `<div style="margin-top: 8px; text-align: right;"><a href="${post.permalink_url}" target="_blank" style="font-size: 11px; color: var(--accent); text-decoration: none;">View on Facebook →</a></div>` : ''}
+              </div>
+            `;
+          });
+
+          // Update summary
+          if (summaryDiv) {
+            summaryDiv.style.display = 'block';
+            document.getElementById('summaryReactions').textContent = totalReactions.toLocaleString();
+            document.getElementById('summaryComments').textContent = totalComments.toLocaleString();
+            document.getElementById('summaryShares').textContent = totalShares.toLocaleString();
+
+            // Calculate average engagement rate (total engagement / total posts)
+            const avgEngagement = totalPosts > 0 ? ((totalReactions + totalComments + totalShares) / totalPosts) : 0;
+            document.getElementById('avgEngagementRate').textContent = avgEngagement.toFixed(1);
+          }
+        } else {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">
+              No posts found in the last 30 days
+            </div>
+          `;
         }
       });
     }
