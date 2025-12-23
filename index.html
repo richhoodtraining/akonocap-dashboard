@@ -1179,37 +1179,67 @@
             </span>
           </div>
 
-          <div id="pagesList">
-            <div class="page-card">
-              <div class="page-avatar">A</div>
-              <div class="page-info">
-                <div class="page-name">Akonocap Bulk Buyers</div>
-                <div class="page-stats">12,847 followers • Sneaker/Streetwear Business</div>
+          <!-- Page Selector for Metrics -->
+          <div style="background: var(--accent-soft); padding: 12px; border-radius: 10px; margin-bottom: 16px; border: 1px solid rgba(24,119,242,0.2);">
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 200px;">
+                <label style="font-size: 11px; font-weight: 600; color: var(--accent); display: block; margin-bottom: 4px;">
+                  📊 SELECT PAGE FOR METRICS
+                </label>
+                <select id="pageMetricsSelect" class="field-input" onchange="onPageSelectChange()" style="width: 100%; margin: 0;">
+                  <option value="">-- Select a Page --</option>
+                </select>
               </div>
-              <button class="btn-ghost" onclick="openDrawer('pageSettings')">Manage</button>
             </div>
           </div>
 
-          <div class="engagement-grid" id="engagementMetrics">
+          <!-- Selected Page Card (only shows after selection) -->
+          <div id="selectedPageCard" style="display: none;">
+            <div class="page-card" style="border: 2px solid var(--accent); background: var(--accent-soft);">
+              <div class="page-avatar" id="selectedPageAvatar">A</div>
+              <div class="page-info">
+                <div class="page-name" id="selectedPageNameDisplay">Page Name</div>
+                <div class="page-stats" id="selectedPageStats">0 followers • Category</div>
+              </div>
+              <button class="btn-ghost" id="selectedPageManageBtn" onclick="openPageSettings('')">Manage</button>
+            </div>
+          </div>
+
+          <!-- Loading indicator for metrics -->
+          <div id="metricsLoader" style="display: none; text-align: center; padding: 20px;">
+            <div class="spinner" style="margin: 0 auto 8px;"></div>
+            <div style="font-size: 12px; color: var(--text-muted);">Loading page insights...</div>
+          </div>
+
+          <div class="engagement-grid" id="engagementMetrics" style="display: none;">
             <div class="engagement-card">
               <div class="engagement-label">Page Views (7d)</div>
-              <div class="engagement-value" data-metric="page_views_total">Loading...</div>
+              <div class="engagement-value" id="metric-page-views">--</div>
               <div class="engagement-delta" id="viewsDelta"></div>
             </div>
             <div class="engagement-card">
               <div class="engagement-label">Post Reach (7d)</div>
-              <div class="engagement-value" data-metric="page_post_impressions">Loading...</div>
+              <div class="engagement-value" id="metric-post-reach">--</div>
               <div class="engagement-delta" id="reachDelta"></div>
             </div>
             <div class="engagement-card">
-              <div class="engagement-label">Engagements</div>
-              <div class="engagement-value" data-metric="page_post_engagements">Loading...</div>
+              <div class="engagement-label">Engagements (7d)</div>
+              <div class="engagement-value" id="metric-engagements">--</div>
               <div class="engagement-delta" id="engagementsDelta"></div>
             </div>
             <div class="engagement-card">
-              <div class="engagement-label">New Followers</div>
-              <div class="engagement-value" data-metric="page_fan_adds">Loading...</div>
+              <div class="engagement-label">New Followers (7d)</div>
+              <div class="engagement-value" id="metric-new-followers">--</div>
               <div class="engagement-delta" id="followersDelta"></div>
+            </div>
+          </div>
+
+          <!-- API Call Info -->
+          <div id="apiCallInfo" style="display: none; margin-top: 12px; padding: 10px; background: rgba(22,163,74,0.1); border-radius: 8px; border: 1px solid rgba(22,163,74,0.3);">
+            <div style="font-size: 11px; color: #16a34a; font-family: monospace;">
+              <strong>✓ API Call:</strong> GET /<span id="apiPageId"></span>/insights<br>
+              <strong>Metrics:</strong> page_views_total, page_impressions, page_post_engagements, page_fan_adds<br>
+              <strong>Period:</strong> day (last 7 days summed)
             </div>
           </div>
 
@@ -1992,33 +2022,206 @@
           renderPagesList();
           populatePageSelects();
 
-          // Load engagement for first page (pages_read_engagement)
-          if (pages.length > 0) {
-            loadPageEngagement(pages[0].id, pages[0].access_token);
+          // Don't auto-load metrics - let user select a page
+          // If there's only one page, auto-select it
+          if (pages.length === 1) {
+            const pageSelect = document.getElementById('pageMetricsSelect');
+            if (pageSelect) {
+              pageSelect.value = pages[0].id;
+              onPageSelectChange();
+              loadSelectedPageMetrics();
+            }
             loadConversations(pages[0].id, pages[0].access_token);
           }
         }
       });
     }
 
-    // Render Pages List
+    // Render Pages List (just populate dropdown, not card list)
     function renderPagesList() {
-      const container = document.getElementById('pagesList');
-      if (!container) return;
+      const pageSelect = document.getElementById('pageMetricsSelect');
+      
+      // Populate page selector dropdown
+      if (pageSelect) {
+        pageSelect.innerHTML = '<option value="">-- Select a Page --</option>';
+        pages.forEach(page => {
+          const pic = page.picture && page.picture.data ? page.picture.data.url : '';
+          pageSelect.innerHTML += `<option value="${page.id}" data-token="${page.access_token}" data-name="${page.name}" data-followers="${page.fan_count || 0}" data-category="${page.category || 'Page'}" data-pic="${pic}">${page.name}</option>`;
+        });
+      }
+    }
 
-      container.innerHTML = '';
-      pages.forEach(page => {
-        const pic = page.picture && page.picture.data ? page.picture.data.url : '';
-        container.innerHTML += `
-          <div class="page-card">
-            <div class="page-avatar">${pic ? '<img src="' + pic + '" alt="">' : page.name.charAt(0)}</div>
-            <div class="page-info">
-              <div class="page-name">${page.name}</div>
-              <div class="page-stats">${page.fan_count ? page.fan_count.toLocaleString() + ' followers • ' : ''}${page.category || 'Page'}</div>
-            </div>
-            <button class="btn-ghost" onclick="openPageSettings('${page.id}')">Manage</button>
-          </div>
-        `;
+    // Handle page selector change - show card and load metrics automatically
+    function onPageSelectChange() {
+      const pageSelect = document.getElementById('pageMetricsSelect');
+      const cardDiv = document.getElementById('selectedPageCard');
+      const metricsGrid = document.getElementById('engagementMetrics');
+      
+      if (!pageSelect || !pageSelect.value) {
+        if (cardDiv) cardDiv.style.display = 'none';
+        if (metricsGrid) metricsGrid.style.display = 'none';
+        document.getElementById('apiCallInfo').style.display = 'none';
+        return;
+      }
+      
+      const selectedOption = pageSelect.options[pageSelect.selectedIndex];
+      const pageId = pageSelect.value;
+      const pageName = selectedOption.dataset.name;
+      const followers = selectedOption.dataset.followers;
+      const category = selectedOption.dataset.category;
+      const pic = selectedOption.dataset.pic;
+      
+      // Show and update selected page card
+      if (cardDiv) {
+        cardDiv.style.display = 'block';
+        document.getElementById('selectedPageNameDisplay').textContent = pageName;
+        document.getElementById('selectedPageStats').textContent = parseInt(followers).toLocaleString() + ' followers • ' + category;
+        
+        const avatarDiv = document.getElementById('selectedPageAvatar');
+        if (pic) {
+          avatarDiv.innerHTML = '<img src="' + pic + '" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+        } else {
+          avatarDiv.innerHTML = pageName.charAt(0);
+        }
+        
+        document.getElementById('selectedPageManageBtn').onclick = function() { openPageSettings(pageId); };
+      }
+      
+      // Show metrics grid
+      if (metricsGrid) metricsGrid.style.display = 'grid';
+      
+      // Auto-load metrics
+      loadSelectedPageMetrics();
+    }
+
+    // Load metrics for selected page
+    function loadSelectedPageMetrics() {
+      const pageSelect = document.getElementById('pageMetricsSelect');
+      if (!pageSelect || !pageSelect.value) {
+        return;
+      }
+      
+      const pageId = pageSelect.value;
+      const selectedOption = pageSelect.options[pageSelect.selectedIndex];
+      const pageToken = selectedOption.dataset.token;
+      
+      // Show loader
+      const loader = document.getElementById('metricsLoader');
+      if (loader) loader.style.display = 'block';
+      
+      // Reset metrics
+      document.getElementById('metric-page-views').textContent = 'Loading...';
+      document.getElementById('metric-post-reach').textContent = 'Loading...';
+      document.getElementById('metric-engagements').textContent = 'Loading...';
+      document.getElementById('metric-new-followers').textContent = 'Loading...';
+      
+      // Show API call info
+      const apiInfo = document.getElementById('apiCallInfo');
+      const apiPageId = document.getElementById('apiPageId');
+      if (apiInfo) apiInfo.style.display = 'block';
+      if (apiPageId) apiPageId.textContent = pageId;
+      
+      // Calculate date range (last 7 days)
+      const now = Math.floor(Date.now() / 1000);
+      const sevenDaysAgo = now - (7 * 24 * 60 * 60);
+      
+      console.log('Loading insights for page:', pageId);
+      
+      // API call for page insights
+      FB.api('/' + pageId + '/insights', {
+        metric: 'page_views_total,page_impressions,page_post_engagements,page_fan_adds',
+        period: 'day',
+        since: sevenDaysAgo,
+        until: now,
+        access_token: pageToken
+      }, function(response) {
+        if (loader) loader.style.display = 'none';
+        
+        console.log('Insights API response:', response);
+        
+        if (response.error) {
+          console.error('Insights API error:', response.error);
+          // Try alternative metrics
+          loadAlternativeMetrics(pageId, pageToken);
+          return;
+        }
+        
+        if (response && response.data) {
+          let pageViews = 0;
+          let postReach = 0;
+          let engagements = 0;
+          let newFollowers = 0;
+          
+          response.data.forEach(metric => {
+            const values = metric.values || [];
+            const total = values.reduce((sum, item) => sum + (parseInt(item.value) || 0), 0);
+            
+            if (metric.name === 'page_views_total') {
+              pageViews = total;
+            } else if (metric.name === 'page_impressions') {
+              postReach = total;
+            } else if (metric.name === 'page_post_engagements') {
+              engagements = total;
+            } else if (metric.name === 'page_fan_adds') {
+              newFollowers = total;
+            }
+          });
+          
+          // Update UI
+          document.getElementById('metric-page-views').textContent = pageViews.toLocaleString();
+          document.getElementById('metric-post-reach').textContent = postReach.toLocaleString();
+          document.getElementById('metric-engagements').textContent = engagements.toLocaleString();
+          document.getElementById('metric-new-followers').textContent = newFollowers.toLocaleString();
+          
+          // Add deltas
+          document.getElementById('viewsDelta').textContent = pageViews > 0 ? '↑ Active' : '';
+          document.getElementById('reachDelta').textContent = postReach > 0 ? '↑ Active' : '';
+          document.getElementById('engagementsDelta').textContent = engagements > 0 ? '↑ Active' : '';
+          document.getElementById('followersDelta').textContent = newFollowers > 0 ? '+' + newFollowers + ' this week' : '';
+        }
+      });
+      
+      // Also load conversations for this page
+      loadConversations(pageId, pageToken);
+    }
+
+    // Alternative metrics load if insights fail
+    function loadAlternativeMetrics(pageId, pageToken) {
+      console.log('Trying alternative metrics...');
+      
+      // Get basic page info
+      FB.api('/' + pageId, {
+        fields: 'fan_count,talking_about_count,were_here_count',
+        access_token: pageToken
+      }, function(response) {
+        if (response && !response.error) {
+          document.getElementById('metric-new-followers').textContent = (response.fan_count || 0).toLocaleString();
+          document.getElementById('metric-engagements').textContent = (response.talking_about_count || 0).toLocaleString();
+          document.getElementById('metric-page-views').textContent = '--';
+          document.getElementById('metric-post-reach').textContent = '--';
+        }
+      });
+      
+      // Get recent posts for engagement
+      FB.api('/' + pageId + '/posts', {
+        fields: 'reactions.summary(true),comments.summary(true),shares',
+        limit: 10,
+        access_token: pageToken
+      }, function(response) {
+        if (response && response.data) {
+          let totalReactions = 0;
+          let totalComments = 0;
+          let totalShares = 0;
+          
+          response.data.forEach(post => {
+            totalReactions += post.reactions?.summary?.total_count || 0;
+            totalComments += post.comments?.summary?.total_count || 0;
+            totalShares += post.shares?.count || 0;
+          });
+          
+          document.getElementById('metric-engagements').textContent = (totalReactions + totalComments + totalShares).toLocaleString();
+          document.getElementById('metric-post-reach').textContent = totalReactions.toLocaleString() + ' reactions';
+        }
       });
     }
 
@@ -2079,13 +2282,23 @@
 
     // Load Detailed Post-Level Engagement
     function loadDetailedEngagement() {
-      // Get the first page to load posts from
-      if (!pages || pages.length === 0) {
-        alert('No pages available. Please connect your Facebook account first.');
-        return;
+      // Get the selected page
+      const pageSelect = document.getElementById('pageMetricsSelect');
+      let page = null;
+      
+      if (pageSelect && pageSelect.value) {
+        page = pages.find(p => p.id === pageSelect.value);
+      }
+      
+      if (!page) {
+        // Fall back to first page if none selected
+        if (!pages || pages.length === 0) {
+          alert('No pages available. Please connect your Facebook account first.');
+          return;
+        }
+        page = pages[0];
       }
 
-      const page = pages[0];
       const loader = document.getElementById('detailedEngagementLoader');
       const container = document.getElementById('postEngagementList');
       const summaryDiv = document.getElementById('engagementSummary');
