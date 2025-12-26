@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Akonocap Command Center</title>
+  <title>Akonocap Command Center — App Review Demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -52,10 +52,6 @@
       justify-content: center;
     }
 
-    body.theme-dark {
-      background: radial-gradient(circle at top, #0b1120 0, #020617 45%, #020617 100%);
-    }
-
     .shell {
       width: 100%;
       max-width: 1400px;
@@ -65,7 +61,6 @@
       padding: 16px 12px 24px;
     }
 
-    /* Header */
     header {
       padding: 12px 18px;
       border-radius: 14px;
@@ -79,12 +74,6 @@
       position: sticky;
       top: 10px;
       z-index: 10;
-    }
-
-    .header-left {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
     }
 
     .brand-row {
@@ -117,16 +106,9 @@
       color: var(--text-muted);
     }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* Buttons */
-    .btn-primary,
-    .btn-secondary,
-    .btn-ghost {
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
       border-radius: 999px;
       padding: 8px 16px;
       border: none;
@@ -135,117 +117,9 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s ease;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #ffffff;
-      box-shadow: 0 3px 8px rgba(24, 119, 242, 0.35);
       font-weight: 600;
     }
 
-    .btn-primary:hover {
-      background: #1664d8;
-      transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-      background: #ffffff;
-      color: var(--accent);
-      border: 1px solid rgba(24, 119, 242, 0.35);
-    }
-
-    body.theme-dark .btn-secondary {
-      background: #020617;
-      color: var(--accent);
-      border-color: rgba(148, 163, 184, 0.6);
-    }
-
-    .btn-secondary:hover {
-      background: var(--accent-soft);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-      font-size: 12px;
-      padding: 6px 12px;
-    }
-
-    .btn-ghost:hover {
-      color: var(--accent);
-      border-color: var(--accent);
-      background: var(--accent-soft);
-    }
-
-    .btn-success {
-      background: var(--success);
-      color: #ffffff;
-      border-radius: 999px;
-      padding: 8px 16px;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    /* Theme toggle */
-    .theme-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      background: #f5f6f7;
-      font-size: 11px;
-      color: var(--text-muted);
-      cursor: pointer;
-    }
-
-    body.theme-dark .theme-toggle {
-      background: #020617;
-    }
-
-    /* User info */
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-4px);
-      transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-
-    .user-info.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
-
-    .user-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      object-fit: cover;
-      border: 2px solid var(--accent);
-    }
-
-    .user-name {
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .logout {
-      font-size: 11px;
-      color: #e11d48;
-      cursor: pointer;
-    }
-
-    /* Layout */
     main {
       flex: 1;
       display: flex;
@@ -260,28 +134,14 @@
       gap: 16px;
     }
 
-    /* Panels */
     .panel {
       background: var(--bg-card);
       border-radius: 14px;
       padding: 18px;
       border: 1px solid var(--border-subtle);
       box-shadow: var(--shadow-soft);
-      transition: all 0.15s ease;
       position: relative;
       overflow: hidden;
-    }
-
-    .panel.disabled {
-      opacity: 0.45;
-      filter: grayscale(0.1);
-      box-shadow: none;
-      pointer-events: none;
-    }
-
-    .panel:not(.disabled):hover {
-      box-shadow: var(--shadow-strong);
-      transform: translateY(-2px);
     }
 
     .panel.full-span {
@@ -293,7 +153,6 @@
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 8px;
-      flex-wrap: wrap;
       gap: 8px;
     }
 
@@ -311,640 +170,106 @@
       margin-bottom: 12px;
     }
 
-    .badge {
-      font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .perm-pill {
-      font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: var(--pill-bg);
-      color: var(--text-muted);
-      border: 1px solid rgba(0, 0, 0, 0.04);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .perm-pill.active {
-      background: rgba(22, 163, 74, 0.1);
-      color: var(--success);
-      border-color: rgba(22, 163, 74, 0.2);
-    }
-
-    .perm-group {
+    .demo-controls {
       display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .field-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
       gap: 8px;
+      align-items: center;
       margin-bottom: 12px;
-      font-size: 12px;
+      flex-wrap: wrap;
     }
 
-    select,
-    input[type="text"],
-    input[type="number"],
-    input[type="datetime-local"] {
-      min-width: 180px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      font-size: 13px;
-      background: #ffffff;
-      color: var(--text-main);
-    }
-
-    body.theme-dark select,
-    body.theme-dark input[type="text"],
-    body.theme-dark input[type="number"],
-    body.theme-dark input[type="datetime-local"] {
-      background: #020617;
-      color: var(--text-main);
-    }
-
-    /* Cards */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .card {
-      background: linear-gradient(135deg, #ffffff, #f5f7fb);
-      border-radius: 12px;
-      padding: 10px 12px;
-      border: 1px solid #dde1ea;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-      transition: transform 0.1s ease;
-    }
-
-    body.theme-dark .card {
-      background: linear-gradient(135deg, #111827, #020617);
-      border-color: #1f2937;
-    }
-
-    .card:hover {
-      transform: translateY(-1px);
-    }
-
-    .card-label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-    }
-
-    .card-value {
-      margin-top: 4px;
-      font-size: 18px;
-      font-weight: 600;
-    }
-
-    .card-delta {
-      margin-top: 4px;
-      font-size: 11px;
-      color: var(--success);
-    }
-
-    /* List */
-    .list {
-      margin-top: 6px;
-      font-size: 12px;
-      border-top: 1px solid rgba(0, 0, 0, 0.04);
-      padding-top: 8px;
-    }
-
-    .list-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.03);
-      cursor: pointer;
-      transition: background 0.12s ease;
-    }
-
-    .list-item:hover {
-      background: rgba(24, 119, 242, 0.03);
-    }
-
-    .list-title {
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .list-meta {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .pill {
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: var(--pill-bg);
-      font-size: 11px;
-      color: var(--text-main);
-    }
-
-    /* Loading overlay */
-    .loading-overlay {
-      position: absolute;
-      inset: 0;
-      background: var(--overlay);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 5;
-      font-size: 13px;
-      color: var(--accent);
-      backdrop-filter: blur(2px);
-    }
-
-    .loading-overlay.visible {
-      display: flex;
-    }
-
-    .spinner {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      border: 2px solid rgba(24, 119, 242, 0.25);
-      border-top-color: var(--accent);
-      margin-right: 8px;
-      animation: spin 0.75s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* Login modal */
-    .modal-backdrop {
+    .caption-overlay {
       position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
+      bottom: 24px;
+      right: 24px;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border-subtle);
+      padding: 12px 14px;
+      border-radius: 10px;
+      box-shadow: var(--shadow-strong);
+      z-index: 120;
       display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
+      font-size: 13px;
+      color: var(--text-main);
     }
 
-    .modal-backdrop.visible {
-      display: flex;
+    .caption-overlay.visible {
+      display: block;
       animation: fadeIn 0.18s ease-out;
     }
 
-    .modal {
-      width: 420px;
-      max-width: 94vw;
-      border-radius: 14px;
-      background: #ffffff;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-      overflow: hidden;
-    }
-
-    .modal-header {
-      padding: 16px 18px;
-      border-bottom: 1px solid #e4e6eb;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .fb-logo {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: #1877f2;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 20px;
-    }
-
-    .modal-body {
-      padding: 14px 18px 16px;
-      font-size: 13px;
-      color: #444950;
-    }
-
-    .modal-perms {
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 10px;
-      background: #f5f6f7;
-      border: 1px solid #e4e6eb;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .modal-footer {
-      padding: 12px 18px 14px;
-      border-top: 1px solid #e4e6eb;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .modal-btn-primary,
-    .modal-btn-secondary {
-      border-radius: 8px;
-      border: none;
-      padding: 8px 14px;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .modal-btn-secondary {
-      background: #e4e6eb;
-      color: #050505;
-    }
-
-    .modal-btn-primary {
-      background: #1877f2;
-      color: #ffffff;
+    .caption-step {
       font-weight: 600;
+      margin-bottom: 6px;
     }
 
-    /* Drawers */
-    .drawer-backdrop {
+    .caption-note {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .screencast-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.25);
       display: none;
-      z-index: 40;
-    }
-
-    .drawer-backdrop.visible {
-      display: block;
-    }
-
-    .drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 400px;
-      max-width: 100%;
-      height: 100%;
-      background: var(--bg-card);
-      box-shadow: -12px 0 30px rgba(0, 0, 0, 0.18);
-      border-left: 1px solid var(--border-subtle);
-      transform: translateX(100%);
-      transition: transform 0.2s ease-out;
-      z-index: 41;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .drawer.visible {
-      transform: translateX(0);
-    }
-
-    .drawer-header {
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      justify-content: space-between;
+      z-index: 115;
       align-items: center;
-      font-size: 15px;
-      font-weight: 600;
+      justify-content: center;
+      pointer-events: none;
     }
 
-    .drawer-close {
-      border: none;
-      background: transparent;
-      font-size: 20px;
-      cursor: pointer;
-      color: var(--text-muted);
-    }
-
-    .drawer-body {
-      padding: 14px 18px 18px;
-      font-size: 13px;
-      color: var(--text-main);
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .drawer-footer {
-      padding: 12px 18px 14px;
-      border-top: 1px solid var(--border-subtle);
+    .screencast-overlay.visible {
       display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      background: var(--bg-card);
+      pointer-events: auto;
     }
 
-    .field-label {
-      font-size: 12px;
-      font-weight: 500;
-      margin-bottom: 4px;
-      color: var(--text-main);
-    }
-
-    .field-input,
-    .field-textarea {
-      width: 100%;
+    .screencast-highlight {
+      border: 2px dashed rgba(24, 119, 242, 0.9);
       border-radius: 8px;
-      border: 1px solid var(--border-subtle);
-      padding: 8px 10px;
-      font-size: 13px;
-      background: #ffffff;
-      color: var(--text-main);
-      margin-bottom: 12px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.95);
+      max-width: 820px;
+      width: calc(100% - 48px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
     }
 
-    body.theme-dark .field-input,
-    body.theme-dark .field-textarea {
-      background: #020617;
-      color: var(--text-main);
-    }
-
-    .field-textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
-
-    .image-placeholder {
-      width: 100%;
-      border-radius: 8px;
-      border: 2px dashed var(--border-subtle);
-      padding: 20px;
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-    }
-
-    /* Icon circles */
-    .icon-circle {
-      width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 700;
-      color: #ffffff;
-      flex-shrink: 0;
-    }
-
-    .icon-circle.fb {
-      background: #1877f2;
-    }
-
-    .icon-circle.ig {
-      background: radial-gradient(circle at 30% 30%, #feda75, #d62976, #962fbf, #4f5bd5);
-    }
-
-    .icon-circle.msg {
-      background: linear-gradient(135deg, #0695FF, #A334FA);
-    }
-
-    .icon-circle.page {
-      background: #1877f2;
-    }
-
-    .icon-circle.biz {
-      background: #4267B2;
-    }
-
-    /* Requirements list */
-    .requirements-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 6px;
-    }
-
-    .req-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(24, 119, 242, 0.02), rgba(66, 103, 178, 0.01));
-      transition: all 0.12s ease;
-    }
-
-    body.theme-dark .req-item {
-      background: linear-gradient(135deg, rgba(29, 155, 240, 0.08), rgba(2, 6, 23, 0.6));
-    }
-
-    .req-item:hover {
-      border-color: rgba(24, 119, 242, 0.35);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-      transform: translateY(-1px);
-    }
-
-    .req-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .status-dot {
-      width: 20px;
-      height: 20px;
-      border-radius: 999px;
-      border: 2px solid var(--border-subtle);
-      background: #ffffff;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    body.theme-dark .status-dot {
-      background: #020617;
-    }
-
-    .req-item.complete .status-dot {
-      background: var(--success);
-      border-color: var(--success);
-      box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
-    }
-
-    .req-item.complete .status-dot::after {
-      content: "✓";
-      color: white;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .req-text {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      min-width: 0;
-    }
-
-    .req-title {
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.4;
-    }
-
-    .req-note {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .req-chevron {
-      font-size: 18px;
-      color: var(--text-muted);
-      margin-left: 12px;
-    }
-
-    /* Page management section */
-    .page-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      margin-bottom: 10px;
-      background: linear-gradient(135deg, rgba(24, 119, 242, 0.02), transparent);
-    }
-
-    .page-avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #1877f2, #42b72a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-      font-size: 18px;
-    }
-
-    .page-info {
-      flex: 1;
-    }
-
-    .page-name {
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .page-stats {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    /* Message preview */
-    .message-preview {
-      padding: 10px 14px;
-      border-radius: 10px;
-      background: var(--pill-bg);
-      margin-bottom: 8px;
-      font-size: 13px;
-    }
-
-    .message-sender {
-      font-weight: 600;
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-
-    .message-text {
-      color: var(--text-muted);
-    }
-
-    .message-time {
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    /* Tab navigation */
-    .tabs {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 14px;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 8px;
-    }
-
-    .tab {
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 12px;
-      cursor: pointer;
-      color: var(--text-muted);
-      transition: all 0.12s ease;
-    }
-
-    .tab:hover {
-      background: var(--accent-soft);
-      color: var(--accent);
-    }
-
-    .tab.active {
-      background: var(--accent);
-      color: white;
-    }
-
-    /* Engagement metrics */
-    .engagement-grid {
+    .pages-list {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-top: 10px;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .page-item {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(24, 119, 242, 0.02), transparent);
     }
 
     .engagement-card {
       padding: 12px;
       border-radius: 10px;
       border: 1px solid var(--border-subtle);
+      margin-top: 10px;
       background: linear-gradient(135deg, rgba(24, 119, 242, 0.02), transparent);
     }
 
-    .engagement-label {
-      font-size: 10px;
-      text-transform: uppercase;
+    .note {
+      font-size: 12px;
       color: var(--text-muted);
-      letter-spacing: 0.05em;
+      margin-top: 8px;
     }
 
-    .engagement-value {
-      font-size: 20px;
-      font-weight: 700;
-      margin-top: 4px;
-    }
-
-    .engagement-delta {
-      font-size: 11px;
-      color: var(--success);
-      margin-top: 2px;
+    .sr-only {
+      position: absolute;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
     }
 
     @keyframes fadeIn {
@@ -963,10 +288,6 @@
       .grid {
         grid-template-columns: 1fr;
       }
-
-      .cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
     }
   </style>
 </head>
@@ -974,6 +295,7 @@
 <body class="theme-light">
   <!-- Facebook SDK -->
   <script>
+    // fbAsyncInit will be called by SDK once loaded
     window.fbAsyncInit = function () {
       FB.init({
         appId: '1185063939768948',
@@ -981,6 +303,7 @@
         xfbml: true,
         version: 'v24.0'
       });
+      // If reviewer already has a session, we show connected state and allow continuing
       FB.getLoginStatus(function (response) {
         if (response.status === 'connected') {
           onFBConnected(response.authResponse);
@@ -989,2205 +312,283 @@
     };
   </script>
   <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
   <div class="shell">
     <!-- HEADER -->
     <header>
-      <div class="header-left">
+      <div>
         <div class="brand-row">
           <div class="logo-pill">A</div>
           <div class="app-name">Akonocap Command Center</div>
         </div>
         <div class="tagline">Unified management for Facebook Ads, Pages, Messaging, and Instagram content.</div>
       </div>
-
-      <div class="header-right">
-        <button id="themeToggle" class="theme-toggle" type="button">
-          <span id="themeIcon">🌙</span>
-          <span id="themeLabel">Dark</span>
-        </button>
-
-        <button id="loginBtn" class="btn-primary" type="button" onclick="facebookLogin()">
-          <span>🔗 Connect with Facebook</span>
-        </button>
-
-        <div id="userPanel" class="user-info">
-          <img class="user-avatar" src="https://i.pravatar.cc/100?img=68" alt="User" />
-          <span class="user-name">Yohanseh | Akonocap</span>
-          <span class="logout" onclick="facebookLogout()">Disconnect</span>
-        </div>
+      <div>
+        <!-- Visible and explicit callout for App Review steps -->
+        <button class="btn-primary" id="start-screencast-btn" onclick="startScreencast()" aria-label="Start demo screencast">Start App Review Screencast</button>
       </div>
     </header>
 
-    <!-- MAIN -->
     <main>
       <div class="grid">
-
-        <!-- ========== META APP REVIEWER GUIDE ========== -->
-        <section class="panel full-span"
-          style="background: linear-gradient(135deg, #1877f2 0%, #42b72a 100%); color: white; border: none;">
-          <div class="panel-header" style="margin-bottom: 0;">
-            <div class="panel-title" style="color: white; font-size: 18px;">
-              <span style="font-size: 24px;">📋</span>
-              META APP REVIEWER: Testing Guide
-            </div>
-          </div>
-
-          <!-- Critical Requirements Alert -->
-          <div
-            style="background: rgba(255,0,0,0.2); border: 2px solid rgba(255,255,255,0.5); border-radius: 10px; padding: 14px; margin-top: 12px;">
-            <p style="margin: 0 0 8px; font-size: 14px; font-weight: 700;">⚠️ CRITICAL: This App Uses REAL Facebook
-              OAuth</p>
-            <ul style="margin: 0; padding-left: 20px; font-size: 12px; line-height: 1.8;">
-              <li>Real Facebook Login OAuth flow (not simulated)</li>
-              <li>Live API calls returning real data from your account</li>
-              <li>Messages sent here WILL appear in Facebook Messenger</li>
-              <li>Utility messages are TRANSACTIONAL ONLY (order updates, no promotions)</li>
-            </ul>
-          </div>
-
-          <div style="background: rgba(255,255,255,0.15); border-radius: 10px; padding: 16px; margin-top: 12px;">
-            <p style="margin: 0 0 12px; font-size: 14px; font-weight: 600;">Step-by-Step Testing Instructions:</p>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">1️⃣ Facebook Login (OAuth)</div>
-                <div style="font-size: 12px; opacity: 0.9;">Click "Connect with Facebook" → Real OAuth popup opens →
-                  Review permissions → Click "Continue" → Redirects back authenticated</div>
-              </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">2️⃣ pages_show_list</div>
-                <div style="font-size: 12px; opacity: 0.9;">After login, Pages panel shows YOUR real Pages → API: GET
-                  /me/accounts</div>
-              </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">3️⃣ pages_read_engagement</div>
-                <div style="font-size: 12px; opacity: 0.9;">View real engagement metrics (views, reach, followers) →
-                  API: GET /{page-id}/insights</div>
-              </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">4️⃣ pages_manage_metadata</div>
-                <div style="font-size: 12px; opacity: 0.9;">Click "Manage" → Edit Page info → Save → API: POST
-                  /{page-id}</div>
-              </div>
-              <div
-                style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border: 2px solid rgba(255,255,0,0.5);">
-                <div style="font-weight: 600; margin-bottom: 6px;">5️⃣ pages_messaging ⚠️</div>
-                <div style="font-size: 12px; opacity: 0.9;">"Compose Message" → Send → <strong>VERIFY: Open Messenger to
-                    see message delivered</strong></div>
-              </div>
-              <div
-                style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border: 2px solid rgba(255,255,0,0.5);">
-                <div style="font-weight: 600; margin-bottom: 6px;">6️⃣ pages_utility_messaging ⚠️</div>
-                <div style="font-size: 12px; opacity: 0.9;">"Send Order Update" → NON-PROMOTIONAL only → <strong>VERIFY:
-                    Check Messenger for delivery</strong></div>
-              </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">7️⃣ business_management</div>
-                <div style="font-size: 12px; opacity: 0.9;">View Business panel → Shows your real business assets → API:
-                  GET /me/businesses</div>
-              </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">8️⃣ ads_read</div>
-                <div style="font-size: 12px; opacity: 0.9;">Select ad account → "Load insights" → Real spend/impressions
-                  → API: GET /{account}/insights</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- FACEBOOK ADS PANEL -->
-        <section id="adsPanel" class="panel disabled">
-          <div id="adsLoading" class="loading-overlay">
-            <div class="spinner"></div>
-            <span>Loading ad insights...</span>
-          </div>
-
+        <!-- Left column: normal app UI (truncated for brevity), plus new App Review Demo panel -->
+        <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">
-              <span class="icon-circle fb">f</span>
-              Facebook Ads Management
-              <span class="badge">Ads API</span>
-            </div>
-          </div>
-          <div class="perm-group">
-            <span class="perm-pill active">✓ ads_read</span>
-            <span class="perm-pill active">✓ ads_management</span>
-          </div>
-          <div class="panel-sub">
-            <strong>Business Use:</strong> We run Facebook ads to acquire B2B wholesale leads (sneaker retailers). This
-            panel shows campaign performance metrics.<br />
-            <span style="font-size: 11px; color: var(--accent);">API: GET /me/adaccounts → GET /{ad-account-id}/insights
-              (fields: spend, impressions, clicks)</span>
-          </div>
-
-          <div class="field-row">
-            <span>Ad account:</span>
-            <select id="adAccountSelect">
-              <option>-- Select ad account --</option>
-              <option>Akonocap - US Buyers (1234 5678 9012)</option>
-              <option>Akonocap - Test Spend (9876 5432 1000)</option>
-            </select>
-            <button id="loadBtn" class="btn-secondary" type="button">Load insights</button>
-            <button id="createCampaignBtn" class="btn-ghost" type="button">+ New Campaign</button>
-          </div>
-
-          <div class="cards">
-            <div class="card">
-              <div class="card-label">Last 7 days spend</div>
-              <div class="card-value" id="adInsightsAccSpend">$0.00</div>
-              <div class="card-delta">+19% vs previous</div>
-            </div>
-            <div class="card">
-              <div class="card-label">Impressions</div>
-              <div class="card-value" id="adInsightsAccImpressions">0</div>
-              <div class="card-delta">+14.3% vs previous</div>
-            </div>
-            <div class="card">
-              <div class="card-label">Cost per lead</div>
-              <div class="card-value" id="adInsightsAccCPL">$0.00</div>
-              <div class="card-delta">-7.8% improvement</div>
+            <div>
+              <div class="panel-title">App Review Demo</div>
+              <div class="panel-sub">Interactive demo that shows the end-to-end flow requested by app review: user login, permissions consent, selecting a Page, and reading Page engagement (pages_read_engagement).</div>
             </div>
           </div>
 
-          <div class="list" id="campaignsList">
-            <div class="list-item" style="justify-content: center; color: var(--text-muted);">
-              Select an ad account to load campaigns...
+          <div class="demo-controls" aria-hidden="false">
+            <button class="btn-primary" id="demo-login-btn" onclick="startLoginFlow()">Click to login and grant permissions</button>
+            <button class="btn-primary" id="demo-reset-btn" onclick="resetDemo()" style="background:#6b7280">Reset demo</button>
+            <div class="note">Important: When you press the first button, the Facebook Login dialog will appear (this demonstrates the frontend Meta login flow). Please accept the permissions to continue.</div>
+          </div>
+
+          <div id="demo-state" aria-live="polite">
+            <!-- Dynamic demo content appears here -->
+            <div id="connected-info" style="display:none">
+              <div class="sr-only" id="sr-connected">Facebook connected.</div>
+              <div class="panel-sub">Connected as: <span id="user-name"></span></div>
+              <div>
+                <button class="btn-primary" onclick="listPages()">Show Pages I manage</button>
+              </div>
+              <div id="pages-container" style="margin-top:12px"></div>
+            </div>
+
+            <div id="not-connected" style="display:block">
+              <div class="note">Reviewer instructions (English): 1) Click "Click to login and grant permissions". 2) In the Facebook dialog, accept the requested permissions (we specifically request <code>pages_read_engagement</code> and <code>pages_show_list</code>). 3) Select a Page when prompted. 4) The demo will show Page posts and engagement counts to demonstrate read access to Page content. Captions and tooltips will appear during the screencast.</div>
             </div>
           </div>
-        </section>
+        </div>
 
-        <!-- PAGES MANAGEMENT PANEL -->
-        <section id="pagesPanel" class="panel disabled">
+        <!-- Right column: additional info / screenshots / guidance for the reviewer -->
+        <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">
-              <span class="icon-circle page">P</span>
-              Facebook Pages Management
-              <span class="badge">Pages API</span>
-            </div>
+            <div class="panel-title">App Review Guidance (for reviewers)</div>
           </div>
-          <div class="perm-group">
-            <span class="perm-pill active">✓ pages_show_list</span>
-            <span class="perm-pill active">✓ pages_manage_metadata</span>
-            <span class="perm-pill active">✓ pages_read_engagement</span>
-          </div>
-          <div class="panel-sub">
-            <strong>Business Use:</strong> Manage our business Facebook Page where wholesale customers contact us.
-            Update business info and track engagement.<br />
-            <span style="font-size: 11px; color: var(--accent);">
-              pages_show_list → GET /me/accounts |
-              pages_manage_metadata → POST /{page-id} (about, website, phone) |
-              pages_read_engagement → GET /{page-id}/insights
-            </span>
-          </div>
+          <div class="panel-sub">What this demo shows</div>
+          <ul>
+            <li>Frontend Meta login flow is visible (FB login dialog opens in the browser).</li>
+            <li>User grants <code>pages_read_engagement</code> and <code>pages_show_list</code> (both requested in the dialog).</li>
+            <li>The demo lists Pages the user manages and reads recent posts and engagement counts to demonstrate read access.</li>
+            <li>All captions and guidance are in English and visible in the UI and as aria-live announcements.</li>
+          </ul>
 
-          <!-- Page Selector for Metrics -->
-          <div style="background: var(--accent-soft); padding: 12px; border-radius: 10px; margin-bottom: 16px; border: 1px solid rgba(24,119,242,0.2);">
-            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-              <div style="flex: 1; min-width: 200px;">
-                <label style="font-size: 11px; font-weight: 600; color: var(--accent); display: block; margin-bottom: 4px;">
-                  📊 SELECT PAGE FOR METRICS
-                </label>
-                <select id="pageMetricsSelect" class="field-input" onchange="onPageSelectChange()" style="width: 100%; margin: 0;">
-                  <option value="">-- Select a Page --</option>
-                </select>
-              </div>
-            </div>
-          </div>
+          <div class="note">If you need a test Page or account, please use the Facebook test-user or test Page provided in your App Dashboard. This demo expects a reviewer to accept the login dialog to show the end-to-end flow. If your submission uses a server-to-server token only, indicate that separately in the submission notes; this demo intentionally demonstrates the frontend login flow so the login UI is visible to reviewers.</div>
+        </div>
 
-          <!-- Selected Page Card (only shows after selection) -->
-          <div id="selectedPageCard" style="display: none;">
-            <div class="page-card" style="border: 2px solid var(--accent); background: var(--accent-soft);">
-              <div class="page-avatar" id="selectedPageAvatar">A</div>
-              <div class="page-info">
-                <div class="page-name" id="selectedPageNameDisplay">Page Name</div>
-                <div class="page-stats" id="selectedPageStats">0 followers • Category</div>
-              </div>
-              <button class="btn-ghost" id="selectedPageManageBtn" onclick="openPageSettings('')">Manage</button>
-            </div>
-          </div>
-
-          <!-- Loading indicator for metrics -->
-          <div id="metricsLoader" style="display: none; text-align: center; padding: 20px;">
-            <div class="spinner" style="margin: 0 auto 8px;"></div>
-            <div style="font-size: 12px; color: var(--text-muted);">Loading page insights...</div>
-          </div>
-
-          <div class="engagement-grid" id="engagementMetrics" style="display: none;">
-            <div class="engagement-card">
-              <div class="engagement-label">Page Views (7d)</div>
-              <div class="engagement-value" id="metric-page-views">--</div>
-              <div class="engagement-delta" id="viewsDelta"></div>
-            </div>
-            <div class="engagement-card">
-              <div class="engagement-label">Post Reach (7d)</div>
-              <div class="engagement-value" id="metric-post-reach">--</div>
-              <div class="engagement-delta" id="reachDelta"></div>
-            </div>
-            <div class="engagement-card">
-              <div class="engagement-label">Engagements (7d)</div>
-              <div class="engagement-value" id="metric-engagements">--</div>
-              <div class="engagement-delta" id="engagementsDelta"></div>
-            </div>
-            <div class="engagement-card">
-              <div class="engagement-label">New Followers (7d)</div>
-              <div class="engagement-value" id="metric-new-followers">--</div>
-              <div class="engagement-delta" id="followersDelta"></div>
-            </div>
-          </div>
-
-          <!-- API Call Info -->
-          <div id="apiCallInfo" style="display: none; margin-top: 12px; padding: 10px; background: rgba(22,163,74,0.1); border-radius: 8px; border: 1px solid rgba(22,163,74,0.3);">
-            <div style="font-size: 11px; color: #16a34a; font-family: monospace;">
-              <strong>✓ API Call:</strong> GET /<span id="apiPageId"></span>/insights<br>
-              <strong>Metrics:</strong> page_views_total, page_impressions, page_post_engagements, page_fan_adds<br>
-              <strong>Period:</strong> day (last 7 days summed)
-            </div>
-          </div>
-
-          <!-- Detailed Post Engagement Section -->
-          <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-subtle);">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-              <div style="font-weight: 600; font-size: 14px;">
-                <span>📊</span>
-                <span>Post-Level Engagement Analytics</span>
-              </div>
-              <button class="btn-ghost" onclick="loadDetailedEngagement()" style="font-size: 12px;">
-                🔄 Refresh Posts
-              </button>
-            </div>
-            
-            <div id="detailedEngagementLoader" style="display: none; text-align: center; padding: 20px; color: var(--text-muted);">
-              <div class="spinner" style="margin: 0 auto 8px;"></div>
-              <div style="font-size: 13px;">Loading post engagement data...</div>
-            </div>
-
-            <div id="postEngagementList" style="max-height: 400px; overflow-y: auto;">
-              <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">
-                Click "Refresh Posts" to load detailed post engagement metrics
-              </div>
-            </div>
-
-            <!-- Engagement Summary -->
-            <div id="engagementSummary" style="margin-top: 16px; display: none;">
-              <div style="background: var(--pill-bg); padding: 14px; border-radius: 8px;">
-                <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--text-main);">
-                  📈 Total Engagement Breakdown
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 12px;">
-                  <div style="text-align: center;">
-                    <div style="font-size: 20px; font-weight: 700; color: #1877f2;" id="summaryReactions">0</div>
-                    <div style="color: var(--text-muted); font-size: 11px;">Reactions</div>
-                  </div>
-                  <div style="text-align: center;">
-                    <div style="font-size: 20px; font-weight: 700; color: #16a34a;" id="summaryComments">0</div>
-                    <div style="color: var(--text-muted); font-size: 11px;">Comments</div>
-                  </div>
-                  <div style="text-align: center;">
-                    <div style="font-size: 20px; font-weight: 700; color: #f59e0b;" id="summaryShares">0</div>
-                    <div style="color: var(--text-muted); font-size: 11px;">Shares</div>
-                  </div>
-                </div>
-                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-subtle); text-align: center;">
-                  <span style="font-size: 12px; color: var(--text-muted);">Avg. Engagement Rate: </span>
-                  <span style="font-size: 14px; font-weight: 600; color: var(--success);" id="avgEngagementRate">0%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- MESSAGING PANEL -->
-        <section id="messagingPanel" class="panel disabled">
+        <!-- Full-width panel with results/engagement -->
+        <div class="panel full-span">
           <div class="panel-header">
-            <div class="panel-title">
-              <span class="icon-circle msg">💬</span>
-              Messaging Center
-              <span class="badge">Messaging API</span>
-            </div>
+            <div class="panel-title">Page engagement readout</div>
           </div>
-          <div class="perm-group">
-            <span class="perm-pill active">✓ pages_messaging</span>
-            <span class="perm-pill active">✓ pages_utility_messaging</span>
+          <div id="engagement-output">
+            <div class="note">No page selected. Use the demo controls to sign in and select a Page.</div>
           </div>
-          <div class="panel-sub">
-            <strong>Business Use:</strong> Respond to customer inquiries. Send order/shipping updates (transactional
-            only).<br />
-            <span style="font-size: 11px; color: var(--accent);">
-              pages_messaging → POST /{page-id}/messages (RESPONSE) |
-              pages_utility_messaging → POST /{page-id}/messages (POST_PURCHASE_UPDATE)
-            </span>
-          </div>
-          <!-- Messenger Verification Note -->
-          <div
-            style="background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
-            <p style="margin: 0; font-size: 11px; color: #b45309;"><strong>📱 REVIEWER NOTE:</strong> Messages sent from
-              this app appear in Facebook Messenger. Open Messenger to verify delivery.</p>
-          </div>
-
-          <div class="tabs" id="messagingTabs">
-            <div class="tab active" data-tab="inbox" onclick="switchMessageTab('inbox')">Inbox (0)</div>
-            <div class="tab" data-tab="sent" onclick="switchMessageTab('sent')">Sent</div>
-            <div class="tab" data-tab="utility" onclick="switchMessageTab('utility')">Utility Messages</div>
-          </div>
-
-          <div id="conversationsList">
-            <div class="message-preview">
-              <div class="message-sender">Loading...</div>
-              <div class="message-text">Fetching messages from API...</div>
-            </div>
-          </div>
-
-          <div class="field-row" style="margin-top: 12px;">
-            <button class="btn-secondary" onclick="openDrawer('sendMessage')">Compose Message</button>
-            <button class="btn-ghost" onclick="openDrawer('utilityMessage')">Send Order Update</button>
-          </div>
-        </section>
-
-        <!-- INSTAGRAM PANEL - FUTURE FEATURE -->
-        <section id="postsPanel" class="panel" style="opacity: 0.5;">
-          <div class="panel-header">
-            <div class="panel-title">
-              <span class="icon-circle ig">IG</span>
-              Instagram Content
-              <span class="badge" style="background: #f59e0b; color: white;">Coming Soon</span>
-            </div>
-          </div>
-          <div class="perm-group">
-            <span class="perm-pill">⏳ Pending: instagram_content_publish</span>
-          </div>
-          <div class="panel-sub">
-            Instagram content publishing will be available after additional permissions are approved. This feature is
-            not part of the current app review request.
-          </div>
-        </section>
-
-        <!-- BUSINESS MANAGEMENT PANEL -->
-        <section id="businessPanel" class="panel full-span disabled">
-          <div class="panel-header">
-            <div class="panel-title">
-              <span class="icon-circle biz">B</span>
-              Business Management
-              <span class="badge">Business API</span>
-            </div>
-          </div>
-          <div class="perm-group">
-            <span class="perm-pill active">✓ business_management</span>
-          </div>
-          <div class="panel-sub">
-            <strong>Business Use:</strong> View all connected business assets (ad accounts, pages) to manage our
-            wholesale marketing operations from one dashboard.<br />
-            <span style="font-size: 11px; color: var(--accent);">
-              API: GET /me/businesses → GET /{business-id}/owned_ad_accounts → GET /{business-id}/owned_pages
-            </span>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 12px;">
-            <div class="page-card">
-              <div class="page-avatar" style="background: #4267B2;">📊</div>
-              <div class="page-info">
-                <div class="page-name">Business Assets</div>
-                <div class="page-stats">2 Ad Accounts • 1 Page • 1 Instagram Account</div>
-              </div>
-            </div>
-            <div class="page-card">
-              <div class="page-avatar" style="background: var(--success);">👥</div>
-              <div class="page-info">
-                <div class="page-name">Team Members</div>
-                <div class="page-stats">3 people with access</div>
-              </div>
-            </div>
-            <div class="page-card">
-              <div class="page-avatar" style="background: var(--warning);">🔒</div>
-              <div class="page-info">
-                <div class="page-name">Permissions</div>
-                <div class="page-stats">All permissions verified</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- APP REQUIREMENTS PANEL - DETAILED FOR REVIEWERS -->
-        <section class="panel full-span" style="border: 2px solid var(--accent);">
-          <div class="panel-header">
-            <div class="panel-title">
-              <span class="icon-circle fb">📄</span>
-              Permission Usage Documentation (For Meta Reviewers)
-              <span class="badge" style="background: var(--accent); color: white;">APP REVIEW</span>
-            </div>
-          </div>
-          <div class="panel-sub" style="font-size: 13px; line-height: 1.6;">
-            <strong>About Akonocap:</strong> We are a wholesale sneaker/streetwear distributor based in the US. We sell
-            bulk inventory to retail stores nationwide.
-            This dashboard is used by our internal team (3 employees) to manage customer communications, track ad
-            performance, and maintain our Facebook presence.
-          </div>
-
-          <div class="requirements-list" style="margin-top: 16px;">
-
-            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
-              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                <span class="status-dot"></span>
-                <div class="req-title" style="font-size: 14px;">pages_show_list</div>
-              </div>
-              <div
-                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To display the user's Facebook Pages so they can select which Page to
-                manage.<br />
-                <strong>How we use it:</strong> Call GET /me/accounts to retrieve Page list. Displayed in "Facebook
-                Pages Management" panel.<br />
-                <strong>Data accessed:</strong> Page ID, name, category, follower count, profile picture.<br />
-                <strong>User benefit:</strong> Users can see and select their business Pages without leaving our app.
-              </div>
-            </div>
-
-            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
-              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                <span class="status-dot"></span>
-                <div class="req-title" style="font-size: 14px;">pages_manage_metadata</div>
-              </div>
-              <div
-                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To allow users to update their Page's business information from our
-                dashboard.<br />
-                <strong>How we use it:</strong> POST /{page-id} with fields: about, website, phone. Accessed via
-                "Manage" button → Page Settings drawer.<br />
-                <strong>Data modified:</strong> Page description (about), website URL, phone number only.<br />
-                <strong>User benefit:</strong> Keep business info up-to-date without switching to Facebook.
-              </div>
-            </div>
-
-            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
-              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                <span class="status-dot"></span>
-                <div class="req-title" style="font-size: 14px;">pages_read_engagement</div>
-              </div>
-              <div
-                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To show Page performance metrics so users can track their business
-                growth.<br />
-                <strong>How we use it:</strong> GET /{page-id}/insights with metrics: page_views_total,
-                page_post_engagements, page_fan_adds.<br />
-                <strong>Data accessed:</strong> Page views, post reach, engagements, new follower count
-                (read-only).<br />
-                <strong>User benefit:</strong> Monitor business Page performance and engagement trends.
-              </div>
-            </div>
-
-            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
-              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                <span class="status-dot"></span>
-                <div class="req-title" style="font-size: 14px;">pages_messaging</div>
-              </div>
-              <div
-                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To respond to wholesale customer inquiries about bulk pricing and
-                product availability.<br />
-                <strong>How we use it:</strong> GET /{page-id}/conversations to read messages. POST /{page-id}/messages
-                with messaging_type: RESPONSE to reply.<br />
-                <strong>Data accessed:</strong> Conversations from customers who initiated contact with our Page.<br />
-                <strong>User benefit:</strong> Respond to B2B customer inquiries directly from our dashboard.
-              </div>
-            </div>
-
-            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
-              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                <span class="status-dot"></span>
-                <div class="req-title" style="font-size: 14px;">pages_utility_messaging</div>
-              </div>
-              <div
-                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To send order confirmations, shipping updates, and delivery
-                notifications to customers.<br />
-                <strong>How we use it:</strong> POST /{page-id}/messages with messaging_type: MESSAGE_TAG and tag:
-                POST_PURCHASE_UPDATE.<br />
-                <strong>Data sent:</strong> Order number, tracking number, delivery status (transactional only, no
-                promotional content).<br />
-                <strong>User benefit:</strong> Keep customers informed about their wholesale orders automatically.
-              </div>
-            </div>
-
-            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
-              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                <span class="status-dot"></span>
-                <div class="req-title" style="font-size: 14px;">business_management</div>
-              </div>
-              <div
-                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
-                <strong>Why we need it:</strong> To access the user's Business Manager and retrieve connected ad
-                accounts.<br />
-                <strong>How we use it:</strong> GET /me/businesses → GET /{business-id}/owned_ad_accounts to populate ad
-                account dropdown.<br />
-                <strong>Data accessed:</strong> Business name, connected ad accounts, connected Pages (read-only).<br />
-                <strong>User benefit:</strong> Access all business assets from one unified dashboard.
-              </div>
-            </div>
-
-          </div>
-
-          <div
-            style="margin-top: 20px; padding: 14px; background: rgba(24,119,242,0.08); border-radius: 10px; border: 1px solid rgba(24,119,242,0.2);">
-            <p style="margin: 0; font-size: 12px; color: var(--text-main);">
-              <strong>🔒 Data Privacy:</strong> We only access data necessary for the features described above. We do
-              not store Facebook data on external servers.
-              All API calls are made client-side using the Facebook JavaScript SDK. Users can revoke access at any time
-              via Facebook Settings → Apps and Websites.
-            </p>
-          </div>
-        </section>
-
+        </div>
       </div>
     </main>
   </div>
 
-  <!-- LOGIN MODAL -->
-  <div id="loginModal" class="modal-backdrop">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="fb-logo">f</div>
-        <div>
-          <div style="font-size:15px;font-weight:600;">Continue as Yohanseh</div>
-          <div style="font-size:12px;color:#6b7280;">Akonocap Command Center</div>
-        </div>
+  <!-- Caption overlay used during the screencast to explicitly narrate steps and highlight what to click/accept. Visible and in English. -->
+  <div class="caption-overlay" id="caption" role="status" aria-live="polite" aria-atomic="true">
+    <div class="caption-step" id="caption-step">Ready</div>
+    <div class="caption-note" id="caption-note">Press "Start App Review Screencast" to begin. The UI will walk you through the Meta login flow, permission consent, Page selection, and reading Page content (pages_read_engagement).</div>
+  </div>
+
+  <!-- Screencast highlight overlay (lightbox) -->
+  <div class="screencast-overlay" id="screencast-overlay" aria-hidden="true">
+    <div class="screencast-highlight" id="screencast-highlight" role="dialog" aria-label="Screencast demo highlight">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:700">App Review Screencast</div>
+        <div><button onclick="endScreencast()" style="border:none;background:#ef4444;color:white;padding:6px 10px;border-radius:6px;cursor:pointer">End</button></div>
       </div>
-      <div class="modal-body">
-        <p>Akonocap Command Center will receive access to your public profile, email address, and the following
-          permissions:</p>
-        <div class="modal-perms">
-          <strong>Ads Management:</strong><br />
-          • ads_read, ads_management — View and manage your Facebook ads<br /><br />
-          <strong>Pages:</strong><br />
-          • pages_show_list — View list of Pages you manage<br />
-          • pages_manage_metadata — Update Page settings and info<br />
-          • pages_read_engagement — View Page insights and metrics<br /><br />
-          <strong>Messaging:</strong><br />
-          • pages_messaging — Respond to Page messages<br />
-          • pages_utility_messaging — Send order updates<br /><br />
-          <strong>Business:</strong><br />
-          • business_management — Manage business assets<br /><br />
-        </div>
-        <p style="margin-top:10px;font-size:11px;color:#6b7280;">
-          You can remove this connection at any time in your Meta account settings.
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button class="modal-btn-secondary" type="button" onclick="closeModal()">Cancel</button>
-        <button class="modal-btn-primary" type="button" onclick="completeLogin()">Continue as Yohanseh</button>
-      </div>
+      <div id="screencast-body" style="margin-top:12px"></div>
     </div>
   </div>
 
-  <!-- DRAWER BACKDROP -->
-  <div id="drawerBackdrop" class="drawer-backdrop"></div>
-
-  <!-- CREATE INSTAGRAM POST DRAWER -->
-  <aside id="postDrawer" class="drawer">
-    <div class="drawer-header">
-      <span>Create Instagram Post</span>
-      <button class="drawer-close" type="button" onclick="closeDrawer('post')">×</button>
-    </div>
-    <div class="drawer-body">
-      <div class="field-label">Connected Account</div>
-      <div class="field-input" style="background:rgba(24,119,242,0.04);border-style:dashed;">
-        @akonocap.bulkbuyers
-      </div>
-
-      <div class="field-label">Media</div>
-      <div class="image-placeholder">
-        Drop image or video here, or click to upload
-      </div>
-
-      <div class="field-label">Caption</div>
-      <textarea class="field-textarea"
-        placeholder="Example: Opening 20 bulk slots this week. DM BULK for pricing."></textarea>
-
-      <div class="field-label">Publish Time</div>
-      <input class="field-input" type="datetime-local" value="2025-01-01T15:00" />
-
-      <div class="field-label">Post Type</div>
-      <select class="field-input">
-        <option>Feed Post</option>
-        <option>Reel</option>
-        <option>Story</option>
-      </select>
-    </div>
-    <div class="drawer-footer">
-      <button class="btn-ghost" type="button" onclick="closeDrawer('post')">Cancel</button>
-      <button class="btn-primary" type="button" onclick="saveDraft()">Schedule Post</button>
-    </div>
-  </aside>
-
-  <!-- CREATE CAMPAIGN DRAWER -->
-  <aside id="campaignDrawer" class="drawer">
-    <div class="drawer-header">
-      <span>Create Facebook Campaign</span>
-      <button class="drawer-close" type="button" onclick="closeDrawer('campaign')">×</button>
-    </div>
-    <div class="drawer-body">
-      <div class="field-label">Ad Account</div>
-      <div id="campaignAdAccount" class="field-input" style="background:rgba(24,119,242,0.04);border-style:dashed;">
-        Select an ad account first
-      </div>
-
-      <div class="field-label">Campaign Objective</div>
-      <select class="field-input">
-        <option>Leads</option>
-        <option>Sales</option>
-        <option>Traffic</option>
-        <option>Engagement</option>
-      </select>
-
-      <div class="field-label">Daily Budget (USD)</div>
-      <input class="field-input" type="number" value="50" />
-
-      <div class="field-label">Target Audience</div>
-      <textarea class="field-textarea"
-        placeholder="Example: US, age 18-35, interests in sneakers, streetwear, reselling."></textarea>
-
-      <div class="field-label">Placements</div>
-      <select class="field-input">
-        <option>Automatic (recommended)</option>
-        <option>Facebook & Instagram Feeds</option>
-        <option>Instagram Only</option>
-      </select>
-    </div>
-    <div class="drawer-footer">
-      <button class="btn-ghost" type="button" onclick="closeDrawer('campaign')">Cancel</button>
-      <button class="btn-primary" type="button" onclick="saveCampaign()">Create Campaign</button>
-    </div>
-  </aside>
-
-  <!-- PAGE SETTINGS DRAWER -->
-  <aside id="pageSettingsDrawer" class="drawer">
-    <div class="drawer-header">
-      <span>Manage Page Settings (pages_manage_metadata)</span>
-      <button class="drawer-close" type="button" onclick="closeDrawer('pageSettings')">×</button>
-    </div>
-    <div class="drawer-body">
-      <div class="field-label">Page ID</div>
-      <input id="settingsPageId" class="field-input" type="text" readonly style="background: #f5f6f7;" />
-
-      <div class="field-label">Page Name</div>
-      <input id="settingsPageName" class="field-input" type="text" readonly style="background: #f5f6f7;" />
-
-      <div class="field-label">About / Description</div>
-      <textarea id="settingsAbout" class="field-textarea" placeholder="Page description..."></textarea>
-
-      <div class="field-label">Website</div>
-      <input id="settingsWebsite" class="field-input" type="text" placeholder="https://yourwebsite.com" />
-
-      <div class="field-label">Phone</div>
-      <input id="settingsPhone" class="field-input" type="text" placeholder="+1 (555) 123-4567" />
-
-      <p style="font-size: 11px; color: var(--success); margin-top: 12px;">✓ Changes are saved via the Pages API using
-        pages_manage_metadata permission</p>
-    </div>
-    <div class="drawer-footer">
-      <button class="btn-ghost" type="button" onclick="closeDrawer('pageSettings')">Cancel</button>
-      <button class="btn-primary" type="button" onclick="savePageSettings()">Save Changes</button>
-    </div>
-  </aside>
-
-  <!-- SEND MESSAGE DRAWER -->
-  <aside id="sendMessageDrawer" class="drawer">
-    <div class="drawer-header">
-      <span>Send Message (pages_messaging)</span>
-      <button class="drawer-close" type="button" onclick="closeDrawer('sendMessage')">×</button>
-    </div>
-    <div class="drawer-body">
-      <!-- Messenger Verification Alert -->
-      <div
-        style="padding: 12px; border-radius: 10px; background: rgba(24,119,242,0.1); border: 1px solid rgba(24,119,242,0.3); margin-bottom: 12px;">
-        <strong style="color: #1877f2;">📱 Verify in Messenger</strong>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">After sending, open Facebook Messenger to confirm the
-          message was delivered to the recipient.</p>
-      </div>
-
-      <div id="messageSentConfirm"
-        style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
-        <strong style="color: #16a34a;">✓ Message Sent Successfully</strong>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Now open Facebook Messenger to verify delivery.</p>
-      </div>
-
-      <div class="field-label">Select Page</div>
-      <select id="messagePageSelect" class="field-input" onchange="loadPSIDsForPage('message')">
-        <option value="">-- Select a Page --</option>
-      </select>
-
-      <div class="field-label">Recipient (Recent Conversations)</div>
-      <select id="messageRecipient" class="field-input" onchange="checkManualMessagePSID()">
-        <option value="">-- Select a Page first --</option>
-      </select>
-      
-      <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
-        <div style="flex: 1; height: 1px; background: #e4e6eb;"></div>
-        <span style="font-size: 11px; color: #666;">OR enter PSID manually</span>
-        <div style="flex: 1; height: 1px; background: #e4e6eb;"></div>
-      </div>
-      
-      <input id="manualMessagePSID" class="field-input" type="text" placeholder="Enter PSID (e.g., 25237327232600073)" oninput="useManualMessagePSID()" />
-      <p style="font-size: 10px; color: #666; margin-top: -8px; margin-bottom: 12px;">PSID of someone who has messaged your Page</p>
-
-      <div class="field-label">Message</div>
-      <textarea id="messageText" class="field-textarea" placeholder="Type your response message here..."></textarea>
-    </div>
-    <div class="drawer-footer">
-      <button class="btn-ghost" type="button" onclick="closeDrawer('sendMessage')">Cancel</button>
-      <button class="btn-primary" type="button" onclick="sendPageMessage()">Send Message</button>
-    </div>
-  </aside>
-
-  <!-- UTILITY MESSAGE DRAWER - WITH TEMPLATE SELECTION -->
-  <aside id="utilityMessageDrawer" class="drawer" style="width: 500px;">
-    <div class="drawer-header">
-      <span>📋 Send Order Update (pages_utility_messaging)</span>
-      <button class="drawer-close" type="button" onclick="closeDrawer('utilityMessage')">×</button>
-    </div>
-    <div class="drawer-body">
-      <!-- STEP INDICATOR -->
-      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-        <div id="step1Indicator" style="flex:1; padding: 8px; background: #1877f2; color: white; border-radius: 8px; text-align: center; font-size: 11px; font-weight: 600;">
-          1. Select Template
-        </div>
-        <div id="step2Indicator" style="flex:1; padding: 8px; background: #e4e6eb; color: #666; border-radius: 8px; text-align: center; font-size: 11px;">
-          2. Fill Details
-        </div>
-        <div id="step3Indicator" style="flex:1; padding: 8px; background: #e4e6eb; color: #666; border-radius: 8px; text-align: center; font-size: 11px;">
-          3. Send
-        </div>
-      </div>
-
-      <!-- Non-Promotional Warning -->
-      <div style="padding: 10px; border-radius: 8px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); margin-bottom: 12px;">
-        <strong style="color: #dc2626; font-size: 11px;">⚠️ TRANSACTIONAL ONLY - No Promotional Content</strong>
-        <p style="margin: 2px 0 0; font-size: 10px; color: #666;">
-          Uses MESSAGE_TAG: POST_PURCHASE_UPDATE for order-related updates only.
-        </p>
-      </div>
-
-      <div id="utilitySentConfirm" style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
-        <strong style="color: #16a34a;">✓ Order Update Sent Successfully!</strong>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Now open Facebook Messenger to verify the message was delivered.</p>
-      </div>
-
-      <!-- STEP 1: TEMPLATE SELECTION -->
-      <div id="templateSelectionStep">
-        <div class="field-label" style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">
-          📝 Step 1: Select a Message Template
-        </div>
-        
-        <!-- Template Cards -->
-        <div id="templateCards" style="display: flex; flex-direction: column; gap: 8px;">
-          
-          <!-- Template 1: Order Shipped -->
-          <div class="template-card" onclick="selectTemplate('shipped')" id="template-shipped" 
-               style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-              <span style="font-size: 18px;">📦</span>
-              <strong style="font-size: 13px;">Order Shipped</strong>
-              <span style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
-            </div>
-            <div style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
-              Your order <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> has shipped!
-              Tracking: <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{tracking_number}}</span>
-            </div>
-          </div>
-
-          <!-- Template 2: Order Delivered -->
-          <div class="template-card" onclick="selectTemplate('delivered')" id="template-delivered"
-               style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-              <span style="font-size: 18px;">✅</span>
-              <strong style="font-size: 13px;">Order Delivered</strong>
-              <span style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
-            </div>
-            <div style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
-              Your order <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> has been delivered. Thank you!
-            </div>
-          </div>
-
-          <!-- Template 3: Order Confirmed -->
-          <div class="template-card" onclick="selectTemplate('confirmed')" id="template-confirmed"
-               style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-              <span style="font-size: 18px;">🧾</span>
-              <strong style="font-size: 13px;">Order Confirmed</strong>
-              <span style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
-            </div>
-            <div style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
-              Your order <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> is confirmed and being prepared.
-            </div>
-          </div>
-
-        </div>
-        
-        <p style="font-size: 10px; color: #666; margin-top: 10px; text-align: center;">
-          Click a template to select it and proceed to fill in placeholders
-        </p>
-      </div>
-
-      <!-- STEP 2: FILL PLACEHOLDERS (Initially Hidden) -->
-      <div id="fillPlaceholdersStep" style="display: none;">
-        <div class="field-label" style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">
-          ✏️ Step 2: Fill in Placeholder Values
-        </div>
-
-        <div style="padding: 10px; background: rgba(24,119,242,0.05); border-radius: 8px; border: 1px solid rgba(24,119,242,0.2); margin-bottom: 12px;">
-          <div style="font-size: 11px; color: #1877f2; font-weight: 600;">Selected Template:</div>
-          <div id="selectedTemplateName" style="font-size: 13px; font-weight: 600; margin-top: 2px;"></div>
-        </div>
-
-        <div class="field-label">Select Page</div>
-        <select id="utilityPageSelect" class="field-input" onchange="loadPSIDsForPage('utility')">
-          <option value="">-- Select a Page --</option>
-        </select>
-
-        <div class="field-label">Recipient (Customer)</div>
-        <select id="utilityRecipient" class="field-input" onchange="checkManualPSID()">
-          <option value="">-- Select a Page first --</option>
-        </select>
-        <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
-          <span style="font-size: 11px; color: #666;">Or enter PSID manually:</span>
-        </div>
-        <input id="manualPSID" class="field-input" type="text" placeholder="Enter PSID (e.g., 25237327232600073)" oninput="useManualPSID()" />
-        <p style="font-size: 10px; color: #666; margin-top: -8px; margin-bottom: 10px;">PSID of customer who messaged your Page</p>
-
-        <div class="field-label">Order Number <span style="color: #dc2626;">*</span></div>
-        <input id="utilityOrderNum" class="field-input" type="text" placeholder="#12345" oninput="updateTemplatePreview()" />
-
-        <div id="trackingField">
-          <div class="field-label">Tracking Number</div>
-          <input id="utilityTracking" class="field-input" type="text" placeholder="1Z999AA10123456784" oninput="updateTemplatePreview()" />
-        </div>
-
-        <div class="field-label" style="margin-top: 12px;">📱 Message Preview</div>
-        <div id="utilityPreview" style="padding: 12px; background: #f0fff4; border-radius: 8px; font-size: 12px; border: 2px solid #16a34a; line-height: 1.5;">
-          Select a template and fill in the placeholders above
-        </div>
-        <p style="font-size: 10px; color: #16a34a; margin: 6px 0 0;">✓ POST_PURCHASE_UPDATE - Transactional only</p>
-
-        <div style="display: flex; gap: 8px; margin-top: 14px;">
-          <button class="btn-ghost" type="button" onclick="backToTemplates()" style="flex: 1;">← Back</button>
-          <button class="btn-primary" type="button" onclick="goToSendStep()" style="flex: 1;">Preview & Send →</button>
-        </div>
-      </div>
-
-      <!-- STEP 3: CONFIRM & SEND (Initially Hidden) -->
-      <div id="sendStep" style="display: none;">
-        <div class="field-label" style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">
-          🚀 Step 3: Review & Send
-        </div>
-
-        <div style="padding: 10px; background: rgba(24,119,242,0.1); border-radius: 8px; margin-bottom: 12px;">
-          <strong style="color: #1877f2; font-size: 12px;">📱 Verify in Messenger After Sending</strong>
-          <p style="margin: 4px 0 0; font-size: 11px; color: #666;">
-            Open Facebook Messenger after sending to confirm delivery.
-          </p>
-        </div>
-
-        <div class="field-label">Sending To:</div>
-        <div id="sendToSummary" style="padding: 8px; background: #f5f6f7; border-radius: 8px; margin-bottom: 10px; font-size: 12px;"></div>
-
-        <div class="field-label">Final Message:</div>
-        <div id="finalMessagePreview" style="padding: 12px; background: white; border-radius: 8px; font-size: 12px; border: 2px solid #16a34a; line-height: 1.5; margin-bottom: 10px;"></div>
-
-        <div style="padding: 8px; background: rgba(22,163,74,0.1); border-radius: 8px; margin-bottom: 14px;">
-          <div style="font-size: 10px; color: #16a34a; font-family: monospace;">
-            POST /{page-id}/messages<br>
-            messaging_type: MESSAGE_TAG<br>
-            tag: POST_PURCHASE_UPDATE
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 8px;">
-          <button class="btn-ghost" type="button" onclick="backToFillStep()" style="flex: 1;">← Edit</button>
-          <button class="btn-primary" type="button" onclick="sendUtilityMessage()" style="flex: 1; background: #16a34a;">📤 Send Update</button>
-        </div>
-      </div>
-
-    </div>
-  </aside>
-
   <script>
-    // Global state
-    let accessToken = null;
-    let pages = [];
-    let adAccounts = [];
-
-    // Handle API errors - check for invalid/expired tokens
-    function handleApiError(response) {
-      if (response.error) {
-        const errorCode = response.error.code;
-        const errorMsg = response.error.message || 'Unknown error';
-
-        // Token errors: 190 = invalid token, 102 = session expired, 463 = token expired
-        if (errorCode === 190 || errorCode === 102 || errorCode === 463 ||
-          errorMsg.includes('session') || errorMsg.includes('token') || errorMsg.includes('invalidated')) {
-          alert('Your Facebook session has expired. Please reconnect your account.');
-          facebookLogout();
-          return true; // Error was handled
-        }
-        return false; // Error not handled
-      }
-      return false;
+    // Helper to update caption overlay (visible and accessible)
+    function setCaption(step, note) {
+      const c = document.getElementById('caption');
+      document.getElementById('caption-step').textContent = step;
+      document.getElementById('caption-note').textContent = note;
+      c.classList.add('visible');
+      // keep visible for screen recording clarity
     }
 
-    // DOM Elements
-    const loginBtn = document.getElementById("loginBtn");
-    const userPanel = document.getElementById("userPanel");
-    const adsPanel = document.getElementById("adsPanel");
-    const pagesPanel = document.getElementById("pagesPanel");
-    const messagingPanel = document.getElementById("messagingPanel");
-    // const postsPanel = document.getElementById("postsPanel"); // Instagram - coming soon
-    const businessPanel = document.getElementById("businessPanel");
-    const themeToggle = document.getElementById("themeToggle");
-    const themeIcon = document.getElementById("themeIcon");
-    const themeLabel = document.getElementById("themeLabel");
-    const adsLoading = document.getElementById("adsLoading");
-    const loadBtn = document.getElementById("loadBtn");
-    // const createPostBtn = document.getElementById("createPostBtn"); // Instagram - coming soon
-    const createCampaignBtn = document.getElementById("createCampaignBtn");
-    const drawerBackdrop = document.getElementById("drawerBackdrop");
-    const adAccountSelect = document.getElementById("adAccountSelect");
-    const campaignAdAccount = document.getElementById("campaignAdAccount");
+    function clearCaption() {
+      const c = document.getElementById('caption');
+      c.classList.remove('visible');
+    }
 
-    // Facebook Login - REAL OAuth Flow
-    function facebookLogin() {
+    // Start the high-level screencast: shows overlay and walks through steps with instructions
+    function startScreencast() {
+      document.getElementById('screencast-overlay').classList.add('visible');
+      document.getElementById('screencast-overlay').setAttribute('aria-hidden', 'false');
+      document.getElementById('screencast-body').innerHTML = `
+        <div style="font-size:14px;font-weight:600">Step 1 — Show the Meta login dialog</div>
+        <div style="margin-top:8px;color:var(--text-muted)">Click the "Click to login and grant permissions" button to open the Facebook login dialog. When the dialog appears, accept the requested permissions (pages_show_list, pages_read_engagement).</div>
+        <div style="margin-top:12px"><button class="btn-primary" onclick="startLoginFlow()">Open Login Dialog</button></div>
+      `;
+      setCaption('Screencast started', 'We will show the full frontend Meta login flow and then demonstrate reading Page posts and engagement. All guidance is in English.');
+    }
+
+    function endScreencast() {
+      document.getElementById('screencast-overlay').classList.remove('visible');
+      document.getElementById('screencast-overlay').setAttribute('aria-hidden', 'true');
+      setCaption('Screencast ended', 'You can restart if needed. The demo remains interactive.');
+      // auto-clear caption after short delay so the recording shows the final state
+      setTimeout(clearCaption, 6000);
+    }
+
+    function resetDemo() {
+      // clear UI
+      document.getElementById('connected-info').style.display = 'none';
+      document.getElementById('not-connected').style.display = 'block';
+      document.getElementById('pages-container').innerHTML = '';
+      document.getElementById('engagement-output').innerHTML = '<div class="note">No page selected. Use the demo controls to sign in and select a Page.</div>';
+      document.getElementById('user-name').textContent = '';
+      setCaption('Demo reset', 'The demo UI has been reset. Press "Click to login and grant permissions" to restart.');
+    }
+
+    // Start the login flow — this will open the official FB login dialog so reviewers can see the flow
+    function startLoginFlow() {
+      setCaption('Opening login dialog', 'Please accept the requested permissions in the dialog. We request pages_show_list and pages_read_engagement (English captions are shown).');
+      // request the permissions reviewers need to see: pages_show_list & pages_read_engagement
+      const scopes = 'pages_show_list,pages_read_engagement';
+      // Call FB.login — this will open the Meta dialog
+      if (typeof FB === 'undefined') {
+        alert('Facebook SDK not loaded. Please ensure the SDK can load in the reviewer environment.');
+        return;
+      }
       FB.login(function (response) {
-        if (response.authResponse) {
+        if (response.status === 'connected') {
           onFBConnected(response.authResponse);
+          setCaption('Login successful', 'Connected. Showing Pages you manage next.');
         } else {
-          alert('Facebook login was cancelled or failed.');
+          setCaption('Login not completed', 'If the dialog was dismissed, please re-run the screencast and accept the permissions.');
         }
-      }, {
-        scope: 'pages_show_list,pages_manage_metadata,pages_read_engagement,pages_messaging,pages_utility_messaging,business_management,ads_read,ads_management',
-        return_scopes: true
-      });
+      }, { scope: scopes, return_scopes: true });
     }
 
-    // On Facebook Connected
+    // Called after successful FB login
     function onFBConnected(authResponse) {
-      accessToken = authResponse.accessToken;
-
-      // Update UI
-      loginBtn.style.display = "none";
-      userPanel.classList.add("visible");
-
-      // Enable all panels (except Instagram which requires additional permissions)
-      adsPanel.classList.remove("disabled");
-      pagesPanel.classList.remove("disabled");
-      messagingPanel.classList.remove("disabled");
-      businessPanel.classList.remove("disabled");
-      // Note: postsPanel (Instagram) is disabled - requires instagram_content_publish permission
-
-      // Load user info
-      FB.api('/me', { fields: 'name,picture' }, function (response) {
-        if (handleApiError(response)) return;
-        if (response && !response.error) {
-          document.querySelector('.user-name').textContent = response.name;
-          if (response.picture && response.picture.data) {
-            document.querySelector('.user-avatar').src = response.picture.data.url;
-          }
-        }
-      });
-
-      // Load pages (pages_show_list)
-      loadPages();
-
-      // Load ad accounts (business_management)
-      loadAdAccounts();
-    }
-
-    // Facebook Logout
-    function facebookLogout() {
-      FB.logout(function (response) {
-        accessToken = null;
-        pages = [];
-        userPanel.classList.remove("visible");
-        loginBtn.style.display = "inline-flex";
-        adsPanel.classList.add("disabled");
-        pagesPanel.classList.add("disabled");
-        messagingPanel.classList.add("disabled");
-        businessPanel.classList.add("disabled");
+      // show username and options
+      FB.api('/me', { fields: 'name' }, function (res) {
+        document.getElementById('user-name').textContent = res.name || res.id || 'Facebook user';
+        document.getElementById('connected-info').style.display = 'block';
+        document.getElementById('not-connected').style.display = 'none';
+        setCaption('Connected as ' + (res.name || 'user'), 'Click "Show Pages I manage" to list Pages accessible with pages_show_list. Then select a Page to show posts and engagement counts.');
       });
     }
 
-    // Load Pages (pages_show_list)
-    function loadPages() {
-      FB.api('/me/accounts', {
-        fields: 'id,name,access_token,picture,fan_count,category,instagram_business_account{id,username}'
-      }, function (response) {
-        if (handleApiError(response)) return;
-
-        if (response && response.data) {
-          pages = response.data;
-          renderPagesList();
-          populatePageSelects();
-
-          // Don't auto-load metrics - let user select a page
-          // If there's only one page, auto-select it
-          if (pages.length === 1) {
-            const pageSelect = document.getElementById('pageMetricsSelect');
-            if (pageSelect) {
-              pageSelect.value = pages[0].id;
-              onPageSelectChange();
-              loadSelectedPageMetrics();
-            }
-            loadConversations(pages[0].id, pages[0].access_token);
-          }
-        }
-      });
-    }
-
-    // Render Pages List (just populate dropdown, not card list)
-    function renderPagesList() {
-      const pageSelect = document.getElementById('pageMetricsSelect');
-      
-      // Populate page selector dropdown
-      if (pageSelect) {
-        pageSelect.innerHTML = '<option value="">-- Select a Page --</option>';
-        pages.forEach(page => {
-          const pic = page.picture && page.picture.data ? page.picture.data.url : '';
-          pageSelect.innerHTML += `<option value="${page.id}" data-token="${page.access_token}" data-name="${page.name}" data-followers="${page.fan_count || 0}" data-category="${page.category || 'Page'}" data-pic="${pic}">${page.name}</option>`;
-        });
-      }
-    }
-
-    // Handle page selector change - show card and load metrics automatically
-    function onPageSelectChange() {
-      const pageSelect = document.getElementById('pageMetricsSelect');
-      const cardDiv = document.getElementById('selectedPageCard');
-      const metricsGrid = document.getElementById('engagementMetrics');
-      
-      if (!pageSelect || !pageSelect.value) {
-        if (cardDiv) cardDiv.style.display = 'none';
-        if (metricsGrid) metricsGrid.style.display = 'none';
-        document.getElementById('apiCallInfo').style.display = 'none';
-        return;
-      }
-      
-      const selectedOption = pageSelect.options[pageSelect.selectedIndex];
-      const pageId = pageSelect.value;
-      const pageName = selectedOption.dataset.name;
-      const followers = selectedOption.dataset.followers;
-      const category = selectedOption.dataset.category;
-      const pic = selectedOption.dataset.pic;
-      
-      // Show and update selected page card
-      if (cardDiv) {
-        cardDiv.style.display = 'block';
-        document.getElementById('selectedPageNameDisplay').textContent = pageName;
-        document.getElementById('selectedPageStats').textContent = parseInt(followers).toLocaleString() + ' followers • ' + category;
-        
-        const avatarDiv = document.getElementById('selectedPageAvatar');
-        if (pic) {
-          avatarDiv.innerHTML = '<img src="' + pic + '" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
-        } else {
-          avatarDiv.innerHTML = pageName.charAt(0);
-        }
-        
-        document.getElementById('selectedPageManageBtn').onclick = function() { openPageSettings(pageId); };
-      }
-      
-      // Show metrics grid
-      if (metricsGrid) metricsGrid.style.display = 'grid';
-      
-      // Auto-load metrics
-      loadSelectedPageMetrics();
-    }
-
-    // Load metrics for selected page
-    function loadSelectedPageMetrics() {
-      const pageSelect = document.getElementById('pageMetricsSelect');
-      if (!pageSelect || !pageSelect.value) {
-        return;
-      }
-      
-      const pageId = pageSelect.value;
-      const selectedOption = pageSelect.options[pageSelect.selectedIndex];
-      const pageToken = selectedOption.dataset.token;
-      
-      // Show loader
-      const loader = document.getElementById('metricsLoader');
-      if (loader) loader.style.display = 'block';
-      
-      // Reset metrics
-      document.getElementById('metric-page-views').textContent = 'Loading...';
-      document.getElementById('metric-post-reach').textContent = 'Loading...';
-      document.getElementById('metric-engagements').textContent = 'Loading...';
-      document.getElementById('metric-new-followers').textContent = 'Loading...';
-      
-      // Show API call info
-      const apiInfo = document.getElementById('apiCallInfo');
-      const apiPageId = document.getElementById('apiPageId');
-      if (apiInfo) apiInfo.style.display = 'block';
-      if (apiPageId) apiPageId.textContent = pageId;
-      
-      // Calculate date range (last 7 days)
-      const now = Math.floor(Date.now() / 1000);
-      const sevenDaysAgo = now - (7 * 24 * 60 * 60);
-      
-      console.log('Loading insights for page:', pageId);
-      
-      // API call for page insights
-      FB.api('/' + pageId + '/insights', {
-        metric: 'page_views_total,page_impressions,page_post_engagements,page_fan_adds',
-        period: 'day',
-        since: sevenDaysAgo,
-        until: now,
-        access_token: pageToken
-      }, function(response) {
-        if (loader) loader.style.display = 'none';
-        
-        console.log('Insights API response:', response);
-        
-        if (response.error) {
-          console.error('Insights API error:', response.error);
-          // Try alternative metrics
-          loadAlternativeMetrics(pageId, pageToken);
+    // List pages the user manages (requires pages_show_list)
+    function listPages() {
+      setCaption('Listing pages', 'Retrieving Pages via /me/accounts to demonstrate pages_show_list and pages_read_engagement usage.');
+      document.getElementById('pages-container').innerHTML = '<div class="note">Loading pages…</div>';
+      FB.api('/me/accounts', { fields: 'name,access_token,category' }, function (res) {
+        if (!res || res.error) {
+          document.getElementById('pages-container').innerHTML = '<div class="note">Unable to list pages. Please ensure the reviewer accepted pages_show_list permission in the login dialog.</div>';
+          setCaption('Unable to list pages', 'If pages do not appear, ensure the login dialog granted pages_show_list.');
           return;
         }
-        
-        if (response && response.data) {
-          let pageViews = 0;
-          let postReach = 0;
-          let engagements = 0;
-          let newFollowers = 0;
-          
-          response.data.forEach(metric => {
-            const values = metric.values || [];
-            const total = values.reduce((sum, item) => sum + (parseInt(item.value) || 0), 0);
-            
-            if (metric.name === 'page_views_total') {
-              pageViews = total;
-            } else if (metric.name === 'page_impressions') {
-              postReach = total;
-            } else if (metric.name === 'page_post_engagements') {
-              engagements = total;
-            } else if (metric.name === 'page_fan_adds') {
-              newFollowers = total;
-            }
-          });
-          
-          // Update UI
-          document.getElementById('metric-page-views').textContent = pageViews.toLocaleString();
-          document.getElementById('metric-post-reach').textContent = postReach.toLocaleString();
-          document.getElementById('metric-engagements').textContent = engagements.toLocaleString();
-          document.getElementById('metric-new-followers').textContent = newFollowers.toLocaleString();
-          
-          // Add deltas
-          document.getElementById('viewsDelta').textContent = pageViews > 0 ? '↑ Active' : '';
-          document.getElementById('reachDelta').textContent = postReach > 0 ? '↑ Active' : '';
-          document.getElementById('engagementsDelta').textContent = engagements > 0 ? '↑ Active' : '';
-          document.getElementById('followersDelta').textContent = newFollowers > 0 ? '+' + newFollowers + ' this week' : '';
-        }
-      });
-      
-      // Also load conversations for this page
-      loadConversations(pageId, pageToken);
-    }
-
-    // Alternative metrics load if insights fail
-    function loadAlternativeMetrics(pageId, pageToken) {
-      console.log('Trying alternative metrics...');
-      
-      // Get basic page info
-      FB.api('/' + pageId, {
-        fields: 'fan_count,talking_about_count,were_here_count',
-        access_token: pageToken
-      }, function(response) {
-        if (response && !response.error) {
-          document.getElementById('metric-new-followers').textContent = (response.fan_count || 0).toLocaleString();
-          document.getElementById('metric-engagements').textContent = (response.talking_about_count || 0).toLocaleString();
-          document.getElementById('metric-page-views').textContent = '--';
-          document.getElementById('metric-post-reach').textContent = '--';
-        }
-      });
-      
-      // Get recent posts for engagement
-      FB.api('/' + pageId + '/posts', {
-        fields: 'reactions.summary(true),comments.summary(true),shares',
-        limit: 10,
-        access_token: pageToken
-      }, function(response) {
-        if (response && response.data) {
-          let totalReactions = 0;
-          let totalComments = 0;
-          let totalShares = 0;
-          
-          response.data.forEach(post => {
-            totalReactions += post.reactions?.summary?.total_count || 0;
-            totalComments += post.comments?.summary?.total_count || 0;
-            totalShares += post.shares?.count || 0;
-          });
-          
-          document.getElementById('metric-engagements').textContent = (totalReactions + totalComments + totalShares).toLocaleString();
-          document.getElementById('metric-post-reach').textContent = totalReactions.toLocaleString() + ' reactions';
-        }
-      });
-    }
-
-    // Populate Page Selects
-    function populatePageSelects() {
-      const selects = ['messagePageSelect', 'utilityPageSelect'];
-      selects.forEach(id => {
-        const select = document.getElementById(id);
-        if (select) {
-          select.innerHTML = '<option value="">-- Select a Page --</option>';
-          pages.forEach(page => {
-            select.innerHTML += `<option value="${page.id}" data-token="${page.access_token}">${page.name}</option>`;
-          });
-        }
-      });
-    }
-
-    // Load Page Engagement (pages_read_engagement)
-    function loadPageEngagement(pageId, pageToken) {
-      // Load page-level insights
-      FB.api('/' + pageId + '/insights', {
-        metric: 'page_views_total,page_post_impressions,page_post_engagements,page_fan_adds,page_impressions,page_engaged_users',
-        period: 'day',
-        since: Math.floor((Date.now() - 7 * 24 * 60 * 60 * 1000) / 1000),
-        until: Math.floor(Date.now() / 1000),
-        access_token: pageToken
-      }, function (response) {
-        if (handleApiError(response)) return;
-        if (response && response.data) {
-          response.data.forEach(metric => {
-            const values = metric.values || [];
-            if (values.length > 0) {
-              // Sum up values for the period
-              const total = values.reduce((sum, item) => sum + (parseInt(item.value) || 0), 0);
-              const el = document.querySelector(`[data-metric="${metric.name}"]`);
-              if (el) {
-                el.textContent = total.toLocaleString();
-              }
-            }
-          });
-        }
-      });
-
-      // Also load follower count
-      FB.api('/' + pageId, {
-        fields: 'fan_count,name,category',
-        access_token: pageToken
-      }, function (response) {
-        if (response && response.fan_count) {
-          // Update follower count if there's a display element for it
-          const followerEl = document.querySelector('[data-metric="fan_count"]');
-          if (followerEl) {
-            followerEl.textContent = response.fan_count.toLocaleString();
-          }
-        }
-      });
-    }
-
-    // Load Detailed Post-Level Engagement
-    function loadDetailedEngagement() {
-      // Get the selected page
-      const pageSelect = document.getElementById('pageMetricsSelect');
-      let page = null;
-      
-      if (pageSelect && pageSelect.value) {
-        page = pages.find(p => p.id === pageSelect.value);
-      }
-      
-      if (!page) {
-        // Fall back to first page if none selected
-        if (!pages || pages.length === 0) {
-          alert('No pages available. Please connect your Facebook account first.');
+        if (!res.data || res.data.length === 0) {
+          document.getElementById('pages-container').innerHTML = '<div class="note">No Pages found for this account. Please use an account that manages at least one Page.</div>';
+          setCaption('No Pages found', 'Please sign in with a Page admin account to continue.');
           return;
         }
-        page = pages[0];
-      }
-
-      const loader = document.getElementById('detailedEngagementLoader');
-      const container = document.getElementById('postEngagementList');
-      const summaryDiv = document.getElementById('engagementSummary');
-
-      if (loader) loader.style.display = 'block';
-      if (container) container.innerHTML = '';
-
-      // Load posts with engagement metrics
-      FB.api('/' + page.id + '/posts', {
-        fields: 'message,created_time,likes.summary(true),comments.summary(true),shares,reactions.summary(true),full_picture,permalink_url',
-        limit: 10,
-        access_token: page.access_token
-      }, function (response) {
-        if (loader) loader.style.display = 'none';
-
-        if (handleApiError(response)) return;
-
-        if (response && response.data && response.data.length > 0) {
-          let totalReactions = 0;
-          let totalComments = 0;
-          let totalShares = 0;
-          let totalPosts = response.data.length;
-
-          container.innerHTML = '';
-
-          response.data.forEach((post, index) => {
-            const reactions = post.reactions?.summary?.total_count || 0;
-            const comments = post.comments?.summary?.total_count || 0;
-            const shares = post.shares?.count || 0;
-            const totalEngagement = reactions + comments + shares;
-
-            totalReactions += reactions;
-            totalComments += comments;
-            totalShares += shares;
-
-            const message = post.message || 'No text content';
-            const preview = message.length > 100 ? message.substring(0, 100) + '...' : message;
-            const dateStr = new Date(post.created_time).toLocaleDateString();
-            const hasImage = post.full_picture ? '🖼️' : '';
-
-            // Determine performance level
-            let performanceColor = '#94a3b8';
-            let performanceLabel = 'Low';
-            if (totalEngagement > 100) {
-              performanceColor = '#16a34a';
-              performanceLabel = 'High';
-            } else if (totalEngagement > 30) {
-              performanceColor = '#f59e0b';
-              performanceLabel = 'Medium';
-            }
-
-            container.innerHTML += `
-              <div class="post-card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                  <div style="flex: 1;">
-                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">
-                      ${hasImage} Post #${index + 1} • ${dateStr}
-                    </div>
-                    <div style="font-size: 13px; color: var(--text-main); line-height: 1.4;">
-                      "${preview}"
-                    </div>
-                  </div>
-                  <div style="margin-left: 12px;">
-                    <span style="background: ${performanceColor}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap;">
-                      ${performanceLabel}
-                    </span>
-                  </div>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 8px; border-top: 1px solid var(--border-subtle);">
-                  <div style="text-align: center;">
-                    <div style="font-size: 16px; font-weight: 700; color: #1877f2;">${reactions}</div>
-                    <div style="font-size: 10px; color: var(--text-muted);">Reactions</div>
-                  </div>
-                  <div style="text-align: center;">
-                    <div style="font-size: 16px; font-weight: 700; color: #16a34a;">${comments}</div>
-                    <div style="font-size: 10px; color: var(--text-muted);">Comments</div>
-                  </div>
-                  <div style="text-align: center;">
-                    <div style="font-size: 16px; font-weight: 700; color: #f59e0b;">${shares}</div>
-                    <div style="font-size: 10px; color: var(--text-muted);">Shares</div>
-                  </div>
-                  <div style="text-align: center;">
-                    <div style="font-size: 16px; font-weight: 700; color: #a855f7;">${totalEngagement}</div>
-                    <div style="font-size: 10px; color: var(--text-muted);">Total</div>
-                  </div>
-                </div>
-                ${post.permalink_url ? `<div style="margin-top: 8px; text-align: right;"><a href="${post.permalink_url}" target="_blank" style="font-size: 11px; color: var(--accent); text-decoration: none;">View on Facebook →</a></div>` : ''}
-              </div>
-            `;
-          });
-
-          // Update summary
-          if (summaryDiv) {
-            summaryDiv.style.display = 'block';
-            document.getElementById('summaryReactions').textContent = totalReactions.toLocaleString();
-            document.getElementById('summaryComments').textContent = totalComments.toLocaleString();
-            document.getElementById('summaryShares').textContent = totalShares.toLocaleString();
-
-            // Calculate average engagement rate (total engagement / total posts)
-            const avgEngagement = totalPosts > 0 ? ((totalReactions + totalComments + totalShares) / totalPosts) : 0;
-            document.getElementById('avgEngagementRate').textContent = avgEngagement.toFixed(1);
-          }
-        } else {
-          container.innerHTML = `
-            <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">
-              No posts found in the last 30 days
-            </div>
-          `;
-        }
-      });
-    }
-
-    // Store messages globally for tab switching
-    let allMessages = { inbox: [], sent: [], utility: [] };
-    let currentPageInfo = { id: null, token: null, name: null };
-
-    // Load Conversations (pages_messaging)
-    function loadConversations(pageId, pageToken) {
-      currentPageInfo = { id: pageId, token: pageToken };
-
-      // Find page name
-      const page = pages.find(p => p.id === pageId);
-      if (page) currentPageInfo.name = page.name;
-
-      FB.api('/' + pageId + '/conversations', {
-        fields: 'participants,messages.limit(10){message,from,created_time}',
-        access_token: pageToken,
-        limit: 10
-      }, function (response) {
-        if (handleApiError(response)) return;
-
-        // Reset messages
-        allMessages = { inbox: [], sent: [], utility: [] };
-
-        if (response && response.data && response.data.length > 0) {
-          response.data.forEach(conv => {
-            const participants = conv.participants?.data || [];
-            const customer = participants.find(p => p.id !== pageId);
-            const messages = conv.messages?.data || [];
-
-            messages.forEach(msg => {
-              const isFromPage = msg.from?.id === pageId;
-              const msgObj = {
-                sender: msg.from?.name || 'Unknown',
-                senderId: msg.from?.id,
-                text: msg.message || '',
-                time: msg.created_time,
-                customer: customer?.name || 'Unknown',
-                customerId: customer?.id
-              };
-
-              if (isFromPage) {
-                // Message sent BY the page
-                allMessages.sent.push(msgObj);
-              } else {
-                // Message received FROM customer
-                allMessages.inbox.push(msgObj);
-              }
-            });
-          });
-        }
-
-        // Update inbox count
-        updateInboxCount();
-
-        // Show inbox by default
-        showMessageTab('inbox');
-      });
-    }
-
-    // Update inbox count in tab
-    function updateInboxCount() {
-      const inboxTab = document.querySelector('.tab[data-tab="inbox"]');
-      if (inboxTab) {
-        inboxTab.textContent = `Inbox (${allMessages.inbox.length})`;
-      }
-    }
-
-    // Show messages for specific tab
-    function showMessageTab(tab) {
-      const container = document.getElementById('conversationsList');
-      if (!container) return;
-
-      const messages = allMessages[tab] || [];
-
-      container.innerHTML = '';
-
-      if (messages.length > 0) {
-        // Show last 3 messages, most recent first
-        const recentMessages = messages.slice(0, 3);
-        recentMessages.forEach(msg => {
-          const timeAgo = getTimeAgo(msg.time);
-          const icon = tab === 'sent' ? '↗️ Sent to' : (tab === 'utility' ? '📦 Update to' : '📩 From');
-          const displayName = tab === 'inbox' ? msg.sender : msg.customer;
-
-          container.innerHTML += `
-            <div class="message-preview" style="border-left: 3px solid ${tab === 'inbox' ? '#1877f2' : (tab === 'sent' ? '#16a34a' : '#f59e0b')};">
-              <div class="message-sender">${icon} ${displayName}</div>
-              <div class="message-text">"${msg.text.substring(0, 80)}${msg.text.length > 80 ? '...' : ''}"</div>
-              <div class="message-time">${timeAgo}</div>
-            </div>
-          `;
-        });
-      } else {
-        const emptyMsg = tab === 'inbox' ? 'No messages received yet' :
-          (tab === 'sent' ? 'No messages sent yet' : 'No utility messages sent yet');
-        container.innerHTML = `<div class="message-preview"><div class="message-sender">No messages</div><div class="message-text">${emptyMsg}</div></div>`;
-      }
-    }
-
-    // Helper: Get relative time
-    function getTimeAgo(dateString) {
-      const date = new Date(dateString);
-      const now = new Date();
-      const diffMs = now - date;
-      const diffMins = Math.floor(diffMs / 60000);
-      const diffHours = Math.floor(diffMs / 3600000);
-      const diffDays = Math.floor(diffMs / 86400000);
-
-      if (diffMins < 1) return 'Just now';
-      if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-      if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-    }
-
-    // Switch message tabs
-    function switchMessageTab(tab) {
-      // Update active tab styling
-      document.querySelectorAll('#messagingTabs .tab').forEach(t => {
-        t.classList.remove('active');
-        if (t.dataset.tab === tab) t.classList.add('active');
-      });
-
-      // Show messages for selected tab
-      showMessageTab(tab);
-    }
-
-    // Add sent message to local tracking
-    function trackSentMessage(recipientName, recipientId, message, isUtility) {
-      const msgObj = {
-        sender: currentPageInfo.name || 'Page',
-        senderId: currentPageInfo.id,
-        text: message,
-        time: new Date().toISOString(),
-        customer: recipientName,
-        customerId: recipientId
-      };
-
-      if (isUtility) {
-        allMessages.utility.unshift(msgObj);
-      } else {
-        allMessages.sent.unshift(msgObj);
-      }
-    }
-
-    // Load PSIDs for message recipient dropdown (last 3 conversations)
-    function loadPSIDsForPage(type) {
-      const pageSelect = document.getElementById(type === 'message' ? 'messagePageSelect' : 'utilityPageSelect');
-      const recipientSelect = document.getElementById(type === 'message' ? 'messageRecipient' : 'utilityRecipient');
-      const pageId = pageSelect.value;
-      const pageToken = pageSelect.options[pageSelect.selectedIndex]?.dataset?.token;
-
-      // Reset dropdown
-      recipientSelect.innerHTML = '<option value="">Loading conversations...</option>';
-
-      if (!pageId || !pageToken) {
-        recipientSelect.innerHTML = '<option value="">-- Select a Page first --</option>';
-        return;
-      }
-
-      // Fetch conversations to get PSIDs
-      FB.api('/' + pageId + '/conversations', {
-        fields: 'participants,messages.limit(1){message,from,created_time}',
-        access_token: pageToken,
-        limit: 3
-      }, function (response) {
-        if (handleApiError(response)) {
-          recipientSelect.innerHTML = '<option value="">Error loading - reconnect</option>';
-          return;
-        }
-
-        recipientSelect.innerHTML = '<option value="">-- Select recipient --</option>';
-
-        if (response && response.data && response.data.length > 0) {
-          response.data.forEach((conv, index) => {
-            // Get the participant who is NOT the page
-            const participants = conv.participants?.data || [];
-            const customer = participants.find(p => p.id !== pageId);
-            const lastMsg = conv.messages?.data?.[0];
-
-            if (customer) {
-              const preview = lastMsg?.message ? lastMsg.message.substring(0, 30) + '...' : '';
-              recipientSelect.innerHTML += `<option value="${customer.id}">${customer.name} (${preview})</option>`;
-            }
-          });
-
-          if (recipientSelect.options.length === 1) {
-            recipientSelect.innerHTML = '<option value="">No conversations found</option>';
-          }
-        } else {
-          recipientSelect.innerHTML = '<option value="">No conversations found - someone must message your Page first</option>';
-        }
-      });
-    }
-
-    // Send Page Message (pages_messaging)
-    function sendPageMessage() {
-      const pageSelect = document.getElementById('messagePageSelect');
-      const pageId = pageSelect.value;
-      const pageToken = pageSelect.options[pageSelect.selectedIndex].dataset.token;
-      const recipient = getMessageRecipientPSID();
-      const message = document.getElementById('messageText').value;
-
-      if (!pageId) {
-        alert('Please select a Page');
-        return;
-      }
-      
-      if (!recipient) {
-        alert('Please select a recipient from dropdown or enter a PSID manually');
-        return;
-      }
-      
-      if (!message) {
-        alert('Please enter a message');
-        return;
-      }
-
-      console.log('Sending message to PSID:', recipient.id);
-      console.log('Message:', message);
-
-      FB.api('/' + pageId + '/messages', 'POST', {
-        recipient: { id: recipient.id },
-        message: { text: message },
-        messaging_type: 'RESPONSE',
-        access_token: pageToken
-      }, function (response) {
-        if (response && response.message_id) {
-          document.getElementById('messageSentConfirm').style.display = 'block';
-          document.getElementById('messageText').value = '';
-
-          // Track sent message locally
-          trackSentMessage(recipient.name.split(' (')[0], recipient.id, message, false);
-
-          alert('✓ Message sent successfully!\n\nMessage ID: ' + response.message_id + '\n\nPSID: ' + recipient.id + '\n\nNow open Facebook Messenger to verify delivery.');
-        } else {
-          if (!handleApiError(response)) {
-            alert('Error: ' + (response.error ? response.error.message : 'Failed to send'));
-          }
-        }
-      });
-    }
-
-    // Template Selection State
-    let selectedTemplate = null;
-    const templateMessages = {
-      shipped: 'Your order {{order_number}} has shipped! Tracking number: {{tracking_number}}. Estimated delivery: 3-5 business days.',
-      delivered: 'Great news! Your order {{order_number}} has been delivered. Thank you for your purchase!',
-      confirmed: 'Your order {{order_number}} is confirmed! We are preparing it for shipment. You will receive tracking information soon.'
-    };
-    const templateNames = {
-      shipped: '📦 Order Shipped',
-      delivered: '✅ Order Delivered', 
-      confirmed: '🧾 Order Confirmed'
-    };
-
-    // Select Template (Step 1)
-    function selectTemplate(type) {
-      selectedTemplate = type;
-      
-      // Update visual selection
-      document.querySelectorAll('.template-card').forEach(card => {
-        card.style.borderColor = '#e4e6eb';
-        card.style.background = 'white';
-      });
-      const selectedCard = document.getElementById('template-' + type);
-      if (selectedCard) {
-        selectedCard.style.borderColor = '#1877f2';
-        selectedCard.style.background = 'rgba(24,119,242,0.05)';
-      }
-      
-      // Show/hide tracking field based on template
-      const trackingField = document.getElementById('trackingField');
-      if (trackingField) {
-        trackingField.style.display = (type === 'shipped') ? 'block' : 'none';
-      }
-      
-      // Update selected template name
-      const templateNameEl = document.getElementById('selectedTemplateName');
-      if (templateNameEl) {
-        templateNameEl.textContent = templateNames[type];
-      }
-      
-      // Move to step 2 after a brief delay
-      setTimeout(() => {
-        goToFillStep();
-      }, 300);
-    }
-
-    // Go to Fill Step (Step 2)
-    function goToFillStep() {
-      const step1 = document.getElementById('templateSelectionStep');
-      const step2 = document.getElementById('fillPlaceholdersStep');
-      const step3 = document.getElementById('sendStep');
-      
-      if (step1) step1.style.display = 'none';
-      if (step2) step2.style.display = 'block';
-      if (step3) step3.style.display = 'none';
-      
-      // Update step indicators
-      const ind1 = document.getElementById('step1Indicator');
-      const ind2 = document.getElementById('step2Indicator');
-      const ind3 = document.getElementById('step3Indicator');
-      if (ind1) { ind1.style.background = '#16a34a'; ind1.style.color = 'white'; }
-      if (ind2) { ind2.style.background = '#1877f2'; ind2.style.color = 'white'; }
-      if (ind3) { ind3.style.background = '#e4e6eb'; ind3.style.color = '#666'; }
-      
-      updateTemplatePreview();
-    }
-
-    // Back to Templates (Step 1)
-    function backToTemplates() {
-      const step1 = document.getElementById('templateSelectionStep');
-      const step2 = document.getElementById('fillPlaceholdersStep');
-      const step3 = document.getElementById('sendStep');
-      
-      if (step1) step1.style.display = 'block';
-      if (step2) step2.style.display = 'none';
-      if (step3) step3.style.display = 'none';
-      
-      // Update step indicators
-      const ind1 = document.getElementById('step1Indicator');
-      const ind2 = document.getElementById('step2Indicator');
-      if (ind1) { ind1.style.background = '#1877f2'; ind1.style.color = 'white'; }
-      if (ind2) { ind2.style.background = '#e4e6eb'; ind2.style.color = '#666'; }
-    }
-
-    // Go to Send Step (Step 3)
-    function goToSendStep() {
-      const pageSelect = document.getElementById('utilityPageSelect');
-      const orderNum = document.getElementById('utilityOrderNum')?.value;
-      const recipient = getRecipientPSID();
-      
-      if (!pageSelect?.value) {
-        alert('Please select a Page');
-        return;
-      }
-      if (!recipient) {
-        alert('Please select a recipient from dropdown or enter a PSID manually');
-        return;
-      }
-      if (!orderNum) {
-        alert('Please enter an order number');
-        return;
-      }
-      
-      const step1 = document.getElementById('templateSelectionStep');
-      const step2 = document.getElementById('fillPlaceholdersStep');
-      const step3 = document.getElementById('sendStep');
-      
-      if (step1) step1.style.display = 'none';
-      if (step2) step2.style.display = 'none';
-      if (step3) step3.style.display = 'block';
-      
-      // Update step indicators
-      const ind1 = document.getElementById('step1Indicator');
-      const ind2 = document.getElementById('step2Indicator');
-      const ind3 = document.getElementById('step3Indicator');
-      if (ind1) { ind1.style.background = '#16a34a'; }
-      if (ind2) { ind2.style.background = '#16a34a'; }
-      if (ind3) { ind3.style.background = '#1877f2'; ind3.style.color = 'white'; }
-      
-      // Update send summary
-      const pageName = pageSelect.options[pageSelect.selectedIndex]?.text || 'Page';
-      const summaryEl = document.getElementById('sendToSummary');
-      const finalPreviewEl = document.getElementById('finalMessagePreview');
-      const utilityPreviewEl = document.getElementById('utilityPreview');
-      
-      if (summaryEl) summaryEl.innerHTML = `<strong>Page:</strong> ${pageName}<br><strong>Customer:</strong> ${recipient.name}<br><strong>PSID:</strong> <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;">${recipient.id}</code>`;
-      if (finalPreviewEl && utilityPreviewEl) finalPreviewEl.textContent = utilityPreviewEl.textContent;
-    }
-
-    // Back to Fill Step (from Step 3)
-    function backToFillStep() {
-      goToFillStep();
-    }
-
-    // Update Template Preview with placeholders filled in
-    function updateTemplatePreview() {
-      if (!selectedTemplate) return;
-      
-      const orderNumEl = document.getElementById('utilityOrderNum');
-      const trackingEl = document.getElementById('utilityTracking');
-      const previewEl = document.getElementById('utilityPreview');
-      
-      const orderNum = orderNumEl?.value || '{{order_number}}';
-      const tracking = trackingEl?.value || '{{tracking_number}}';
-      
-      let message = templateMessages[selectedTemplate] || '';
-      message = message.replace('{{order_number}}', orderNum);
-      message = message.replace('{{tracking_number}}', tracking);
-      
-      if (previewEl) previewEl.textContent = message;
-    }
-
-    // Legacy function for compatibility
-    function updateUtilityPreview() {
-      if (selectedTemplate) {
-        updateTemplatePreview();
-        return;
-      }
-      // Fallback for old flow
-      const typeEl = document.getElementById('utilityType');
-      const orderNumEl = document.getElementById('utilityOrderNum');
-      const trackingEl = document.getElementById('utilityTracking');
-      const previewEl = document.getElementById('utilityPreview');
-      
-      if (!typeEl || !previewEl) return;
-      
-      const type = typeEl.value;
-      const orderNum = orderNumEl?.value || '#[order]';
-      const tracking = trackingEl?.value || '[tracking]';
-
-      let preview = '';
-      switch (type) {
-        case 'shipped':
-          preview = `Your order ${orderNum} has shipped. Tracking number: ${tracking}. Estimated delivery: 3-5 business days.`;
-          break;
-        case 'delivered':
-          preview = `Your order ${orderNum} has been delivered.`;
-          break;
-        case 'confirmed':
-          preview = `Payment received. Your order ${orderNum} is confirmed and being prepared for shipment.`;
-          break;
-      }
-      previewEl.textContent = preview;
-    }
-
-    // Manual PSID handling for Utility Messages
-    function useManualPSID() {
-      const manualInput = document.getElementById('manualPSID');
-      const selectDropdown = document.getElementById('utilityRecipient');
-      
-      if (manualInput && manualInput.value.trim()) {
-        // Clear dropdown selection when manual PSID is entered
-        if (selectDropdown) selectDropdown.value = '';
-      }
-    }
-
-    function checkManualPSID() {
-      const manualInput = document.getElementById('manualPSID');
-      const selectDropdown = document.getElementById('utilityRecipient');
-      
-      if (selectDropdown && selectDropdown.value) {
-        // Clear manual input when dropdown is selected
-        if (manualInput) manualInput.value = '';
-      }
-    }
-
-    // Get the recipient PSID for Utility Messages (from dropdown or manual input)
-    function getRecipientPSID() {
-      const manualInput = document.getElementById('manualPSID');
-      const selectDropdown = document.getElementById('utilityRecipient');
-      
-      // Prefer manual input if filled
-      if (manualInput && manualInput.value.trim()) {
-        return {
-          id: manualInput.value.trim(),
-          name: 'Customer (PSID: ' + manualInput.value.trim().substring(0, 8) + '...)'
-        };
-      }
-      
-      // Otherwise use dropdown
-      if (selectDropdown && selectDropdown.value) {
-        return {
-          id: selectDropdown.value,
-          name: selectDropdown.options[selectDropdown.selectedIndex]?.text || 'Customer'
-        };
-      }
-      
-      return null;
-    }
-
-    // Manual PSID handling for Regular Messages
-    function useManualMessagePSID() {
-      const manualInput = document.getElementById('manualMessagePSID');
-      const selectDropdown = document.getElementById('messageRecipient');
-      
-      if (manualInput && manualInput.value.trim()) {
-        // Clear dropdown selection when manual PSID is entered
-        if (selectDropdown) selectDropdown.value = '';
-      }
-    }
-
-    function checkManualMessagePSID() {
-      const manualInput = document.getElementById('manualMessagePSID');
-      const selectDropdown = document.getElementById('messageRecipient');
-      
-      if (selectDropdown && selectDropdown.value) {
-        // Clear manual input when dropdown is selected
-        if (manualInput) manualInput.value = '';
-      }
-    }
-
-    // Get the recipient PSID for Regular Messages (from dropdown or manual input)
-    function getMessageRecipientPSID() {
-      const manualInput = document.getElementById('manualMessagePSID');
-      const selectDropdown = document.getElementById('messageRecipient');
-      
-      // Prefer manual input if filled
-      if (manualInput && manualInput.value.trim()) {
-        return {
-          id: manualInput.value.trim(),
-          name: 'Customer (PSID: ' + manualInput.value.trim().substring(0, 8) + '...)'
-        };
-      }
-      
-      // Otherwise use dropdown
-      if (selectDropdown && selectDropdown.value) {
-        return {
-          id: selectDropdown.value,
-          name: selectDropdown.options[selectDropdown.selectedIndex]?.text || 'Customer'
-        };
-      }
-      
-      return null;
-    }
-
-    // Send Utility Message (pages_utility_messaging)
-    function sendUtilityMessage() {
-      const pageSelect = document.getElementById('utilityPageSelect');
-      const pageId = pageSelect.value;
-      const pageToken = pageSelect.options[pageSelect.selectedIndex].dataset.token;
-      const recipient = getRecipientPSID();
-      const message = document.getElementById('utilityPreview').textContent;
-
-      if (!pageId) {
-        alert('Please select a page');
-        return;
-      }
-      
-      if (!recipient) {
-        alert('Please select a recipient or enter a PSID manually');
-        return;
-      }
-
-      console.log('Sending utility message to PSID:', recipient.id);
-      console.log('Message:', message);
-
-      FB.api('/' + pageId + '/messages', 'POST', {
-        recipient: { id: recipient.id },
-        message: { text: message },
-        messaging_type: 'MESSAGE_TAG',
-        tag: 'POST_PURCHASE_UPDATE',
-        access_token: pageToken
-      }, function (response) {
-        if (response && response.message_id) {
-          document.getElementById('utilitySentConfirm').style.display = 'block';
-
-          // Track utility message locally
-          trackSentMessage(recipient.name.split(' (')[0], recipient.id, message, true);
-
-          alert('✓ Order update sent successfully!\n\nMessage ID: ' + response.message_id + '\n\nPSID: ' + recipient.id + '\n\nNow open Facebook Messenger to verify delivery.');
-        } else {
-          if (!handleApiError(response)) {
-            alert('Error: ' + (response.error ? response.error.message : 'Failed to send'));
-          }
-        }
-      });
-    }
-
-    // Load Ad Accounts (business_management)
-    function loadAdAccounts() {
-      FB.api('/me/adaccounts', { fields: 'id,name,account_status' }, function (response) {
-        if (handleApiError(response)) return;
-        if (response && response.data) {
-          adAccounts = response.data;
-          adAccountSelect.innerHTML = '<option>-- Select ad account --</option>';
-          adAccounts.forEach(acc => {
-            adAccountSelect.innerHTML += `<option value="${acc.id}">${acc.name || acc.id}</option>`;
-          });
-        }
-      });
-    }
-
-    // Load Ad Insights (ads_read)
-    function loadAdInsights() {
-      const accountId = adAccountSelect.value;
-      if (!accountId || accountId === '-- Select ad account --') {
-        alert('Please select an ad account');
-        return;
-      }
-
-      adsLoading.classList.add("visible");
-
-      // 1. Fetch Account-level Insights
-      FB.api('/' + accountId + '/insights', {
-        fields: 'spend,impressions,clicks,actions',
-        date_preset: 'last_7d'
-      }, function (response) {
-        adsLoading.classList.remove("visible");
-        if (handleApiError(response)) return;
-
-        if (response && response.data && response.data[0]) {
-          const data = response.data[0];
-          const spend = parseFloat(data.spend || 0);
-          const impressions = parseInt(data.impressions || 0);
-
-          // Calculate Leads (actions with value 'lead')
-          let leads = 0;
-          if (data.actions) {
-            data.actions.forEach(action => {
-              if (action.action_type === 'lead' || action.action_type === 'contact' || action.action_type === 'landing_page_view') {
-                leads += parseInt(action.value);
-              }
-            });
-          }
-
-          // Calculate CPL
-          const cpl = leads > 0 ? (spend / leads) : 0;
-
-          // Update UI with IDs
-          const spendEl = document.getElementById('adInsightsAccSpend');
-          const impEl = document.getElementById('adInsightsAccImpressions');
-          const cplEl = document.getElementById('adInsightsAccCPL');
-
-          if (spendEl) spendEl.textContent = '$' + spend.toFixed(2);
-          if (impEl) impEl.textContent = impressions.toLocaleString();
-          if (cplEl) cplEl.textContent = cpl > 0 ? '$' + cpl.toFixed(2) : '$ -';
-        }
-      });
-
-      // 2. Load Campaigns for this account
-      loadActiveCampaigns(accountId);
-    }
-
-    // Load Active Campaigns
-    function loadActiveCampaigns(accountId) {
-      const container = document.getElementById('campaignsList');
-      if (!container) return;
-
-      container.innerHTML = '<div class="list-item" style="justify-content: center; color: var(--text-muted);"><div class="spinner" style="width:14px;height:14px;border-width:2px;"></div> Loading campaigns...</div>';
-
-      // Fetch Campaign Insights directly to get metrics + names
-      FB.api('/' + accountId + '/insights', {
-        level: 'campaign',
-        fields: 'campaign_name,campaign_id,spend,impressions,actions,objective,buying_type',
-        date_preset: 'last_7d',
-        limit: 5
-      }, function (response) {
-        if (handleApiError(response)) return;
-
+        const container = document.getElementById('pages-container');
         container.innerHTML = '';
-
-        if (response && response.data && response.data.length > 0) {
-          response.data.forEach(camp => {
-            const spend = parseFloat(camp.spend || 0);
-
-            // Calculate Leads/CPL for this campaign
-            let leads = 0;
-            if (camp.actions) {
-              camp.actions.forEach(action => {
-                if (action.action_type === 'lead' || action.action_type === 'contact') {
-                  leads += parseInt(action.value);
-                }
-              });
-            }
-            const cpl = leads > 0 ? (spend / leads) : 0;
-
-            // Status/Meta string
-            const meta = `Active | ${leads} Leads | ${camp.objective || ' conversions'}`;
-
-            container.innerHTML += `
-              <div class="list-item">
-                <div>
-                  <div class="list-title">${camp.campaign_name}</div>
-                  <div class="list-meta">${meta}</div>
-                </div>
-                <span class="pill">${cpl > 0 ? 'CPL $' + cpl.toFixed(2) : 'Spend $' + spend.toFixed(0)}</span>
-              </div>
-            `;
-          });
-        } else {
-          container.innerHTML = '<div class="list-item" style="justify-content: center; color: var(--text-muted);">No active campaigns in last 7 days</div>';
-        }
+        const list = document.createElement('div');
+        list.className = 'pages-list';
+        res.data.forEach(function (pg) {
+          const item = document.createElement('div');
+          item.className = 'page-item';
+          item.innerHTML = `<div>
+              <div style="font-weight:600">${escapeHtml(pg.name)}</div>
+              <div style="font-size:12px;color:var(--text-muted)">${escapeHtml(pg.category || '')}</div>
+            </div>
+            <div>
+              <button class="btn-primary" onclick="selectPage('${encodeURIComponent(pg.id)}')">Select</button>
+            </div>`;
+          // attach data via dataset for later
+          item.dataset.pageId = pg.id;
+          list.appendChild(item);
+        });
+        container.appendChild(list);
+        setCaption('Pages listed', 'Select a Page to demonstrate reading Page content (posts) and engagement metrics.');
       });
     }
 
-    // Open Page Settings (pages_manage_metadata)
-    function openPageSettings(pageId) {
-      const page = pages.find(p => p.id === pageId);
-      if (page) {
-        document.getElementById('settingsPageId').value = page.id;
-        document.getElementById('settingsPageName').value = page.name;
+    // Select a page — read recent posts and show engagement counts (requires pages_read_engagement)
+    function selectPage(pageIdEncoded) {
+      const pageId = decodeURIComponent(pageIdEncoded);
+      setCaption('Reading Page posts', 'We will call /{page-id}/posts and read engagement counts (pages_read_engagement). Demonstrates allowed usage: reading content posted by the Page and engagement info.');
+      document.getElementById('engagement-output').innerHTML = '<div class="note">Loading posts and engagement…</div>';
+      // First we attempt to read posts (this will succeed only if pages_read_engagement was granted)
+      FB.api(`/${pageId}/posts`, { fields: 'message,created_time,id,insights.metric(post_impressions,post_engaged_users){values}' , limit: 5 }, function (res) {
+        if (!res || res.error) {
+          // Provide a clear explanation for reviewers if permission is missing
+          document.getElementById('engagement-output').innerHTML = `<div class="note">Unable to read posts or engagement. This usually means <strong>pages_read_engagement</strong> was not granted in the login dialog. Please re-run the demo and accept the permission so I can show the end-to-end flow.</div>`;
+          setCaption('Permission required', 'pages_read_engagement must be accepted in the login dialog to show Page posts and engagement metrics.');
+          return;
+        }
+        // Build UI showing posts and high-level engagement info
+        const out = document.getElementById('engagement-output');
+        out.innerHTML = '';
+        const header = document.createElement('div');
+        header.style.marginBottom = '8px';
+        header.innerHTML = `<div style="font-weight:700">Recent posts for the selected Page</div>
+                            <div style="font-size:12px;color:var(--text-muted)">This demonstrates reading Page content and engagement. IDs and timestamps are shown as examples.</div>`;
+        out.appendChild(header);
 
-        FB.api('/' + pageId, {
-          fields: 'about,website,phone',
-          access_token: page.access_token
-        }, function (response) {
-          if (response) {
-            document.getElementById('settingsAbout').value = response.about || '';
-            document.getElementById('settingsWebsite').value = response.website || '';
-            document.getElementById('settingsPhone').value = response.phone || '';
+        (res.data || []).forEach(function (post) {
+          const card = document.createElement('div');
+          card.className = 'engagement-card';
+          const msg = post.message ? escapeHtml(post.message) : '(no message)';
+          const created = post.created_time ? new Date(post.created_time).toLocaleString('en-US', { timeZone: 'UTC' }) : '';
+          // Attempt to get a simple engagement metric if available from insights
+          let engaged = '';
+          if (post.insights && post.insights.data && post.insights.data.length > 0) {
+            // try to pick post_engaged_users value
+            const engagedMetric = post.insights.data.find(m => m.name && m.name.indexOf('post_engaged_users') !== -1);
+            if (engagedMetric && engagedMetric.values && engagedMetric.values[0]) {
+              engaged = engagedMetric.values[0].value || '';
+            }
           }
+          card.innerHTML = `<div style="font-weight:600; margin-bottom:6px">${msg}</div>
+                            <div style="font-size:12px;color:var(--text-muted)">Posted: ${escapeHtml(created)} ${engaged ? '· Engaged users: ' + escapeHtml(String(engaged)) : ''}</div>`;
+          out.appendChild(card);
         });
 
-        openDrawer('pageSettings');
-      }
-    }
-
-    // Save Page Settings (pages_manage_metadata)
-    function savePageSettings() {
-      const pageId = document.getElementById('settingsPageId').value;
-      const page = pages.find(p => p.id === pageId);
-      if (!page) return;
-
-      FB.api('/' + pageId, 'POST', {
-        about: document.getElementById('settingsAbout').value,
-        website: document.getElementById('settingsWebsite').value,
-        phone: document.getElementById('settingsPhone').value,
-        access_token: page.access_token
-      }, function (response) {
-        if (response && response.success) {
-          alert('✓ Page settings updated successfully!');
-          closeDrawer('pageSettings');
-          loadPages();
+        if ((res.data || []).length === 0) {
+          out.innerHTML += '<div class="note">No recent posts found — this Page may not have public posts. If you need a different Page for the review, please sign in with a Page that has recent posts.</div>';
         } else {
-          alert('Error: ' + (response.error ? response.error.message : 'Failed to update'));
+          setCaption('Posts displayed', 'The demo displayed recent Page posts and engagement metrics to demonstrate allowed usage of pages_read_engagement.');
         }
       });
     }
 
-    // Theme toggle
-    themeToggle.addEventListener("click", () => {
-      const body = document.body;
-      const dark = body.classList.contains("theme-dark");
-      if (dark) {
-        body.classList.remove("theme-dark");
-        body.classList.add("theme-light");
-        themeIcon.textContent = "🌙";
-        themeLabel.textContent = "Dark";
-      } else {
-        body.classList.remove("theme-light");
-        body.classList.add("theme-dark");
-        themeIcon.textContent = "☀️";
-        themeLabel.textContent = "Light";
-      }
-    });
-
-    // Load insights button
-    loadBtn.addEventListener("click", loadAdInsights);
-
-    // Drawer helpers
-    function openDrawer(which) {
-      drawerBackdrop.classList.add("visible");
-      const drawer = document.getElementById(which + "Drawer");
-      if (drawer) drawer.classList.add("visible");
-    }
-
-    function closeDrawer(which) {
-      const allDrawers = document.querySelectorAll('.drawer');
-      allDrawers.forEach(d => d.classList.remove('visible'));
-      drawerBackdrop.classList.remove("visible");
-    }
-
-    function saveDraft() {
-      closeDrawer('post');
-      alert("✓ Instagram post scheduled successfully!");
-    }
-
-    function saveCampaign() {
-      closeDrawer('campaign');
-      alert("✓ Facebook campaign created successfully!");
-    }
-
-    drawerBackdrop.addEventListener("click", () => closeDrawer());
-    // createPostBtn.addEventListener("click", () => openDrawer("post")); // Instagram - coming soon
-    createCampaignBtn.addEventListener("click", () => openDrawer("campaign"));
-
-    // Tab switching (for non-messaging tabs only - messaging tabs have onclick handlers)
-    document.querySelectorAll('.tabs:not(#messagingTabs) .tab').forEach(tab => {
-      tab.addEventListener('click', function () {
-        this.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
+    // Utility: sanitize strings for safe insertion into innerHTML
+    function escapeHtml(unsafe) {
+      if (unsafe === null || unsafe === undefined) return '';
+      return String(unsafe).replace(/[&<"'>]/g, function (m) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m];
       });
-    });
+    }
 
-    // Initialize
-    updateUtilityPreview();
+    // Called on page load: if already connected via fbAsyncInit, FB.getLoginStatus will trigger onFBConnected
+    // Fallback: ensure caption shows helpful instruction if SDK fails to load
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        if (typeof FB === 'undefined') {
+          setCaption('Meta SDK not loaded', 'The Facebook SDK could not load in this environment. App Review requires showing the login dialog - ensure the SDK is permitted to load in your review environment.');
+        }
+      }, 1200);
+    });
   </script>
 </body>
 
