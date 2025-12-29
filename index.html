@@ -1004,12 +1004,7 @@
           `;
           
           if (postsRes?.error) {
-            html += `
-              <div class="note error">
-                <strong>Debug Info:</strong> ${escapeHtml(postsRes.error.message)}<br>
-                <small>Error Code: ${postsRes.error.code || 'N/A'}</small>
-              </div>
-            `;
+            console.log('Posts API error:', postsRes.error);
           }
         }
         
