@@ -642,11 +642,17 @@
           return;
         }
         
+        console.log('Pages loaded:', res.data.length);
+        res.data.forEach(pg => {
+          console.log('Page:', pg.name, 'Token length:', pg.access_token?.length);
+        });
+        
         // Show API call
         let html = `
           <div class="api-call-box">
             <span class="method">GET</span> <span class="endpoint">/me/accounts</span>
-            <br>fields: id, name, access_token, category, fan_count
+            <br>fields: id, name, <span style="color:#4ade80;font-weight:bold;">access_token</span>, category, fan_count
+            <br><span style="color:#fbbf24;">✓ Page Access Tokens received for ${res.data.length} pages</span>
           </div>
           <div class="pages-list">
         `;
@@ -654,6 +660,8 @@
         res.data.forEach(function (pg) {
           const pic = pg.picture?.data?.url || '';
           const fans = pg.fan_count ? pg.fan_count.toLocaleString() + ' followers' : '';
+          const tokenPreview = pg.access_token ? pg.access_token.substring(0, 20) + '...' : 'NO TOKEN';
+          
           html += `
             <div class="page-item" id="page-item-${pg.id}" onclick="selectPage('${pg.id}', '${encodeURIComponent(pg.access_token)}', '${encodeURIComponent(pg.name)}')">
               <div style="display:flex;align-items:center;gap:10px;">
@@ -661,6 +669,7 @@
                 <div>
                   <div style="font-weight:600">${escapeHtml(pg.name)}</div>
                   <div style="font-size:12px;color:var(--text-muted)">${escapeHtml(pg.category || '')} ${fans ? '• ' + fans : ''}</div>
+                  <div style="font-size:10px;color:#16a34a;font-family:monospace;">Token: ${tokenPreview}</div>
                 </div>
               </div>
               <button class="btn-primary" style="padding:8px 14px;font-size:12px;">Select</button>
@@ -706,11 +715,25 @@
       const output = document.getElementById('engagement-output');
       let html = '';
       
+      // Show which token is being used
+      const tokenPreview = selectedPageToken ? selectedPageToken.substring(0, 30) + '...' : 'NO TOKEN';
+      
+      html += `
+        <div style="margin-bottom:16px;padding:12px;background:#dcfce7;border:1px solid #86efac;border-radius:8px;">
+          <div style="font-weight:600;color:#166534;margin-bottom:4px;">🔑 Using Page Access Token</div>
+          <div style="font-size:11px;font-family:monospace;color:#166534;">${tokenPreview}</div>
+          <div style="font-size:11px;color:#166534;margin-top:4px;">This token was returned from GET /me/accounts and grants access to Page data</div>
+        </div>
+      `;
+      
       // 1. First get basic page info with follower counts
       FB.api('/' + selectedPageId, {
         fields: 'id,name,fan_count,followers_count,talking_about_count,were_here_count',
         access_token: selectedPageToken
       }, function(pageRes) {
+        
+        console.log('Page info response:', pageRes);
+        console.log('Using token:', selectedPageToken?.substring(0, 30));
         
         // Show API call
         html += `
@@ -719,6 +742,7 @@
             <div class="api-call-box">
               <span class="method">GET</span> <span class="endpoint">/${selectedPageId}</span>
               <br>fields: fan_count, followers_count, talking_about_count
+              <br><span style="color:#fbbf24;">access_token: [Page Token]</span>
             </div>
           </div>
         `;
