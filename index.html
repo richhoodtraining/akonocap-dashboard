@@ -1420,6 +1420,25 @@
             </span>
           </div>
 
+          <!-- Page Selector for Instagram -->
+          <div class="field-row" style="margin-bottom: 12px;">
+            <span style="font-size: 12px;">Select Page:</span>
+            <select id="igPageSelect" class="field-input" onchange="onIgPageSelected()">
+              <option value="">-- Select a Facebook Page --</option>
+            </select>
+          </div>
+
+          <!-- No Instagram Message -->
+          <div id="igNoAccount"
+            style="display: none; padding: 16px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; margin-bottom: 12px;">
+            <p style="margin: 0; font-size: 12px; color: #b45309;">
+              <strong>⚠️ No Instagram Business account connected</strong><br>
+              The selected Facebook Page does not have a connected Instagram Business account.
+              <a href="https://www.facebook.com/business/help/898752960195806" target="_blank"
+                style="color: #1877f2;">Learn how to connect one</a>.
+            </p>
+          </div>
+
           <!-- Instagram Account Info -->
           <div id="igAccountInfo" style="display: none;">
             <div class="page-card" style="margin-bottom: 12px;">
@@ -3352,11 +3371,26 @@
     let selectedIgMedia = null;
     let selectedIgComment = null;
 
-    // Load Instagram accounts from Pages
+    // Load Instagram accounts from Pages - populate dropdown
     function loadInstagramAccounts() {
       instagramAccounts = [];
+      const igPageSelect = document.getElementById('igPageSelect');
+
+      if (!igPageSelect) return;
+
+      // Reset dropdown
+      igPageSelect.innerHTML = '<option value="">-- Select a Facebook Page --</option>';
+
+      // Hide account info and no account message initially
+      document.getElementById('igAccountInfo').style.display = 'none';
+      document.getElementById('igNoAccount').style.display = 'none';
+
+      // Populate dropdown with Pages that have Instagram accounts connected
       pages.forEach(page => {
-        if (page.instagram_business_account) {
+        const hasIg = page.instagram_business_account ? true : false;
+        const igInfo = hasIg ? ` (@${page.instagram_business_account.username})` : ' (No IG connected)';
+
+        if (hasIg) {
           instagramAccounts.push({
             igId: page.instagram_business_account.id,
             igUsername: page.instagram_business_account.username,
@@ -3365,15 +3399,68 @@
             pageName: page.name
           });
         }
+
+        // Add to dropdown - all pages, but indicate which have IG
+        igPageSelect.innerHTML += `<option value="${page.id}" data-hasig="${hasIg}">${page.name}${igInfo}</option>`;
       });
 
-      if (instagramAccounts.length > 0) {
-        loadInstagramData(instagramAccounts[0]);
-      } else {
+      // Reset media list
+      const mediaList = document.getElementById('igMediaList');
+      if (mediaList) {
+        mediaList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">Select a Facebook Page to view its connected Instagram account</div>';
+      }
+    }
+
+    // Handle Page selection for Instagram
+    function onIgPageSelected() {
+      const igPageSelect = document.getElementById('igPageSelect');
+      const pageId = igPageSelect?.value;
+
+      // Hide both sections initially
+      document.getElementById('igAccountInfo').style.display = 'none';
+      document.getElementById('igNoAccount').style.display = 'none';
+
+      if (!pageId) {
+        // No page selected - show default message
         const mediaList = document.getElementById('igMediaList');
         if (mediaList) {
-          mediaList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">No Instagram Business account connected to your Pages</div>';
+          mediaList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">Select a Facebook Page to view its connected Instagram account</div>';
         }
+        currentIgAccount = null;
+        return;
+      }
+
+      // Find the page
+      const page = pages.find(p => p.id === pageId);
+      if (!page) return;
+
+      // Check if this page has an Instagram account connected
+      if (page.instagram_business_account) {
+        // Has IG - load it
+        const igAccount = {
+          igId: page.instagram_business_account.id,
+          igUsername: page.instagram_business_account.username,
+          pageId: page.id,
+          pageToken: page.access_token,
+          pageName: page.name
+        };
+        loadInstagramData(igAccount);
+      } else {
+        // No IG connected to this page
+        document.getElementById('igNoAccount').style.display = 'block';
+        currentIgAccount = null;
+
+        // Clear media
+        const mediaList = document.getElementById('igMediaList');
+        if (mediaList) {
+          mediaList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">No Instagram account connected to this Page</div>';
+        }
+
+        // Clear engagement cards
+        document.getElementById('igFollowers').textContent = '--';
+        document.getElementById('igPosts').textContent = '--';
+        document.getElementById('igEngagement').textContent = '--';
+        document.getElementById('igReach').textContent = '--';
       }
     }
 
