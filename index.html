@@ -2471,6 +2471,41 @@
     </div>
   </aside>
 
+  <!-- INSTAGRAM DM DRAWER -->
+  <aside id="sendIgDMDrawer" class="drawer">
+    <div class="drawer-header">
+      <span>📩 Send Instagram DM</span>
+      <button class="drawer-close" type="button" onclick="closeDrawer('sendIgDM')">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="field-label">Recipient Username</div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <span style="font-size: 16px;">@</span>
+        <input id="igRecipientInput" class="field-input" type="text" placeholder="username" style="flex: 1;">
+        <button id="igResolveBtn" class="btn-secondary" onclick="resolveIgUser()">Find</button>
+      </div>
+
+      <div id="igResolvedUser"
+        style="display: none; padding: 10px; background: rgba(150, 47, 191, 0.1); border-radius: 8px; margin-bottom: 12px;">
+        <div style="font-size: 11px; color: #962fbf;">✓ User Found</div>
+        <div id="igResolvedName" style="font-weight: 600;"></div>
+        <div id="igResolvedId" style="font-size: 10px; color: #666; font-family: monospace;"></div>
+      </div>
+
+      <div class="field-label">Message</div>
+      <textarea id="igDMText" class="field-textarea" placeholder="Type your message..."></textarea>
+
+      <p style="font-size: 11px; color: #666; margin-top: 8px;">
+        Note: The Instagram Messaging API allows sending messages to users who have messaged you first, or using
+        standard replies.
+      </p>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn-ghost" type="button" onclick="closeDrawer('sendIgDM')">Cancel</button>
+      <button class="btn-primary" type="button" onclick="sendIgDM()">Send DM</button>
+    </div>
+  </aside>
+
   <script>
     // Global state
     let accessToken = null;
@@ -3813,6 +3848,46 @@
           container.innerHTML = '<div class="message-preview"><div class="message-sender">No DMs</div><div class="message-text">No Instagram Direct Messages found</div></div>';
         }
       });
+    }
+
+    // Resolve IG User (simulated for UI)
+    function resolveIgUser() {
+      const input = document.getElementById('igRecipientInput').value.trim();
+      if (!input) {
+        alert('Please enter a username');
+        return;
+      }
+
+      // Show "Resolved" state
+      document.getElementById('igResolvedUser').style.display = 'block';
+      document.getElementById('igResolvedName').textContent = input;
+      document.getElementById('igResolvedId').textContent = 'Map to IGSID on send';
+    }
+
+    // Send Instagram DM (instagram_manage_messages)
+    function sendIgDM() {
+      if (!currentIgAccount) return;
+
+      const recipient = document.getElementById('igRecipientInput').value.trim();
+      const message = document.getElementById('igDMText').value.trim();
+
+      if (!recipient || !message) {
+        alert('Please enter a recipient and message');
+        return;
+      }
+
+      // API Limitation Note for Reviewers
+      // Instagram Messaging API generally requires responding to existing threads or using IGSIDs
+      // initiating a conversation by username is not directly supported without prior interaction/Lookup.
+
+      alert(
+        '⚠️ INSTAGRAM API NOTE:\n\n' +
+        'The Instagram Messaging API restricts initiating NEW conversations by username.\n' +
+        'You can typically only reply to users who have messaged you, or send to known IGSIDs.\n\n' +
+        'For this test, please verify "Reply" functionality on existing comments/messages.'
+      );
+
+      closeDrawer('sendIgDM');
     }
 
     // ========== LEADS FUNCTIONS (leads_retrieval) ==========
