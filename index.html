@@ -268,14 +268,16 @@
       max-width: 1380px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      grid-auto-rows: min-content;
+      align-items: start;
+      gap: 14px;
     }
 
     /* Panels */
     .panel {
       background: var(--bg-card);
       border-radius: 14px;
-      padding: 18px;
+      padding: 14px;
       border: 1px solid var(--border-subtle);
       box-shadow: var(--shadow-soft);
       transition: all 0.15s ease;
@@ -303,9 +305,9 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
 
     .panel-title {
@@ -317,9 +319,10 @@
     }
 
     .panel-sub {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-muted);
-      margin-bottom: 12px;
+      margin-bottom: 8px;
+      line-height: 1.4;
     }
 
     .badge {
@@ -333,15 +336,15 @@
     }
 
     .perm-pill {
-      font-size: 10px;
-      padding: 3px 8px;
+      font-size: 9px;
+      padding: 2px 6px;
       border-radius: 999px;
       background: var(--pill-bg);
       color: var(--text-muted);
       border: 1px solid rgba(0, 0, 0, 0.04);
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
 
     .perm-pill.active {
@@ -353,8 +356,9 @@
     .perm-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
+      gap: 4px;
+      margin-top: 2px;
+      margin-bottom: 4px;
     }
 
     .field-row {
@@ -362,7 +366,7 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       font-size: 12px;
     }
 
@@ -391,14 +395,14 @@
     .cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 8px;
+      margin-bottom: 10px;
     }
 
     .card {
       background: linear-gradient(135deg, #ffffff, #f5f7fb);
-      border-radius: 12px;
-      padding: 10px 12px;
+      border-radius: 10px;
+      padding: 8px 10px;
       border: 1px solid #dde1ea;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
       transition: transform 0.1s ease;
@@ -414,37 +418,37 @@
     }
 
     .card-label {
-      font-size: 10px;
+      font-size: 9px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-muted);
     }
 
     .card-value {
-      margin-top: 4px;
-      font-size: 18px;
+      margin-top: 2px;
+      font-size: 16px;
       font-weight: 600;
     }
 
     .card-delta {
-      margin-top: 4px;
-      font-size: 11px;
+      margin-top: 2px;
+      font-size: 10px;
       color: var(--success);
     }
 
     /* List */
     .list {
-      margin-top: 6px;
+      margin-top: 4px;
       font-size: 12px;
       border-top: 1px solid rgba(0, 0, 0, 0.04);
-      padding-top: 8px;
+      padding-top: 6px;
     }
 
     .list-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 0;
+      padding: 6px 0;
       border-bottom: 1px solid rgba(0, 0, 0, 0.03);
       cursor: pointer;
       transition: background 0.12s ease;
