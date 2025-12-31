@@ -3475,8 +3475,8 @@
     // createPostBtn.addEventListener("click", () => openDrawer("post")); // Instagram - coming soon
     createCampaignBtn.addEventListener("click", () => openDrawer("campaign"));
 
-    // Tab switching (for non-messaging tabs only - messaging tabs have onclick handlers)
-    document.querySelectorAll('.tabs:not(#messagingTabs) .tab').forEach(tab => {
+    // Tab switching (for tabs without specific onclick handlers)
+    document.querySelectorAll('.tabs:not(#messagingTabs):not(#instagramTabs):not(#postsAdsTabs) .tab').forEach(tab => {
       tab.addEventListener('click', function () {
         this.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         this.classList.add('active');
