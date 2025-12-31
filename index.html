@@ -2613,12 +2613,17 @@
       FB.logout(function (response) {
         accessToken = null;
         pages = [];
+        selectedPageId = null;
+        selectedPageToken = null;
+
         userPanel.classList.remove("visible");
         loginBtn.style.display = "inline-flex";
-        adsPanel.classList.add("disabled");
-        pagesPanel.classList.add("disabled");
-        messagingPanel.classList.add("disabled");
-        businessPanel.classList.add("disabled");
+
+        // Disable all panels
+        const panels = [adsPanel, pagesPanel, messagingPanel, businessPanel, instagramPanel, leadsPanel, catalogPanel, postsAdsPanel];
+        panels.forEach(p => {
+          if (p) p.classList.add("disabled");
+        });
       });
     }
 
@@ -4194,25 +4199,6 @@
 
     // ========== UPDATED facebookLogout ==========
 
-    const originalFacebookLogout = facebookLogout;
-    facebookLogout = function () {
-      FB.logout(function (response) {
-        accessToken = null;
-        pages = [];
-        selectedPageId = null;
-        selectedPageToken = null;
-        userPanel.classList.remove("visible");
-        loginBtn.style.display = "inline-flex";
-        adsPanel.classList.add("disabled");
-        pagesPanel.classList.add("disabled");
-        messagingPanel.classList.add("disabled");
-        businessPanel.classList.add("disabled");
-        if (instagramPanel) instagramPanel.classList.add("disabled");
-        if (leadsPanel) leadsPanel.classList.add("disabled");
-        if (catalogPanel) catalogPanel.classList.add("disabled");
-        if (postsAdsPanel) postsAdsPanel.classList.add("disabled");
-      });
-    };
   </script>
 </body>
 
