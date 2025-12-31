@@ -1310,38 +1310,54 @@
             </span>
           </div>
 
-          <div id="pagesList">
-            <div class="page-card">
-              <div class="page-avatar">A</div>
+          <!-- Primary Page Selector -->
+          <div class="field-row" style="margin-bottom: 10px;">
+            <span style="font-size: 12px; font-weight: 500;">Active Page:</span>
+            <select id="primaryPageSelect" class="field-input" style="flex: 1; max-width: 300px;"
+              onchange="onPrimaryPageSelected()">
+              <option value="">-- Select a Facebook Page --</option>
+            </select>
+          </div>
+
+          <!-- Selected Page Info -->
+          <div id="selectedPageInfo" style="display: none;">
+            <div class="page-card" style="margin-bottom: 10px;">
+              <div class="page-avatar" id="selectedPageAvatar">A</div>
               <div class="page-info">
-                <div class="page-name">Akonocap Bulk Buyers</div>
-                <div class="page-stats">12,847 followers • Sneaker/Streetwear Business</div>
+                <div class="page-name" id="selectedPageName">Page Name</div>
+                <div class="page-stats" id="selectedPageStats">0 followers • Category</div>
               </div>
-              <button class="btn-ghost" onclick="openDrawer('pageSettings')">Manage</button>
+              <button class="btn-ghost" onclick="openPageSettings(selectedPageId)">Manage</button>
+            </div>
+
+            <div class="engagement-grid">
+              <div class="engagement-card">
+                <div class="engagement-label">Page Views (7d)</div>
+                <div class="engagement-value" id="pageViewsValue">--</div>
+                <div class="engagement-delta" id="pageViewsDelta">Loading...</div>
+              </div>
+              <div class="engagement-card">
+                <div class="engagement-label">Post Reach (7d)</div>
+                <div class="engagement-value" id="postReachValue">--</div>
+                <div class="engagement-delta" id="postReachDelta">Loading...</div>
+              </div>
+              <div class="engagement-card">
+                <div class="engagement-label">Engagements</div>
+                <div class="engagement-value" id="engagementsValue">--</div>
+                <div class="engagement-delta" id="engagementsDelta">Loading...</div>
+              </div>
+              <div class="engagement-card">
+                <div class="engagement-label">New Followers</div>
+                <div class="engagement-value" id="newFollowersValue">--</div>
+                <div class="engagement-delta" id="newFollowersDelta">Loading...</div>
+              </div>
             </div>
           </div>
 
-          <div class="engagement-grid">
-            <div class="engagement-card">
-              <div class="engagement-label">Page Views (7d)</div>
-              <div class="engagement-value">8,432</div>
-              <div class="engagement-delta">+23% vs previous week</div>
-            </div>
-            <div class="engagement-card">
-              <div class="engagement-label">Post Reach (7d)</div>
-              <div class="engagement-value">45,891</div>
-              <div class="engagement-delta">+18% vs previous week</div>
-            </div>
-            <div class="engagement-card">
-              <div class="engagement-label">Engagements</div>
-              <div class="engagement-value">2,156</div>
-              <div class="engagement-delta">+31% vs previous week</div>
-            </div>
-            <div class="engagement-card">
-              <div class="engagement-label">New Followers</div>
-              <div class="engagement-value">342</div>
-              <div class="engagement-delta">+12% vs previous week</div>
-            </div>
+          <!-- No Page Selected Message -->
+          <div id="noPageSelected"
+            style="padding: 16px; text-align: center; color: var(--text-muted); background: rgba(0,0,0,0.02); border-radius: 8px;">
+            Select a Facebook Page above to view details and manage it across all panels
           </div>
         </section>
 
@@ -2572,6 +2588,9 @@
     }
 
     // Load Pages (pages_show_list)
+    let selectedPageId = null;
+    let selectedPageToken = null;
+
     function loadPages() {
       FB.api('/me/accounts', {
         fields: 'id,name,access_token,picture,fan_count,category,instagram_business_account{id,username}'
@@ -2580,42 +2599,142 @@
 
         if (response && response.data) {
           pages = response.data;
-          renderPagesList();
+          populatePrimaryPageSelect();
           populatePageSelects();
-
-          // Load engagement for first page (pages_read_engagement)
-          if (pages.length > 0) {
-            loadPageEngagement(pages[0].id, pages[0].access_token);
-            loadConversations(pages[0].id, pages[0].access_token);
-          }
+          loadInstagramAccounts();
         }
       });
     }
 
-    // Render Pages List
-    function renderPagesList() {
-      const container = document.getElementById('pagesList');
-      if (!container) return;
+    // Populate Primary Page Selector
+    function populatePrimaryPageSelect() {
+      const select = document.getElementById('primaryPageSelect');
+      if (!select) return;
 
-      container.innerHTML = '';
+      select.innerHTML = '<option value="">-- Select a Facebook Page --</option>';
       pages.forEach(page => {
-        const pic = page.picture && page.picture.data ? page.picture.data.url : '';
-        container.innerHTML += `
-          <div class="page-card">
-            <div class="page-avatar">${pic ? '<img src="' + pic + '" alt="">' : page.name.charAt(0)}</div>
-            <div class="page-info">
-              <div class="page-name">${page.name}</div>
-              <div class="page-stats">${page.fan_count ? page.fan_count.toLocaleString() + ' followers • ' : ''}${page.category || 'Page'}</div>
-            </div>
-            <button class="btn-ghost" onclick="openPageSettings('${page.id}')">Manage</button>
-          </div>
-        `;
+        const igInfo = page.instagram_business_account ? ` (IG: @${page.instagram_business_account.username})` : '';
+        select.innerHTML += `<option value="${page.id}">${page.name}${igInfo}</option>`;
+      });
+
+      // Show no page selected message
+      document.getElementById('noPageSelected').style.display = 'block';
+      document.getElementById('selectedPageInfo').style.display = 'none';
+    }
+
+    // Handle Primary Page Selection
+    function onPrimaryPageSelected() {
+      const select = document.getElementById('primaryPageSelect');
+      const pageId = select?.value;
+
+      if (!pageId) {
+        selectedPageId = null;
+        selectedPageToken = null;
+        document.getElementById('noPageSelected').style.display = 'block';
+        document.getElementById('selectedPageInfo').style.display = 'none';
+        return;
+      }
+
+      // Find the selected page
+      const page = pages.find(p => p.id === pageId);
+      if (!page) return;
+
+      selectedPageId = page.id;
+      selectedPageToken = page.access_token;
+
+      // Show selected page info
+      document.getElementById('noPageSelected').style.display = 'none';
+      document.getElementById('selectedPageInfo').style.display = 'block';
+
+      // Update page info display
+      const pic = page.picture && page.picture.data ? page.picture.data.url : '';
+      const avatarEl = document.getElementById('selectedPageAvatar');
+      if (avatarEl) {
+        avatarEl.innerHTML = pic ? `<img src="${pic}" alt="" style="width:100%;height:100%;border-radius:10px;object-fit:cover;">` : page.name.charAt(0);
+      }
+      document.getElementById('selectedPageName').textContent = page.name;
+      document.getElementById('selectedPageStats').textContent = (page.fan_count ? page.fan_count.toLocaleString() + ' followers • ' : '') + (page.category || 'Page');
+
+      // Load engagement metrics for this page
+      loadSelectedPageEngagement(page.id, page.access_token);
+
+      // Load conversations for this page
+      loadConversations(page.id, page.access_token);
+
+      // Update Instagram panel with this page's IG account
+      const igPageSelect = document.getElementById('igPageSelect');
+      if (igPageSelect) {
+        igPageSelect.value = page.id;
+        onIgPageSelected();
+      }
+
+      // Update other panel selects
+      syncPageSelectsToSelected();
+    }
+
+    // Sync all page selects to the selected page
+    function syncPageSelectsToSelected() {
+      if (!selectedPageId) return;
+
+      const selects = ['leadsPageSelect', 'postsPageSelect', 'messagePageSelect', 'utilityPageSelect'];
+      selects.forEach(id => {
+        const select = document.getElementById(id);
+        if (select) {
+          select.value = selectedPageId;
+        }
+      });
+
+      // Trigger load functions for panels that need it
+      loadLeadForms();
+      loadPagePosts();
+    }
+
+    // Load Selected Page Engagement (pages_read_engagement)
+    function loadSelectedPageEngagement(pageId, pageToken) {
+      FB.api('/' + pageId + '/insights', {
+        metric: 'page_views_total,page_post_engagements,page_fan_adds,page_impressions',
+        period: 'week',
+        access_token: pageToken
+      }, function (response) {
+        if (handleApiError(response)) return;
+
+        // Set defaults
+        document.getElementById('pageViewsValue').textContent = '--';
+        document.getElementById('postReachValue').textContent = '--';
+        document.getElementById('engagementsValue').textContent = '--';
+        document.getElementById('newFollowersValue').textContent = '--';
+
+        document.getElementById('pageViewsDelta').textContent = 'Past 7 days';
+        document.getElementById('postReachDelta').textContent = 'Past 7 days';
+        document.getElementById('engagementsDelta').textContent = 'Past 7 days';
+        document.getElementById('newFollowersDelta').textContent = 'Past 7 days';
+
+        if (response && response.data) {
+          response.data.forEach(metric => {
+            const value = metric.values && metric.values[0] ? metric.values[0].value : 0;
+
+            switch (metric.name) {
+              case 'page_views_total':
+                document.getElementById('pageViewsValue').textContent = value.toLocaleString();
+                break;
+              case 'page_impressions':
+                document.getElementById('postReachValue').textContent = value.toLocaleString();
+                break;
+              case 'page_post_engagements':
+                document.getElementById('engagementsValue').textContent = value.toLocaleString();
+                break;
+              case 'page_fan_adds':
+                document.getElementById('newFollowersValue').textContent = value.toLocaleString();
+                break;
+            }
+          });
+        }
       });
     }
 
-    // Populate Page Selects
+    // Populate Page Selects (for drawers and other panels)
     function populatePageSelects() {
-      const selects = ['messagePageSelect', 'utilityPageSelect'];
+      const selects = ['messagePageSelect', 'utilityPageSelect', 'leadsPageSelect', 'postsPageSelect'];
       selects.forEach(id => {
         const select = document.getElementById(id);
         if (select) {
@@ -3998,26 +4117,6 @@
       alert('This would open a dialog to boost post: ' + postId + '\n\nUsing pages_manage_ads permission to create a promotion.');
     }
 
-    // ========== UPDATED populatePageSelects ==========
-
-    // Override populatePageSelects to include new dropdowns
-    const originalPopulatePageSelects = populatePageSelects;
-    populatePageSelects = function () {
-      const selects = ['messagePageSelect', 'utilityPageSelect', 'leadsPageSelect', 'postsPageSelect'];
-      selects.forEach(id => {
-        const select = document.getElementById(id);
-        if (select) {
-          select.innerHTML = '<option value="">-- Select a Page --</option>';
-          pages.forEach(page => {
-            select.innerHTML += `<option value="${page.id}" data-token="${page.access_token}">${page.name}</option>`;
-          });
-        }
-      });
-
-      // Also load Instagram accounts after pages are populated
-      loadInstagramAccounts();
-    };
-
     // ========== UPDATED facebookLogout ==========
 
     const originalFacebookLogout = facebookLogout;
@@ -4025,6 +4124,8 @@
       FB.logout(function (response) {
         accessToken = null;
         pages = [];
+        selectedPageId = null;
+        selectedPageToken = null;
         userPanel.classList.remove("visible");
         loginBtn.style.display = "inline-flex";
         adsPanel.classList.add("disabled");
