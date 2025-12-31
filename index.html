@@ -1042,7 +1042,7 @@
           <div class="panel-header" style="margin-bottom: 0;">
             <div class="panel-title" style="color: white; font-size: 18px;">
               <span style="font-size: 24px;">📋</span>
-              META APP REVIEWER: Testing Guide
+              META APP REVIEWER: Complete Testing Guide (19 Permissions)
             </div>
           </div>
 
@@ -1050,60 +1050,172 @@
           <div
             style="background: rgba(255,0,0,0.2); border: 2px solid rgba(255,255,255,0.5); border-radius: 10px; padding: 14px; margin-top: 12px;">
             <p style="margin: 0 0 8px; font-size: 14px; font-weight: 700;">⚠️ CRITICAL: This App Uses REAL Facebook
-              OAuth</p>
+              OAuth & Live APIs</p>
             <ul style="margin: 0; padding-left: 20px; font-size: 12px; line-height: 1.8;">
               <li>Real Facebook Login OAuth flow (not simulated)</li>
               <li>Live API calls returning real data from your account</li>
-              <li>Messages sent here WILL appear in Facebook Messenger</li>
+              <li>Messages sent here WILL appear in Facebook Messenger & Instagram DMs</li>
               <li>Utility messages are TRANSACTIONAL ONLY (order updates, no promotions)</li>
+              <li>All actions affect your real Facebook/Instagram accounts</li>
             </ul>
+          </div>
+
+          <!-- Permission Summary -->
+          <div style="background: rgba(255,255,255,0.1); border-radius: 10px; padding: 12px; margin-top: 12px;">
+            <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600;">📊 Permissions Requested in This Review:</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 10px;">
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">public_profile</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">pages_show_list</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">pages_read_engagement</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">pages_manage_metadata</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">pages_messaging</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">pages_utility_messaging</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">pages_manage_posts</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">pages_manage_ads</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">business_management</span>
+              <span style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">ads_read</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">ads_management</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">instagram_basic</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">instagram_business_basic</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">instagram_content_publish</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">instagram_manage_comments</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">instagram_business_manage_messages</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">instagram_manage_messages</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">catalog_management</span>
+              <span
+                style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">leads_retrieval</span>
+            </div>
           </div>
 
           <div style="background: rgba(255,255,255,0.15); border-radius: 10px; padding: 16px; margin-top: 12px;">
             <p style="margin: 0 0 12px; font-size: 14px; font-weight: 600;">Step-by-Step Testing Instructions:</p>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">1️⃣ Facebook Login (OAuth)</div>
-                <div style="font-size: 12px; opacity: 0.9;">Click "Connect with Facebook" → Real OAuth popup opens →
-                  Review permissions → Click "Continue" → Redirects back authenticated</div>
-                <div style="font-size: 11px; margin-top: 6px; opacity: 0.9;">public_profile -> GET /me?fields=id,name,picture; shown in header</div>
+
+            <!-- Row 1: Core Authentication & Pages -->
+            <p style="margin: 12px 0 8px; font-size: 12px; font-weight: 600; opacity: 0.8;">🔐 AUTHENTICATION & PAGES
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">1️⃣ public_profile</div>
+                <div style="font-size: 11px; opacity: 0.9;">Click "Connect with Facebook" → OAuth popup → Approve → See
+                  your name/photo in header</div>
               </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">2️⃣ pages_show_list</div>
-                <div style="font-size: 12px; opacity: 0.9;">After login, Pages panel shows YOUR real Pages → API: GET
-                  /me/accounts</div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">2️⃣ pages_show_list</div>
+                <div style="font-size: 11px; opacity: 0.9;">Pages panel shows YOUR real Pages → GET /me/accounts</div>
               </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">3️⃣ pages_read_engagement</div>
-                <div style="font-size: 12px; opacity: 0.9;">View real engagement metrics (views, reach, followers) →
-                  API: GET /{page-id}/insights</div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">3️⃣ pages_read_engagement</div>
+                <div style="font-size: 11px; opacity: 0.9;">View real metrics (views, reach) → GET /{page}/insights
+                </div>
               </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">4️⃣ pages_manage_metadata</div>
-                <div style="font-size: 12px; opacity: 0.9;">Click "Manage" → Edit Page info → Save → API: POST
-                  /{page-id}</div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">4️⃣ pages_manage_metadata</div>
+                <div style="font-size: 11px; opacity: 0.9;">Click "Manage" → Edit info → Save → POST /{page}</div>
+              </div>
+            </div>
+
+            <!-- Row 2: Messaging -->
+            <p style="margin: 16px 0 8px; font-size: 12px; font-weight: 600; opacity: 0.8;">💬 MESSAGING (Verify in
+              Messenger!)</p>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+              <div
+                style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; border: 2px solid rgba(255,255,0,0.5);">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">5️⃣ pages_messaging ⚠️</div>
+                <div style="font-size: 11px; opacity: 0.9;">"Compose Message" → Send → <strong>VERIFY: Open Messenger to
+                    see message</strong></div>
               </div>
               <div
-                style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border: 2px solid rgba(255,255,0,0.5);">
-                <div style="font-weight: 600; margin-bottom: 6px;">5️⃣ pages_messaging ⚠️</div>
-                <div style="font-size: 12px; opacity: 0.9;">"Compose Message" → Send → <strong>VERIFY: Open Messenger to
-                    see message delivered</strong></div>
+                style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; border: 2px solid rgba(255,255,0,0.5);">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">6️⃣ pages_utility_messaging ⚠️</div>
+                <div style="font-size: 11px; opacity: 0.9;">"Send Order Update" → NON-PROMOTIONAL → <strong>VERIFY:
+                    Check Messenger</strong></div>
               </div>
-              <div
-                style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border: 2px solid rgba(255,255,0,0.5);">
-                <div style="font-weight: 600; margin-bottom: 6px;">6️⃣ pages_utility_messaging ⚠️</div>
-                <div style="font-size: 12px; opacity: 0.9;">"Send Order Update" → NON-PROMOTIONAL only → <strong>VERIFY:
-                    Check Messenger for delivery</strong></div>
+            </div>
+
+            <!-- Row 3: Posts & Ads -->
+            <p style="margin: 16px 0 8px; font-size: 12px; font-weight: 600; opacity: 0.8;">📝 PAGE POSTS & ADS</p>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">7️⃣ pages_manage_posts</div>
+                <div style="font-size: 11px; opacity: 0.9;">Posts panel → View/create posts → POST /{page}/feed</div>
               </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">7️⃣ business_management</div>
-                <div style="font-size: 12px; opacity: 0.9;">View Business panel → Shows your real business assets → API:
-                  GET /me/businesses</div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">8️⃣ pages_manage_ads</div>
+                <div style="font-size: 11px; opacity: 0.9;">Click "Boost Post" → Create promotion</div>
               </div>
-              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; margin-bottom: 6px;">8️⃣ ads_read</div>
-                <div style="font-size: 12px; opacity: 0.9;">Select ad account → "Load insights" → Real spend/impressions
-                  → API: GET /{account}/insights</div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">9️⃣ ads_read</div>
+                <div style="font-size: 11px; opacity: 0.9;">Select ad account → "Load insights" → Real spend data</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">🔟 ads_management</div>
+                <div style="font-size: 11px; opacity: 0.9;">"+ New Campaign" → Create campaign form</div>
+              </div>
+            </div>
+
+            <!-- Row 4: Instagram -->
+            <p style="margin: 16px 0 8px; font-size: 12px; font-weight: 600; opacity: 0.8;">📸 INSTAGRAM (Requires
+              connected IG Business account)</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">1️⃣1️⃣ instagram_basic +
+                  instagram_business_basic</div>
+                <div style="font-size: 11px; opacity: 0.9;">IG panel shows account info, follower count, media grid →
+                  GET /{ig-user}/media</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">1️⃣2️⃣ instagram_manage_comments
+                </div>
+                <div style="font-size: 11px; opacity: 0.9;">Click "Comments" tab → View comments → Reply → POST
+                  /{comment}/replies</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">1️⃣3️⃣ instagram_*_messages</div>
+                <div style="font-size: 11px; opacity: 0.9;">Click "DMs" tab → View Instagram Direct Messages</div>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px;">
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">1️⃣4️⃣ instagram_content_publish
+                </div>
+                <div style="font-size: 11px; opacity: 0.9;">"+ Create Post" button → Schedule Instagram post</div>
+              </div>
+            </div>
+
+            <!-- Row 5: Business & Catalog -->
+            <p style="margin: 16px 0 8px; font-size: 12px; font-weight: 600; opacity: 0.8;">🏢 BUSINESS, CATALOG & LEADS
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">1️⃣5️⃣ business_management</div>
+                <div style="font-size: 11px; opacity: 0.9;">Business panel → Shows assets → GET /me/businesses</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">1️⃣6️⃣ catalog_management</div>
+                <div style="font-size: 11px; opacity: 0.9;">Catalog panel → Select catalog → View products → GET
+                  /{catalog}/products</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 600; margin-bottom: 4px; font-size: 12px;">1️⃣7️⃣ leads_retrieval</div>
+                <div style="font-size: 11px; opacity: 0.9;">Leads panel → Select Page → View lead forms → GET
+                  /{form}/leads</div>
               </div>
             </div>
           </div>
@@ -1276,21 +1388,283 @@
           </div>
         </section>
 
-        <!-- INSTAGRAM PANEL - FUTURE FEATURE -->
-        <section id="postsPanel" class="panel" style="opacity: 0.5;">
+        <!-- INSTAGRAM MANAGEMENT PANEL -->
+        <section id="instagramPanel" class="panel disabled">
+          <div id="igLoading" class="loading-overlay">
+            <div class="spinner"></div>
+            <span>Loading Instagram data...</span>
+          </div>
+
           <div class="panel-header">
             <div class="panel-title">
               <span class="icon-circle ig">IG</span>
-              Instagram Content
-              <span class="badge" style="background: #f59e0b; color: white;">Coming Soon</span>
+              Instagram Business Management
+              <span class="badge">Instagram API</span>
             </div>
           </div>
           <div class="perm-group">
-            <span class="perm-pill">⏳ Pending: instagram_content_publish</span>
+            <span class="perm-pill active">✓ instagram_basic</span>
+            <span class="perm-pill active">✓ instagram_business_basic</span>
+            <span class="perm-pill active">✓ instagram_content_publish</span>
+            <span class="perm-pill active">✓ instagram_manage_comments</span>
+            <span class="perm-pill active">✓ instagram_business_manage_messages</span>
+            <span class="perm-pill active">✓ instagram_manage_messages</span>
           </div>
           <div class="panel-sub">
-            Instagram content publishing will be available after additional permissions are approved. This feature is
-            not part of the current app review request.
+            <strong>Business Use:</strong> Manage our Instagram business profile, publish product photos, respond to
+            comments and DMs from wholesale customers.<br />
+            <span style="font-size: 11px; color: var(--accent);">
+              instagram_basic → GET /{ig-user-id}?fields=id,username |
+              instagram_content_publish → POST /{ig-user-id}/media |
+              instagram_manage_comments → GET /{media-id}/comments, POST /{comment-id}/replies
+            </span>
+          </div>
+
+          <!-- Instagram Account Info -->
+          <div id="igAccountInfo" style="display: none;">
+            <div class="page-card" style="margin-bottom: 12px;">
+              <div class="page-avatar"
+                style="background: radial-gradient(circle at 30% 30%, #feda75, #d62976, #962fbf, #4f5bd5);">
+                <img id="igProfilePic" src="" alt=""
+                  style="width: 100%; height: 100%; border-radius: 10px; object-fit: cover;">
+              </div>
+              <div class="page-info">
+                <div class="page-name" id="igUsername">@username</div>
+                <div class="page-stats" id="igStats">0 followers • 0 posts</div>
+              </div>
+              <button class="btn-ghost" onclick="openDrawer('createIgPost')">+ Create Post</button>
+            </div>
+          </div>
+
+          <!-- Instagram Tabs -->
+          <div class="tabs" id="instagramTabs">
+            <div class="tab active" data-tab="media" onclick="switchIgTab('media')">Media</div>
+            <div class="tab" data-tab="comments" onclick="switchIgTab('comments')">Comments</div>
+            <div class="tab" data-tab="messages" onclick="switchIgTab('messages')">DMs</div>
+          </div>
+
+          <!-- Media Section -->
+          <div id="igMediaSection">
+            <div id="igMediaList" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+              <div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">
+                Connect to load Instagram media...
+              </div>
+            </div>
+          </div>
+
+          <!-- Comments Section (hidden by default) -->
+          <div id="igCommentsSection" style="display: none;">
+            <div id="igCommentsList">
+              <div class="message-preview">
+                <div class="message-sender">Comments</div>
+                <div class="message-text">Select a post to view and manage comments</div>
+              </div>
+            </div>
+            <div class="field-row" style="margin-top: 12px;">
+              <input id="igReplyText" class="field-input" type="text" placeholder="Type reply..." style="flex: 1;">
+              <button class="btn-secondary" onclick="replyToIgComment()">Reply</button>
+            </div>
+          </div>
+
+          <!-- DMs Section (hidden by default) -->
+          <div id="igMessagesSection" style="display: none;">
+            <div id="igDMList">
+              <div class="message-preview">
+                <div class="message-sender">Direct Messages</div>
+                <div class="message-text">Loading Instagram DMs...</div>
+              </div>
+            </div>
+            <div class="field-row" style="margin-top: 12px;">
+              <button class="btn-secondary" onclick="openDrawer('sendIgDM')">Send DM</button>
+            </div>
+          </div>
+
+          <div class="engagement-grid" style="margin-top: 12px;">
+            <div class="engagement-card">
+              <div class="engagement-label">Followers</div>
+              <div class="engagement-value" id="igFollowers">--</div>
+              <div class="engagement-delta" id="igFollowersDelta">Loading...</div>
+            </div>
+            <div class="engagement-card">
+              <div class="engagement-label">Posts</div>
+              <div class="engagement-value" id="igPosts">--</div>
+              <div class="engagement-delta">Total media</div>
+            </div>
+            <div class="engagement-card">
+              <div class="engagement-label">Engagement Rate</div>
+              <div class="engagement-value" id="igEngagement">--</div>
+              <div class="engagement-delta">Avg. per post</div>
+            </div>
+            <div class="engagement-card">
+              <div class="engagement-label">Reach (7d)</div>
+              <div class="engagement-value" id="igReach">--</div>
+              <div class="engagement-delta">Impressions</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEADS RETRIEVAL PANEL -->
+        <section id="leadsPanel" class="panel disabled">
+          <div id="leadsLoading" class="loading-overlay">
+            <div class="spinner"></div>
+            <span>Loading leads data...</span>
+          </div>
+
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="icon-circle fb" style="background: linear-gradient(135deg, #16a34a, #059669);">📋</span>
+              Leads Retrieval
+              <span class="badge">Leads API</span>
+            </div>
+          </div>
+          <div class="perm-group">
+            <span class="perm-pill active">✓ leads_retrieval</span>
+            <span class="perm-pill active">✓ pages_manage_ads</span>
+          </div>
+          <div class="panel-sub">
+            <strong>Business Use:</strong> Retrieve leads from Facebook Lead Ads to follow up with potential wholesale
+            customers who expressed interest.<br />
+            <span style="font-size: 11px; color: var(--accent);">
+              API: GET /{page-id}/leadgen_forms → GET /{form-id}/leads?fields=created_time,field_data
+            </span>
+          </div>
+
+          <!-- Leads List -->
+          <div id="leadsList" class="list">
+            <div class="list-item" style="justify-content: center; color: var(--text-muted);">
+              Select a Page with Lead Ads to view leads...
+            </div>
+          </div>
+
+          <div class="cards" style="margin-top: 12px;">
+            <div class="card">
+              <div class="card-label">Total Leads (30d)</div>
+              <div class="card-value" id="leadsTotal">--</div>
+              <div class="card-delta">From lead forms</div>
+            </div>
+            <div class="card">
+              <div class="card-label">New Today</div>
+              <div class="card-value" id="leadsToday">--</div>
+              <div class="card-delta">Awaiting follow-up</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Conversion Rate</div>
+              <div class="card-value" id="leadsConversion">--</div>
+              <div class="card-delta">Lead to customer</div>
+            </div>
+          </div>
+
+          <div class="field-row" style="margin-top: 12px;">
+            <select id="leadsPageSelect" class="field-input" onchange="loadLeadForms()">
+              <option value="">-- Select Page --</option>
+            </select>
+            <button class="btn-secondary" onclick="loadLeads()">Load Leads</button>
+            <button class="btn-ghost" onclick="exportLeads()">Export CSV</button>
+          </div>
+        </section>
+
+        <!-- CATALOG MANAGEMENT PANEL -->
+        <section id="catalogPanel" class="panel disabled">
+          <div id="catalogLoading" class="loading-overlay">
+            <div class="spinner"></div>
+            <span>Loading catalog data...</span>
+          </div>
+
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="icon-circle fb" style="background: linear-gradient(135deg, #f59e0b, #d97706);">📦</span>
+              Product Catalog Management
+              <span class="badge">Catalog API</span>
+            </div>
+          </div>
+          <div class="perm-group">
+            <span class="perm-pill active">✓ catalog_management</span>
+          </div>
+          <div class="panel-sub">
+            <strong>Business Use:</strong> Manage our sneaker/streetwear product catalog for Facebook & Instagram
+            shopping ads and product tagging.<br />
+            <span style="font-size: 11px; color: var(--accent);">
+              API: GET /{catalog-id}/products → POST /{catalog-id}/products → DELETE /{product-id}
+            </span>
+          </div>
+
+          <!-- Catalog Stats -->
+          <div class="cards" style="margin-bottom: 12px;">
+            <div class="card">
+              <div class="card-label">Total Products</div>
+              <div class="card-value" id="catalogTotal">--</div>
+              <div class="card-delta">In catalog</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Active</div>
+              <div class="card-value" id="catalogActive">--</div>
+              <div class="card-delta">Published</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Pending</div>
+              <div class="card-value" id="catalogPending">--</div>
+              <div class="card-delta">In review</div>
+            </div>
+          </div>
+
+          <!-- Products List -->
+          <div id="catalogList" class="list">
+            <div class="list-item" style="justify-content: center; color: var(--text-muted);">
+              Connect to view product catalog...
+            </div>
+          </div>
+
+          <div class="field-row" style="margin-top: 12px;">
+            <select id="catalogSelect" class="field-input" onchange="loadCatalogProducts()">
+              <option value="">-- Select Catalog --</option>
+            </select>
+            <button class="btn-secondary" onclick="openDrawer('addProduct')">+ Add Product</button>
+            <button class="btn-ghost" onclick="syncCatalog()">Sync Inventory</button>
+          </div>
+        </section>
+
+        <!-- PAGES POSTS & ADS MANAGEMENT PANEL -->
+        <section id="postsAdsPanel" class="panel disabled">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="icon-circle page">📝</span>
+              Page Posts & Ads Management
+              <span class="badge">Content API</span>
+            </div>
+          </div>
+          <div class="perm-group">
+            <span class="perm-pill active">✓ pages_manage_posts</span>
+            <span class="perm-pill active">✓ pages_manage_ads</span>
+          </div>
+          <div class="panel-sub">
+            <strong>Business Use:</strong> Create and manage Page posts and boost them as ads to reach more wholesale
+            customers.<br />
+            <span style="font-size: 11px; color: var(--accent);">
+              pages_manage_posts → POST /{page-id}/feed (create post) |
+              pages_manage_ads → POST /{page-post-id}/promotions (boost post)
+            </span>
+          </div>
+
+          <!-- Page Posts Tabs -->
+          <div class="tabs" id="postsAdsTabs">
+            <div class="tab active" data-tab="posts" onclick="switchPostsTab('posts')">Published Posts</div>
+            <div class="tab" data-tab="scheduled" onclick="switchPostsTab('scheduled')">Scheduled</div>
+            <div class="tab" data-tab="boosted" onclick="switchPostsTab('boosted')">Boosted</div>
+          </div>
+
+          <!-- Posts List -->
+          <div id="pagePostsList" class="list">
+            <div class="list-item" style="justify-content: center; color: var(--text-muted);">
+              Select a Page to view posts...
+            </div>
+          </div>
+
+          <div class="field-row" style="margin-top: 12px;">
+            <select id="postsPageSelect" class="field-input" onchange="loadPagePosts()">
+              <option value="">-- Select Page --</option>
+            </select>
+            <button class="btn-secondary" onclick="openDrawer('createPost')">+ Create Post</button>
+            <button class="btn-ghost" onclick="openDrawer('boostPost')">📈 Boost Post</button>
           </div>
         </section>
 
@@ -1365,7 +1739,8 @@
               <div
                 style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
                 <strong>Why we need it:</strong> To personalize the dashboard with the signed-in user's identity.<br />
-                <strong>How we use it:</strong> GET /me?fields=id,name,picture after login. Displayed in the header.<br />
+                <strong>How we use it:</strong> GET /me?fields=id,name,picture after login. Displayed in the
+                header.<br />
                 <strong>Data accessed:</strong> User ID, name, profile picture (read-only).<br />
                 <strong>User benefit:</strong> Confirms they are connected to the correct Facebook account.
               </div>
@@ -1466,6 +1841,188 @@
                 account dropdown.<br />
                 <strong>Data accessed:</strong> Business name, connected ad accounts, connected Pages (read-only).<br />
                 <strong>User benefit:</strong> Access all business assets from one unified dashboard.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">ads_read</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To view ad campaign performance metrics and spending data.<br />
+                <strong>How we use it:</strong> GET /{ad-account-id}/insights with fields: spend, impressions, clicks,
+                actions.<br />
+                <strong>Data accessed:</strong> Ad spend, impressions, clicks, conversions (read-only).<br />
+                <strong>User benefit:</strong> Track ROI on ad campaigns from our unified dashboard.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">ads_management</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To create and manage ad campaigns for lead generation.<br />
+                <strong>How we use it:</strong> POST /{ad-account-id}/campaigns to create campaigns. POST
+                /{campaign-id}/adsets for targeting.<br />
+                <strong>Data modified:</strong> Campaign settings, budgets, targeting, ad creatives.<br />
+                <strong>User benefit:</strong> Launch and optimize lead generation campaigns from one place.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">pages_manage_posts</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To publish product announcements and business updates on our
+                Page.<br />
+                <strong>How we use it:</strong> POST /{page-id}/feed with message and optional photo to create
+                posts.<br />
+                <strong>Data modified:</strong> Page posts (text, photos, links).<br />
+                <strong>User benefit:</strong> Share new inventory arrivals and promotions with followers.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">pages_manage_ads</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To boost Page posts as ads and manage lead forms.<br />
+                <strong>How we use it:</strong> POST /{page-post-id}/promotions to boost posts. GET
+                /{page-id}/leadgen_forms for lead ads.<br />
+                <strong>Data modified:</strong> Boosted post budgets and targeting.<br />
+                <strong>User benefit:</strong> Amplify reach of important announcements to potential customers.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">instagram_basic</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To access basic Instagram account information linked to our Page.<br />
+                <strong>How we use it:</strong> GET
+                /{ig-user-id}?fields=id,username,profile_picture_url,followers_count.<br />
+                <strong>Data accessed:</strong> Instagram username, profile picture, follower count (read-only).<br />
+                <strong>User benefit:</strong> View Instagram account info alongside Facebook data.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">instagram_business_basic</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To access Instagram Business account insights and media.<br />
+                <strong>How we use it:</strong> GET /{ig-user-id}/media and GET /{ig-user-id}/insights for business
+                metrics.<br />
+                <strong>Data accessed:</strong> Media posts, engagement metrics, reach, impressions (read-only).<br />
+                <strong>User benefit:</strong> Track Instagram content performance and audience growth.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">instagram_content_publish</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To publish product photos and reels showcasing our inventory.<br />
+                <strong>How we use it:</strong> POST /{ig-user-id}/media to create media container, POST
+                /{ig-user-id}/media_publish to publish.<br />
+                <strong>Data modified:</strong> Instagram feed posts, reels, stories.<br />
+                <strong>User benefit:</strong> Share product content across Instagram without switching apps.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">instagram_manage_comments</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To respond to customer questions and feedback on our posts.<br />
+                <strong>How we use it:</strong> GET /{media-id}/comments to read, POST /{comment-id}/replies to respond,
+                DELETE /{comment-id} for moderation.<br />
+                <strong>Data accessed:</strong> Comments on our Instagram posts. Ability to reply and delete.<br />
+                <strong>User benefit:</strong> Engage with potential wholesale customers asking about products.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">instagram_business_manage_messages</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To respond to Instagram DMs from wholesale customers.<br />
+                <strong>How we use it:</strong> GET /{ig-user-id}/conversations and POST /{ig-user-id}/messages for
+                responses.<br />
+                <strong>Data accessed:</strong> Instagram Direct Messages from customers who initiated contact.<br />
+                <strong>User benefit:</strong> Manage all customer inquiries from Instagram DMs in one place.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">instagram_manage_messages</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> Required for full Instagram messaging functionality.<br />
+                <strong>How we use it:</strong> Works with instagram_business_manage_messages for complete DM
+                access.<br />
+                <strong>Data accessed:</strong> Instagram Direct Message conversations.<br />
+                <strong>User benefit:</strong> Comprehensive messaging management for customer service.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">catalog_management</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To manage our product catalog for Facebook/Instagram shopping.<br />
+                <strong>How we use it:</strong> GET /{catalog-id}/products to view, POST /{catalog-id}/products to add,
+                DELETE /{product-id} to remove.<br />
+                <strong>Data modified:</strong> Product names, descriptions, prices, images, availability.<br />
+                <strong>User benefit:</strong> Keep product catalog synchronized with current inventory.
+              </div>
+            </div>
+
+            <div class="req-item complete" style="flex-direction: column; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                <span class="status-dot"></span>
+                <div class="req-title" style="font-size: 14px;">leads_retrieval</div>
+              </div>
+              <div
+                style="margin-left: 32px; margin-top: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Why we need it:</strong> To retrieve leads from Facebook Lead Ads for sales follow-up.<br />
+                <strong>How we use it:</strong> GET /{page-id}/leadgen_forms → GET
+                /{form-id}/leads?fields=created_time,field_data.<br />
+                <strong>Data accessed:</strong> Lead form submissions including name, email, phone (with user
+                consent).<br />
+                <strong>User benefit:</strong> Access qualified leads for wholesale customer acquisition.
               </div>
             </div>
 
@@ -1685,28 +2242,34 @@
     <div class="drawer-body">
       <!-- STEP INDICATOR -->
       <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-        <div id="step1Indicator" style="flex:1; padding: 8px; background: #1877f2; color: white; border-radius: 8px; text-align: center; font-size: 11px; font-weight: 600;">
+        <div id="step1Indicator"
+          style="flex:1; padding: 8px; background: #1877f2; color: white; border-radius: 8px; text-align: center; font-size: 11px; font-weight: 600;">
           1. Select Template
         </div>
-        <div id="step2Indicator" style="flex:1; padding: 8px; background: #e4e6eb; color: #666; border-radius: 8px; text-align: center; font-size: 11px;">
+        <div id="step2Indicator"
+          style="flex:1; padding: 8px; background: #e4e6eb; color: #666; border-radius: 8px; text-align: center; font-size: 11px;">
           2. Fill Details
         </div>
-        <div id="step3Indicator" style="flex:1; padding: 8px; background: #e4e6eb; color: #666; border-radius: 8px; text-align: center; font-size: 11px;">
+        <div id="step3Indicator"
+          style="flex:1; padding: 8px; background: #e4e6eb; color: #666; border-radius: 8px; text-align: center; font-size: 11px;">
           3. Send
         </div>
       </div>
 
       <!-- Non-Promotional Warning -->
-      <div style="padding: 10px; border-radius: 8px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); margin-bottom: 12px;">
+      <div
+        style="padding: 10px; border-radius: 8px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); margin-bottom: 12px;">
         <strong style="color: #dc2626; font-size: 11px;">⚠️ TRANSACTIONAL ONLY - No Promotional Content</strong>
         <p style="margin: 2px 0 0; font-size: 10px; color: #666;">
           Uses MESSAGE_TAG: POST_PURCHASE_UPDATE for order-related updates only.
         </p>
       </div>
 
-      <div id="utilitySentConfirm" style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
+      <div id="utilitySentConfirm"
+        style="display:none; padding: 12px; border-radius: 10px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); margin-bottom: 12px;">
         <strong style="color: #16a34a;">✓ Order Update Sent Successfully!</strong>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Now open Facebook Messenger to verify the message was delivered.</p>
+        <p style="margin: 4px 0 0; font-size: 12px; color: #666;">Now open Facebook Messenger to verify the message was
+          delivered.</p>
       </div>
 
       <!-- STEP 1: TEMPLATE SELECTION -->
@@ -1714,52 +2277,64 @@
         <div class="field-label" style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">
           📝 Step 1: Select a Message Template
         </div>
-        
+
         <!-- Template Cards -->
         <div id="templateCards" style="display: flex; flex-direction: column; gap: 8px;">
-          
+
           <!-- Template 1: Order Shipped -->
-          <div class="template-card" onclick="selectTemplate('shipped')" id="template-shipped" 
-               style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
+          <div class="template-card" onclick="selectTemplate('shipped')" id="template-shipped"
+            style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
               <span style="font-size: 18px;">📦</span>
               <strong style="font-size: 13px;">Order Shipped</strong>
-              <span style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
+              <span
+                style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
             </div>
-            <div style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
-              Your order <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> has shipped!
-              Tracking: <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{tracking_number}}</span>
+            <div
+              style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
+              Your order <span
+                style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> has shipped!
+              Tracking: <span
+                style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{tracking_number}}</span>
             </div>
           </div>
 
           <!-- Template 2: Order Delivered -->
           <div class="template-card" onclick="selectTemplate('delivered')" id="template-delivered"
-               style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
+            style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
               <span style="font-size: 18px;">✅</span>
               <strong style="font-size: 13px;">Order Delivered</strong>
-              <span style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
+              <span
+                style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
             </div>
-            <div style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
-              Your order <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> has been delivered. Thank you!
+            <div
+              style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
+              Your order <span
+                style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> has been
+              delivered. Thank you!
             </div>
           </div>
 
           <!-- Template 3: Order Confirmed -->
           <div class="template-card" onclick="selectTemplate('confirmed')" id="template-confirmed"
-               style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
+            style="padding: 12px; border: 2px solid #e4e6eb; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; background: white;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
               <span style="font-size: 18px;">🧾</span>
               <strong style="font-size: 13px;">Order Confirmed</strong>
-              <span style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
+              <span
+                style="margin-left: auto; padding: 2px 6px; background: #dbeafe; border-radius: 999px; font-size: 9px; color: #1e40af;">POST_PURCHASE_UPDATE</span>
             </div>
-            <div style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
-              Your order <span style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> is confirmed and being prepared.
+            <div
+              style="font-size: 11px; color: #666; background: #f8fafc; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.4;">
+              Your order <span
+                style="background: #fef3c7; padding: 1px 4px; border-radius: 3px;">{{order_number}}</span> is confirmed
+              and being prepared.
             </div>
           </div>
 
         </div>
-        
+
         <p style="font-size: 10px; color: #666; margin-top: 10px; text-align: center;">
           Click a template to select it and proceed to fill in placeholders
         </p>
@@ -1771,7 +2346,8 @@
           ✏️ Step 2: Fill in Placeholder Values
         </div>
 
-        <div style="padding: 10px; background: rgba(24,119,242,0.05); border-radius: 8px; border: 1px solid rgba(24,119,242,0.2); margin-bottom: 12px;">
+        <div
+          style="padding: 10px; background: rgba(24,119,242,0.05); border-radius: 8px; border: 1px solid rgba(24,119,242,0.2); margin-bottom: 12px;">
           <div style="font-size: 11px; color: #1877f2; font-weight: 600;">Selected Template:</div>
           <div id="selectedTemplateName" style="font-size: 13px; font-weight: 600; margin-top: 2px;"></div>
         </div>
@@ -1788,19 +2364,24 @@
         <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
           <span style="font-size: 11px; color: #666;">Or enter PSID manually:</span>
         </div>
-        <input id="manualPSID" class="field-input" type="text" placeholder="Enter PSID (e.g., 25237327232600073)" oninput="useManualPSID()" />
-        <p style="font-size: 10px; color: #666; margin-top: -8px; margin-bottom: 10px;">PSID of customer who messaged your Page</p>
+        <input id="manualPSID" class="field-input" type="text" placeholder="Enter PSID (e.g., 25237327232600073)"
+          oninput="useManualPSID()" />
+        <p style="font-size: 10px; color: #666; margin-top: -8px; margin-bottom: 10px;">PSID of customer who messaged
+          your Page</p>
 
         <div class="field-label">Order Number <span style="color: #dc2626;">*</span></div>
-        <input id="utilityOrderNum" class="field-input" type="text" placeholder="#12345" oninput="updateTemplatePreview()" />
+        <input id="utilityOrderNum" class="field-input" type="text" placeholder="#12345"
+          oninput="updateTemplatePreview()" />
 
         <div id="trackingField">
           <div class="field-label">Tracking Number</div>
-          <input id="utilityTracking" class="field-input" type="text" placeholder="1Z999AA10123456784" oninput="updateTemplatePreview()" />
+          <input id="utilityTracking" class="field-input" type="text" placeholder="1Z999AA10123456784"
+            oninput="updateTemplatePreview()" />
         </div>
 
         <div class="field-label" style="margin-top: 12px;">📱 Message Preview</div>
-        <div id="utilityPreview" style="padding: 12px; background: #f0fff4; border-radius: 8px; font-size: 12px; border: 2px solid #16a34a; line-height: 1.5;">
+        <div id="utilityPreview"
+          style="padding: 12px; background: #f0fff4; border-radius: 8px; font-size: 12px; border: 2px solid #16a34a; line-height: 1.5;">
           Select a template and fill in the placeholders above
         </div>
         <p style="font-size: 10px; color: #16a34a; margin: 6px 0 0;">✓ POST_PURCHASE_UPDATE - Transactional only</p>
@@ -1825,10 +2406,13 @@
         </div>
 
         <div class="field-label">Sending To:</div>
-        <div id="sendToSummary" style="padding: 8px; background: #f5f6f7; border-radius: 8px; margin-bottom: 10px; font-size: 12px;"></div>
+        <div id="sendToSummary"
+          style="padding: 8px; background: #f5f6f7; border-radius: 8px; margin-bottom: 10px; font-size: 12px;"></div>
 
         <div class="field-label">Final Message:</div>
-        <div id="finalMessagePreview" style="padding: 12px; background: white; border-radius: 8px; font-size: 12px; border: 2px solid #16a34a; line-height: 1.5; margin-bottom: 10px;"></div>
+        <div id="finalMessagePreview"
+          style="padding: 12px; background: white; border-radius: 8px; font-size: 12px; border: 2px solid #16a34a; line-height: 1.5; margin-bottom: 10px;">
+        </div>
 
         <div style="padding: 8px; background: rgba(22,163,74,0.1); border-radius: 8px; margin-bottom: 14px;">
           <div style="font-size: 10px; color: #16a34a; font-family: monospace;">
@@ -1840,7 +2424,8 @@
 
         <div style="display: flex; gap: 8px;">
           <button class="btn-ghost" type="button" onclick="backToFillStep()" style="flex: 1;">← Edit</button>
-          <button class="btn-primary" type="button" onclick="sendUtilityMessage()" style="flex: 1; background: #16a34a;">📤 Send Update</button>
+          <button class="btn-primary" type="button" onclick="sendUtilityMessage()"
+            style="flex: 1; background: #16a34a;">📤 Send Update</button>
         </div>
       </div>
 
@@ -1877,14 +2462,16 @@
     const adsPanel = document.getElementById("adsPanel");
     const pagesPanel = document.getElementById("pagesPanel");
     const messagingPanel = document.getElementById("messagingPanel");
-    // const postsPanel = document.getElementById("postsPanel"); // Instagram - coming soon
+    const instagramPanel = document.getElementById("instagramPanel");
+    const leadsPanel = document.getElementById("leadsPanel");
+    const catalogPanel = document.getElementById("catalogPanel");
+    const postsAdsPanel = document.getElementById("postsAdsPanel");
     const businessPanel = document.getElementById("businessPanel");
     const themeToggle = document.getElementById("themeToggle");
     const themeIcon = document.getElementById("themeIcon");
     const themeLabel = document.getElementById("themeLabel");
     const adsLoading = document.getElementById("adsLoading");
     const loadBtn = document.getElementById("loadBtn");
-    // const createPostBtn = document.getElementById("createPostBtn"); // Instagram - coming soon
     const createCampaignBtn = document.getElementById("createCampaignBtn");
     const drawerBackdrop = document.getElementById("drawerBackdrop");
     const adAccountSelect = document.getElementById("adAccountSelect");
@@ -1899,7 +2486,7 @@
           alert('Facebook login was cancelled or failed.');
         }
       }, {
-        scope: 'public_profile,pages_show_list,pages_manage_metadata,pages_read_engagement,pages_messaging,pages_utility_messaging,business_management,ads_read,ads_management',
+        scope: 'public_profile,pages_show_list,pages_manage_metadata,pages_read_engagement,pages_messaging,pages_utility_messaging,pages_manage_posts,pages_manage_ads,business_management,ads_read,ads_management,instagram_basic,instagram_business_basic,instagram_business_manage_messages,instagram_content_publish,instagram_manage_comments,instagram_manage_messages,catalog_management,leads_retrieval',
         return_scopes: true
       });
     }
@@ -1912,12 +2499,15 @@
       loginBtn.style.display = "none";
       userPanel.classList.add("visible");
 
-      // Enable all panels (except Instagram which requires additional permissions)
+      // Enable all panels
       adsPanel.classList.remove("disabled");
       pagesPanel.classList.remove("disabled");
       messagingPanel.classList.remove("disabled");
       businessPanel.classList.remove("disabled");
-      // Note: postsPanel (Instagram) is disabled - requires instagram_content_publish permission
+      if (instagramPanel) instagramPanel.classList.remove("disabled");
+      if (leadsPanel) leadsPanel.classList.remove("disabled");
+      if (catalogPanel) catalogPanel.classList.remove("disabled");
+      if (postsAdsPanel) postsAdsPanel.classList.remove("disabled");
 
       // Load user info (public_profile)
       FB.api('/me', { fields: 'id,name,picture' }, function (response) {
@@ -1939,6 +2529,9 @@
 
       // Load ad accounts (business_management)
       loadAdAccounts();
+
+      // Load catalogs (catalog_management)
+      loadCatalogs();
     }
 
     // Facebook Logout
@@ -2268,14 +2861,14 @@
     };
     const templateNames = {
       shipped: '📦 Order Shipped',
-      delivered: '✅ Order Delivered', 
+      delivered: '✅ Order Delivered',
       confirmed: '🧾 Order Confirmed'
     };
 
     // Select Template (Step 1)
     function selectTemplate(type) {
       selectedTemplate = type;
-      
+
       // Update visual selection
       document.querySelectorAll('.template-card').forEach(card => {
         card.style.borderColor = '#e4e6eb';
@@ -2286,19 +2879,19 @@
         selectedCard.style.borderColor = '#1877f2';
         selectedCard.style.background = 'rgba(24,119,242,0.05)';
       }
-      
+
       // Show/hide tracking field based on template
       const trackingField = document.getElementById('trackingField');
       if (trackingField) {
         trackingField.style.display = (type === 'shipped') ? 'block' : 'none';
       }
-      
+
       // Update selected template name
       const templateNameEl = document.getElementById('selectedTemplateName');
       if (templateNameEl) {
         templateNameEl.textContent = templateNames[type];
       }
-      
+
       // Move to step 2 after a brief delay
       setTimeout(() => {
         goToFillStep();
@@ -2310,11 +2903,11 @@
       const step1 = document.getElementById('templateSelectionStep');
       const step2 = document.getElementById('fillPlaceholdersStep');
       const step3 = document.getElementById('sendStep');
-      
+
       if (step1) step1.style.display = 'none';
       if (step2) step2.style.display = 'block';
       if (step3) step3.style.display = 'none';
-      
+
       // Update step indicators
       const ind1 = document.getElementById('step1Indicator');
       const ind2 = document.getElementById('step2Indicator');
@@ -2322,7 +2915,7 @@
       if (ind1) { ind1.style.background = '#16a34a'; ind1.style.color = 'white'; }
       if (ind2) { ind2.style.background = '#1877f2'; ind2.style.color = 'white'; }
       if (ind3) { ind3.style.background = '#e4e6eb'; ind3.style.color = '#666'; }
-      
+
       updateTemplatePreview();
     }
 
@@ -2331,11 +2924,11 @@
       const step1 = document.getElementById('templateSelectionStep');
       const step2 = document.getElementById('fillPlaceholdersStep');
       const step3 = document.getElementById('sendStep');
-      
+
       if (step1) step1.style.display = 'block';
       if (step2) step2.style.display = 'none';
       if (step3) step3.style.display = 'none';
-      
+
       // Update step indicators
       const ind1 = document.getElementById('step1Indicator');
       const ind2 = document.getElementById('step2Indicator');
@@ -2348,7 +2941,7 @@
       const pageSelect = document.getElementById('utilityPageSelect');
       const orderNum = document.getElementById('utilityOrderNum')?.value;
       const recipient = getRecipientPSID();
-      
+
       if (!pageSelect?.value) {
         alert('Please select a Page');
         return;
@@ -2361,15 +2954,15 @@
         alert('Please enter an order number');
         return;
       }
-      
+
       const step1 = document.getElementById('templateSelectionStep');
       const step2 = document.getElementById('fillPlaceholdersStep');
       const step3 = document.getElementById('sendStep');
-      
+
       if (step1) step1.style.display = 'none';
       if (step2) step2.style.display = 'none';
       if (step3) step3.style.display = 'block';
-      
+
       // Update step indicators
       const ind1 = document.getElementById('step1Indicator');
       const ind2 = document.getElementById('step2Indicator');
@@ -2377,13 +2970,13 @@
       if (ind1) { ind1.style.background = '#16a34a'; }
       if (ind2) { ind2.style.background = '#16a34a'; }
       if (ind3) { ind3.style.background = '#1877f2'; ind3.style.color = 'white'; }
-      
+
       // Update send summary
       const pageName = pageSelect.options[pageSelect.selectedIndex]?.text || 'Page';
       const summaryEl = document.getElementById('sendToSummary');
       const finalPreviewEl = document.getElementById('finalMessagePreview');
       const utilityPreviewEl = document.getElementById('utilityPreview');
-      
+
       if (summaryEl) summaryEl.innerHTML = `<strong>Page:</strong> ${pageName}<br><strong>Customer:</strong> ${recipient.name}<br><strong>PSID:</strong> <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;">${recipient.id}</code>`;
       if (finalPreviewEl && utilityPreviewEl) finalPreviewEl.textContent = utilityPreviewEl.textContent;
     }
@@ -2396,18 +2989,18 @@
     // Update Template Preview with placeholders filled in
     function updateTemplatePreview() {
       if (!selectedTemplate) return;
-      
+
       const orderNumEl = document.getElementById('utilityOrderNum');
       const trackingEl = document.getElementById('utilityTracking');
       const previewEl = document.getElementById('utilityPreview');
-      
+
       const orderNum = orderNumEl?.value || '{{order_number}}';
       const tracking = trackingEl?.value || '{{tracking_number}}';
-      
+
       let message = templateMessages[selectedTemplate] || '';
       message = message.replace('{{order_number}}', orderNum);
       message = message.replace('{{tracking_number}}', tracking);
-      
+
       if (previewEl) previewEl.textContent = message;
     }
 
@@ -2422,9 +3015,9 @@
       const orderNumEl = document.getElementById('utilityOrderNum');
       const trackingEl = document.getElementById('utilityTracking');
       const previewEl = document.getElementById('utilityPreview');
-      
+
       if (!typeEl || !previewEl) return;
-      
+
       const type = typeEl.value;
       const orderNum = orderNumEl?.value || '#[order]';
       const tracking = trackingEl?.value || '[tracking]';
@@ -2448,7 +3041,7 @@
     function useManualPSID() {
       const manualInput = document.getElementById('manualPSID');
       const selectDropdown = document.getElementById('utilityRecipient');
-      
+
       if (manualInput && manualInput.value.trim()) {
         // Clear dropdown selection when manual PSID is entered
         if (selectDropdown) selectDropdown.value = '';
@@ -2458,7 +3051,7 @@
     function checkManualPSID() {
       const manualInput = document.getElementById('manualPSID');
       const selectDropdown = document.getElementById('utilityRecipient');
-      
+
       if (selectDropdown && selectDropdown.value) {
         // Clear manual input when dropdown is selected
         if (manualInput) manualInput.value = '';
@@ -2469,7 +3062,7 @@
     function getRecipientPSID() {
       const manualInput = document.getElementById('manualPSID');
       const selectDropdown = document.getElementById('utilityRecipient');
-      
+
       // Prefer manual input if filled
       if (manualInput && manualInput.value.trim()) {
         return {
@@ -2477,7 +3070,7 @@
           name: 'Customer (PSID: ' + manualInput.value.trim().substring(0, 8) + '...)'
         };
       }
-      
+
       // Otherwise use dropdown
       if (selectDropdown && selectDropdown.value) {
         return {
@@ -2485,7 +3078,7 @@
           name: selectDropdown.options[selectDropdown.selectedIndex]?.text || 'Customer'
         };
       }
-      
+
       return null;
     }
 
@@ -2501,7 +3094,7 @@
         alert('Please select a page');
         return;
       }
-      
+
       if (!recipient) {
         alert('Please select a recipient or enter a PSID manually');
         return;
@@ -2750,6 +3343,609 @@
 
     // Initialize
     updateUtilityPreview();
+
+    // ========== INSTAGRAM FUNCTIONS (instagram_basic, instagram_business_basic, instagram_content_publish, instagram_manage_comments, instagram_business_manage_messages) ==========
+
+    let instagramAccounts = [];
+    let currentIgAccount = null;
+    let igMedia = [];
+    let selectedIgMedia = null;
+    let selectedIgComment = null;
+
+    // Load Instagram accounts from Pages
+    function loadInstagramAccounts() {
+      instagramAccounts = [];
+      pages.forEach(page => {
+        if (page.instagram_business_account) {
+          instagramAccounts.push({
+            igId: page.instagram_business_account.id,
+            igUsername: page.instagram_business_account.username,
+            pageId: page.id,
+            pageToken: page.access_token,
+            pageName: page.name
+          });
+        }
+      });
+
+      if (instagramAccounts.length > 0) {
+        loadInstagramData(instagramAccounts[0]);
+      } else {
+        const mediaList = document.getElementById('igMediaList');
+        if (mediaList) {
+          mediaList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">No Instagram Business account connected to your Pages</div>';
+        }
+      }
+    }
+
+    // Load Instagram data (instagram_basic, instagram_business_basic)
+    function loadInstagramData(igAccount) {
+      currentIgAccount = igAccount;
+      const igLoading = document.getElementById('igLoading');
+      if (igLoading) igLoading.classList.add('visible');
+
+      FB.api('/' + igAccount.igId, {
+        fields: 'id,username,profile_picture_url,followers_count,media_count,biography',
+        access_token: igAccount.pageToken
+      }, function (response) {
+        if (igLoading) igLoading.classList.remove('visible');
+        if (handleApiError(response)) return;
+
+        if (response && !response.error) {
+          // Update account info
+          document.getElementById('igAccountInfo').style.display = 'block';
+          document.getElementById('igUsername').textContent = '@' + response.username;
+          document.getElementById('igStats').textContent = (response.followers_count || 0).toLocaleString() + ' followers • ' + (response.media_count || 0) + ' posts';
+          if (response.profile_picture_url) {
+            document.getElementById('igProfilePic').src = response.profile_picture_url;
+          }
+
+          // Update engagement cards
+          document.getElementById('igFollowers').textContent = (response.followers_count || 0).toLocaleString();
+          document.getElementById('igFollowersDelta').textContent = 'Total followers';
+          document.getElementById('igPosts').textContent = response.media_count || 0;
+
+          // Load media
+          loadInstagramMedia(igAccount);
+
+          // Load insights
+          loadInstagramInsights(igAccount);
+        }
+      });
+    }
+
+    // Load Instagram media (instagram_business_basic)
+    function loadInstagramMedia(igAccount) {
+      FB.api('/' + igAccount.igId + '/media', {
+        fields: 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,like_count,comments_count',
+        limit: 9,
+        access_token: igAccount.pageToken
+      }, function (response) {
+        if (handleApiError(response)) return;
+
+        const container = document.getElementById('igMediaList');
+        if (!container) return;
+
+        container.innerHTML = '';
+        igMedia = [];
+
+        if (response && response.data && response.data.length > 0) {
+          igMedia = response.data;
+          response.data.forEach((media, index) => {
+            const imgUrl = media.thumbnail_url || media.media_url || '';
+            const typeIcon = media.media_type === 'VIDEO' ? '🎬' : (media.media_type === 'CAROUSEL_ALBUM' ? '📷' : '');
+            container.innerHTML += `
+              <div onclick="selectIgMedia(${index})" style="aspect-ratio: 1; border-radius: 8px; overflow: hidden; cursor: pointer; position: relative; border: 2px solid transparent; transition: all 0.15s ease;" id="igMedia-${index}">
+                <img src="${imgUrl}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; bottom: 4px; left: 4px; right: 4px; display: flex; justify-content: space-between; font-size: 10px; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
+                  <span>❤️ ${media.like_count || 0}</span>
+                  <span>💬 ${media.comments_count || 0}</span>
+                </div>
+                ${typeIcon ? `<div style="position: absolute; top: 4px; right: 4px; font-size: 14px;">${typeIcon}</div>` : ''}
+              </div>
+            `;
+          });
+        } else {
+          container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">No posts yet</div>';
+        }
+      });
+    }
+
+    // Load Instagram insights (instagram_business_basic)
+    function loadInstagramInsights(igAccount) {
+      FB.api('/' + igAccount.igId + '/insights', {
+        metric: 'reach,impressions',
+        period: 'day',
+        access_token: igAccount.pageToken
+      }, function (response) {
+        if (response && response.data) {
+          response.data.forEach(metric => {
+            if (metric.name === 'reach') {
+              const value = metric.values && metric.values[0] ? metric.values[0].value : 0;
+              document.getElementById('igReach').textContent = value.toLocaleString();
+            }
+          });
+        }
+      });
+    }
+
+    // Select Instagram media for comment management
+    function selectIgMedia(index) {
+      selectedIgMedia = igMedia[index];
+
+      // Update visual selection
+      document.querySelectorAll('[id^="igMedia-"]').forEach(el => {
+        el.style.borderColor = 'transparent';
+      });
+      const selected = document.getElementById('igMedia-' + index);
+      if (selected) selected.style.borderColor = '#1877f2';
+
+      // Load comments for this media
+      loadIgComments(selectedIgMedia.id);
+    }
+
+    // Load Instagram comments (instagram_manage_comments)
+    function loadIgComments(mediaId) {
+      if (!currentIgAccount) return;
+
+      FB.api('/' + mediaId + '/comments', {
+        fields: 'id,text,username,timestamp,like_count',
+        access_token: currentIgAccount.pageToken
+      }, function (response) {
+        const container = document.getElementById('igCommentsList');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        if (response && response.data && response.data.length > 0) {
+          response.data.forEach(comment => {
+            const timeAgo = getTimeAgo(comment.timestamp);
+            container.innerHTML += `
+              <div class="message-preview" style="border-left: 3px solid #d62976;" onclick="selectIgComment('${comment.id}', '${comment.username}')">
+                <div class="message-sender">@${comment.username}</div>
+                <div class="message-text">"${comment.text}"</div>
+                <div class="message-time">${timeAgo} • ❤️ ${comment.like_count || 0}</div>
+              </div>
+            `;
+          });
+        } else {
+          container.innerHTML = '<div class="message-preview"><div class="message-sender">No comments</div><div class="message-text">This post has no comments yet</div></div>';
+        }
+      });
+    }
+
+    // Select comment for reply
+    function selectIgComment(commentId, username) {
+      selectedIgComment = { id: commentId, username: username };
+      const replyInput = document.getElementById('igReplyText');
+      if (replyInput) {
+        replyInput.placeholder = `Reply to @${username}...`;
+        replyInput.focus();
+      }
+    }
+
+    // Reply to Instagram comment (instagram_manage_comments)
+    function replyToIgComment() {
+      if (!selectedIgComment || !currentIgAccount) {
+        alert('Please select a comment to reply to');
+        return;
+      }
+
+      const replyText = document.getElementById('igReplyText').value;
+      if (!replyText.trim()) {
+        alert('Please enter a reply');
+        return;
+      }
+
+      FB.api('/' + selectedIgComment.id + '/replies', 'POST', {
+        message: replyText,
+        access_token: currentIgAccount.pageToken
+      }, function (response) {
+        if (response && response.id) {
+          alert('✓ Reply posted successfully!');
+          document.getElementById('igReplyText').value = '';
+          loadIgComments(selectedIgMedia.id);
+        } else {
+          if (!handleApiError(response)) {
+            alert('Error: ' + (response.error ? response.error.message : 'Failed to post reply'));
+          }
+        }
+      });
+    }
+
+    // Switch Instagram tabs
+    function switchIgTab(tab) {
+      document.querySelectorAll('#instagramTabs .tab').forEach(t => {
+        t.classList.remove('active');
+        if (t.dataset.tab === tab) t.classList.add('active');
+      });
+
+      document.getElementById('igMediaSection').style.display = tab === 'media' ? 'block' : 'none';
+      document.getElementById('igCommentsSection').style.display = tab === 'comments' ? 'block' : 'none';
+      document.getElementById('igMessagesSection').style.display = tab === 'messages' ? 'block' : 'none';
+
+      if (tab === 'messages') {
+        loadInstagramDMs();
+      }
+    }
+
+    // Load Instagram DMs (instagram_business_manage_messages, instagram_manage_messages)
+    function loadInstagramDMs() {
+      if (!currentIgAccount) return;
+
+      const container = document.getElementById('igDMList');
+      if (!container) return;
+
+      FB.api('/' + currentIgAccount.igId + '/conversations', {
+        fields: 'participants,messages.limit(1){message,from,created_time}',
+        platform: 'instagram',
+        access_token: currentIgAccount.pageToken,
+        limit: 5
+      }, function (response) {
+        container.innerHTML = '';
+
+        if (response && response.data && response.data.length > 0) {
+          response.data.forEach(conv => {
+            const lastMsg = conv.messages?.data?.[0];
+            const participant = conv.participants?.data?.find(p => p.id !== currentIgAccount.igId);
+
+            if (lastMsg) {
+              const timeAgo = getTimeAgo(lastMsg.created_time);
+              container.innerHTML += `
+                <div class="message-preview" style="border-left: 3px solid #962fbf;">
+                  <div class="message-sender">📩 ${participant?.name || 'Instagram User'}</div>
+                  <div class="message-text">"${lastMsg.message?.substring(0, 60) || ''}${lastMsg.message?.length > 60 ? '...' : ''}"</div>
+                  <div class="message-time">${timeAgo}</div>
+                </div>
+              `;
+            }
+          });
+        } else {
+          container.innerHTML = '<div class="message-preview"><div class="message-sender">No DMs</div><div class="message-text">No Instagram Direct Messages found</div></div>';
+        }
+      });
+    }
+
+    // ========== LEADS FUNCTIONS (leads_retrieval) ==========
+
+    let leadForms = [];
+    let currentLeads = [];
+
+    // Load lead forms (leads_retrieval, pages_manage_ads)
+    function loadLeadForms() {
+      const pageSelect = document.getElementById('leadsPageSelect');
+      const pageId = pageSelect?.value;
+
+      if (!pageId) return;
+
+      const page = pages.find(p => p.id === pageId);
+      if (!page) return;
+
+      FB.api('/' + pageId + '/leadgen_forms', {
+        fields: 'id,name,status,leads_count',
+        access_token: page.access_token
+      }, function (response) {
+        if (handleApiError(response)) return;
+
+        leadForms = response?.data || [];
+
+        const container = document.getElementById('leadsList');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        if (leadForms.length > 0) {
+          leadForms.forEach(form => {
+            container.innerHTML += `
+              <div class="list-item" onclick="loadLeadsFromForm('${form.id}', '${page.access_token}')">
+                <div>
+                  <div class="list-title">${form.name}</div>
+                  <div class="list-meta">${form.status} • ${form.leads_count || 0} leads</div>
+                </div>
+                <span class="pill">${form.leads_count || 0} leads</span>
+              </div>
+            `;
+          });
+        } else {
+          container.innerHTML = '<div class="list-item" style="justify-content: center; color: var(--text-muted);">No lead forms found for this Page</div>';
+        }
+      });
+    }
+
+    // Load leads from a form (leads_retrieval)
+    function loadLeadsFromForm(formId, pageToken) {
+      const leadsLoading = document.getElementById('leadsLoading');
+      if (leadsLoading) leadsLoading.classList.add('visible');
+
+      FB.api('/' + formId + '/leads', {
+        fields: 'created_time,field_data',
+        access_token: pageToken,
+        limit: 10
+      }, function (response) {
+        if (leadsLoading) leadsLoading.classList.remove('visible');
+        if (handleApiError(response)) return;
+
+        currentLeads = response?.data || [];
+
+        const container = document.getElementById('leadsList');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        if (currentLeads.length > 0) {
+          // Update stats
+          document.getElementById('leadsTotal').textContent = currentLeads.length;
+
+          const today = new Date().toDateString();
+          const todayLeads = currentLeads.filter(l => new Date(l.created_time).toDateString() === today);
+          document.getElementById('leadsToday').textContent = todayLeads.length;
+
+          currentLeads.forEach(lead => {
+            const timeAgo = getTimeAgo(lead.created_time);
+            const fields = lead.field_data || [];
+            const name = fields.find(f => f.name === 'full_name' || f.name === 'first_name')?.values?.[0] || 'Lead';
+            const email = fields.find(f => f.name === 'email')?.values?.[0] || '';
+
+            container.innerHTML += `
+              <div class="list-item">
+                <div>
+                  <div class="list-title">📋 ${name}</div>
+                  <div class="list-meta">${email || 'No email'} • ${timeAgo}</div>
+                </div>
+                <span class="pill">New</span>
+              </div>
+            `;
+          });
+        } else {
+          container.innerHTML = '<div class="list-item" style="justify-content: center; color: var(--text-muted);">No leads found in this form</div>';
+        }
+      });
+    }
+
+    // Load leads button handler
+    function loadLeads() {
+      const pageSelect = document.getElementById('leadsPageSelect');
+      if (!pageSelect?.value) {
+        alert('Please select a Page first');
+        return;
+      }
+      loadLeadForms();
+    }
+
+    // Export leads to CSV
+    function exportLeads() {
+      if (currentLeads.length === 0) {
+        alert('No leads to export. Load leads first.');
+        return;
+      }
+
+      let csv = 'Name,Email,Phone,Created\n';
+      currentLeads.forEach(lead => {
+        const fields = lead.field_data || [];
+        const name = fields.find(f => f.name === 'full_name' || f.name === 'first_name')?.values?.[0] || '';
+        const email = fields.find(f => f.name === 'email')?.values?.[0] || '';
+        const phone = fields.find(f => f.name === 'phone_number')?.values?.[0] || '';
+        csv += `"${name}","${email}","${phone}","${lead.created_time}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'facebook_leads_' + new Date().toISOString().split('T')[0] + '.csv';
+      a.click();
+    }
+
+    // ========== CATALOG FUNCTIONS (catalog_management) ==========
+
+    let catalogs = [];
+    let catalogProducts = [];
+
+    // Load catalogs (catalog_management)
+    function loadCatalogs() {
+      FB.api('/me/businesses', {
+        fields: 'id,name,owned_product_catalogs{id,name,product_count}'
+      }, function (response) {
+        if (handleApiError(response)) return;
+
+        const catalogSelect = document.getElementById('catalogSelect');
+        if (!catalogSelect) return;
+
+        catalogSelect.innerHTML = '<option value="">-- Select Catalog --</option>';
+        catalogs = [];
+
+        if (response && response.data) {
+          response.data.forEach(business => {
+            if (business.owned_product_catalogs && business.owned_product_catalogs.data) {
+              business.owned_product_catalogs.data.forEach(catalog => {
+                catalogs.push(catalog);
+                catalogSelect.innerHTML += `<option value="${catalog.id}">${catalog.name} (${catalog.product_count || 0} products)</option>`;
+              });
+            }
+          });
+        }
+      });
+    }
+
+    // Load catalog products (catalog_management)
+    function loadCatalogProducts() {
+      const catalogSelect = document.getElementById('catalogSelect');
+      const catalogId = catalogSelect?.value;
+
+      if (!catalogId) return;
+
+      const catalogLoading = document.getElementById('catalogLoading');
+      if (catalogLoading) catalogLoading.classList.add('visible');
+
+      FB.api('/' + catalogId + '/products', {
+        fields: 'id,name,description,price,currency,image_url,availability',
+        limit: 10
+      }, function (response) {
+        if (catalogLoading) catalogLoading.classList.remove('visible');
+        if (handleApiError(response)) return;
+
+        catalogProducts = response?.data || [];
+
+        const container = document.getElementById('catalogList');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        if (catalogProducts.length > 0) {
+          // Update stats
+          document.getElementById('catalogTotal').textContent = catalogProducts.length;
+          const active = catalogProducts.filter(p => p.availability === 'in stock').length;
+          document.getElementById('catalogActive').textContent = active;
+          document.getElementById('catalogPending').textContent = catalogProducts.length - active;
+
+          catalogProducts.forEach(product => {
+            const price = product.price ? (parseFloat(product.price) / 100).toFixed(2) : '0.00';
+            const status = product.availability === 'in stock' ? '✅' : '⏳';
+
+            container.innerHTML += `
+              <div class="list-item">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  ${product.image_url ? `<img src="${product.image_url}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">` : ''}
+                  <div>
+                    <div class="list-title">${product.name || 'Untitled'}</div>
+                    <div class="list-meta">${status} ${product.availability || 'Unknown'}</div>
+                  </div>
+                </div>
+                <span class="pill">$${price}</span>
+              </div>
+            `;
+          });
+        } else {
+          container.innerHTML = '<div class="list-item" style="justify-content: center; color: var(--text-muted);">No products in catalog</div>';
+        }
+      });
+    }
+
+    // Sync catalog (placeholder)
+    function syncCatalog() {
+      alert('Catalog sync initiated. This would update product availability from your inventory system.');
+    }
+
+    // ========== PAGE POSTS & ADS FUNCTIONS (pages_manage_posts, pages_manage_ads) ==========
+
+    let pagePosts = [];
+    let currentPostsTab = 'posts';
+
+    // Load page posts (pages_manage_posts)
+    function loadPagePosts() {
+      const pageSelect = document.getElementById('postsPageSelect');
+      const pageId = pageSelect?.value;
+
+      if (!pageId) return;
+
+      const page = pages.find(p => p.id === pageId);
+      if (!page) return;
+
+      FB.api('/' + pageId + '/feed', {
+        fields: 'id,message,created_time,shares,reactions.summary(true),comments.summary(true),is_published,scheduled_publish_time',
+        access_token: page.access_token,
+        limit: 10
+      }, function (response) {
+        if (handleApiError(response)) return;
+
+        pagePosts = response?.data || [];
+        showPagePostsTab(currentPostsTab);
+      });
+    }
+
+    // Show posts for specific tab
+    function showPagePostsTab(tab) {
+      const container = document.getElementById('pagePostsList');
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      let posts = pagePosts;
+
+      if (tab === 'scheduled') {
+        posts = pagePosts.filter(p => !p.is_published && p.scheduled_publish_time);
+      } else if (tab === 'boosted') {
+        // Would need additional API call to check promotion status
+        posts = posts.slice(0, 3); // Placeholder
+      }
+
+      if (posts.length > 0) {
+        posts.forEach(post => {
+          const timeAgo = getTimeAgo(post.created_time);
+          const message = post.message ? post.message.substring(0, 60) + (post.message.length > 60 ? '...' : '') : 'No text';
+          const reactions = post.reactions?.summary?.total_count || 0;
+          const comments = post.comments?.summary?.total_count || 0;
+          const shares = post.shares?.count || 0;
+
+          container.innerHTML += `
+            <div class="list-item">
+              <div>
+                <div class="list-title">${message}</div>
+                <div class="list-meta">${timeAgo} • ❤️ ${reactions} • 💬 ${comments} • 🔄 ${shares}</div>
+              </div>
+              <button class="btn-ghost" onclick="boostPost('${post.id}')">Boost</button>
+            </div>
+          `;
+        });
+      } else {
+        const emptyMsg = tab === 'posts' ? 'No posts yet' : (tab === 'scheduled' ? 'No scheduled posts' : 'No boosted posts');
+        container.innerHTML = `<div class="list-item" style="justify-content: center; color: var(--text-muted);">${emptyMsg}</div>`;
+      }
+    }
+
+    // Switch posts tabs
+    function switchPostsTab(tab) {
+      currentPostsTab = tab;
+      document.querySelectorAll('#postsAdsTabs .tab').forEach(t => {
+        t.classList.remove('active');
+        if (t.dataset.tab === tab) t.classList.add('active');
+      });
+      showPagePostsTab(tab);
+    }
+
+    // Boost post (pages_manage_ads)
+    function boostPost(postId) {
+      alert('This would open a dialog to boost post: ' + postId + '\n\nUsing pages_manage_ads permission to create a promotion.');
+    }
+
+    // ========== UPDATED populatePageSelects ==========
+
+    // Override populatePageSelects to include new dropdowns
+    const originalPopulatePageSelects = populatePageSelects;
+    populatePageSelects = function () {
+      const selects = ['messagePageSelect', 'utilityPageSelect', 'leadsPageSelect', 'postsPageSelect'];
+      selects.forEach(id => {
+        const select = document.getElementById(id);
+        if (select) {
+          select.innerHTML = '<option value="">-- Select a Page --</option>';
+          pages.forEach(page => {
+            select.innerHTML += `<option value="${page.id}" data-token="${page.access_token}">${page.name}</option>`;
+          });
+        }
+      });
+
+      // Also load Instagram accounts after pages are populated
+      loadInstagramAccounts();
+    };
+
+    // ========== UPDATED facebookLogout ==========
+
+    const originalFacebookLogout = facebookLogout;
+    facebookLogout = function () {
+      FB.logout(function (response) {
+        accessToken = null;
+        pages = [];
+        userPanel.classList.remove("visible");
+        loginBtn.style.display = "inline-flex";
+        adsPanel.classList.add("disabled");
+        pagesPanel.classList.add("disabled");
+        messagingPanel.classList.add("disabled");
+        businessPanel.classList.add("disabled");
+        if (instagramPanel) instagramPanel.classList.add("disabled");
+        if (leadsPanel) leadsPanel.classList.add("disabled");
+        if (catalogPanel) catalogPanel.classList.add("disabled");
+        if (postsAdsPanel) postsAdsPanel.classList.add("disabled");
+      });
+    };
   </script>
 </body>
 
