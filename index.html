@@ -3785,7 +3785,23 @@
     function openDrawer(which) {
       drawerBackdrop.classList.add("visible");
       const drawer = document.getElementById(which + "Drawer");
-      if (drawer) drawer.classList.add("visible");
+      if (drawer) {
+        drawer.classList.add("visible");
+
+        // Reset Instagram DM drawer if opened fresh (not as reply)
+        if (which === 'sendIgDM') {
+          const conversationId = drawer.getAttribute('data-conversation-id');
+          if (!conversationId) {
+            // Clear fields and reset title
+            document.getElementById('igRecipientInput').value = '';
+            document.getElementById('igDMText').value = '';
+            const drawerHeader = drawer.querySelector('.drawer-header span');
+            if (drawerHeader) {
+              drawerHeader.textContent = '📩 Send Instagram DM';
+            }
+          }
+        }
+      }
     }
 
     function closeDrawer(which) {
@@ -4111,6 +4127,9 @@
       }
     }
 
+    // Store conversations globally for reply functionality
+    let instagramConversations = [];
+
     // Load Instagram DMs (instagram_business_manage_messages, instagram_manage_messages)
     function loadInstagramDMs() {
       if (!currentIgAccount) return;
@@ -4118,34 +4137,73 @@
       const container = document.getElementById('igDMList');
       if (!container) return;
 
+      container.innerHTML = '<div class="message-preview"><div class="message-text" style="text-align: center;"><div class="spinner" style="width:16px;height:16px;border-width:2px;margin:0 auto 8px;"></div>Loading DMs...</div></div>';
+
       FB.api('/' + currentIgAccount.igId + '/conversations', {
-        fields: 'participants,messages.limit(1){message,from,created_time}',
+        fields: 'id,participants,messages.limit(1){message,from,created_time}',
         platform: 'instagram',
         access_token: currentIgAccount.pageToken,
-        limit: 5
+        limit: 10
       }, function (response) {
+        console.log('Instagram DMs Response:', response);
         container.innerHTML = '';
 
         if (response && response.data && response.data.length > 0) {
-          response.data.forEach(conv => {
+          instagramConversations = response.data; // Store for reply functionality
+
+          response.data.forEach((conv, index) => {
             const lastMsg = conv.messages?.data?.[0];
             const participant = conv.participants?.data?.find(p => p.id !== currentIgAccount.igId);
 
-            if (lastMsg) {
+            if (lastMsg && participant) {
               const timeAgo = getTimeAgo(lastMsg.created_time);
+              const messagePreview = lastMsg.message?.substring(0, 80) || '[No text]';
+
               container.innerHTML += `
-                <div class="message-preview" style="border-left: 3px solid #962fbf;">
-                  <div class="message-sender">📩 ${participant?.name || 'Instagram User'}</div>
-                  <div class="message-text">"${lastMsg.message?.substring(0, 60) || ''}${lastMsg.message?.length > 60 ? '...' : ''}"</div>
-                  <div class="message-time">${timeAgo}</div>
+                <div class="message-preview" style="border-left: 3px solid #962fbf; cursor: pointer; position: relative;" onclick="replyToIgConversation('${conv.id}', '${participant.username || participant.name || 'user'}')">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div style="flex: 1;">
+                      <div class="message-sender">📩 ${participant.username ? '@' + participant.username : participant.name || 'Instagram User'}</div>
+                      <div class="message-text">"${messagePreview}${lastMsg.message?.length > 80 ? '...' : ''}"</div>
+                      <div class="message-time">${timeAgo}</div>
+                    </div>
+                    <button class="btn-ghost" style="padding: 4px 8px; font-size: 11px; margin-left: 8px;" onclick="event.stopPropagation(); replyToIgConversation('${conv.id}', '${participant.username || participant.name || 'user'}')">Reply</button>
+                  </div>
                 </div>
               `;
             }
           });
+        } else if (response && response.error) {
+          container.innerHTML = `
+            <div class="message-preview" style="border-left: 3px solid #dc2626;">
+              <div class="message-sender">❌ Error Loading DMs</div>
+              <div class="message-text" style="font-size: 11px;">${response.error.message}</div>
+            </div>
+          `;
         } else {
-          container.innerHTML = '<div class="message-preview"><div class="message-sender">No DMs</div><div class="message-text">No Instagram Direct Messages found</div></div>';
+          container.innerHTML = '<div class="message-preview"><div class="message-sender">No DMs</div><div class="message-text">No Instagram Direct Messages found. When users message your Instagram account, they will appear here.</div></div>';
         }
       });
+    }
+
+    // Reply to an existing Instagram conversation
+    function replyToIgConversation(conversationId, participantName) {
+      // Pre-fill the conversation ID and open the drawer
+      openDrawer('sendIgDM');
+
+      // Store the conversation ID for sending
+      document.getElementById('igRecipientInput').value = participantName;
+      document.getElementById('igDMText').value = '';
+      document.getElementById('igDMText').focus();
+
+      // Store conversation ID in a data attribute for later use
+      document.getElementById('sendIgDMDrawer').setAttribute('data-conversation-id', conversationId);
+
+      // Update drawer title to show it's a reply
+      const drawerHeader = document.querySelector('#sendIgDMDrawer .drawer-header span');
+      if (drawerHeader) {
+        drawerHeader.textContent = `📩 Reply to @${participantName}`;
+      }
     }
 
     // Resolve IG User (simulated for UI)
@@ -4164,28 +4222,101 @@
 
     // Send Instagram DM (instagram_manage_messages)
     function sendIgDM() {
-      if (!currentIgAccount) return;
-
-      const recipient = document.getElementById('igRecipientInput').value.trim();
-      const message = document.getElementById('igDMText').value.trim();
-
-      if (!recipient || !message) {
-        alert('Please enter a recipient and message');
+      if (!currentIgAccount) {
+        alert('Please select an Instagram account first');
         return;
       }
 
-      // API Limitation Note for Reviewers
-      // Instagram Messaging API generally requires responding to existing threads or using IGSIDs
-      // initiating a conversation by username is not directly supported without prior interaction/Lookup.
+      const message = document.getElementById('igDMText').value.trim();
 
-      alert(
-        '⚠️ INSTAGRAM API NOTE:\n\n' +
-        'The Instagram Messaging API restricts initiating NEW conversations by username.\n' +
-        'You can typically only reply to users who have messaged you, or send to known IGSIDs.\n\n' +
-        'For this test, please verify "Reply" functionality on existing comments/messages.'
-      );
+      if (!message) {
+        alert('Please enter a message');
+        return;
+      }
 
-      closeDrawer('sendIgDM');
+      // Check if we have a stored conversation ID (from reply button)
+      const drawer = document.getElementById('sendIgDMDrawer');
+      const storedConversationId = drawer.getAttribute('data-conversation-id');
+
+      if (storedConversationId) {
+        // We're replying to an existing conversation - send directly
+        console.log('Sending reply to conversation:', storedConversationId);
+
+        FB.api('/' + storedConversationId + '/messages', 'POST', {
+          message: message,
+          access_token: currentIgAccount.pageToken
+        }, function (sendResponse) {
+          console.log('Send reply response:', sendResponse);
+
+          if (sendResponse && !sendResponse.error) {
+            alert('✅ Message sent successfully!');
+            drawer.removeAttribute('data-conversation-id'); // Clear stored ID
+            closeDrawer('sendIgDM');
+            loadInstagramDMs(); // Refresh DM list
+          } else {
+            console.error('Send message error:', sendResponse);
+            alert('❌ Failed to send message: ' + (sendResponse.error?.message || 'Unknown error') + '\n\nPlease check the console for details.');
+          }
+        });
+      } else {
+        // No stored conversation - user is trying to initiate new conversation
+        const recipientUsername = document.getElementById('igRecipientInput').value.trim();
+
+        if (!recipientUsername) {
+          alert('Please enter a recipient username');
+          return;
+        }
+
+        // Try to find existing conversation with this user
+        FB.api('/' + currentIgAccount.igId + '/conversations', {
+          platform: 'instagram',
+          access_token: currentIgAccount.pageToken
+        }, function (convResponse) {
+          console.log('Conversations response:', convResponse);
+
+          if (convResponse && convResponse.data && convResponse.data.length > 0) {
+            // Search for conversation with this username
+            const matchingConv = convResponse.data.find(conv => {
+              const participant = conv.participants?.data?.find(p => p.id !== currentIgAccount.igId);
+              return participant && (
+                participant.username === recipientUsername ||
+                participant.username === recipientUsername.replace('@', '') ||
+                participant.name?.toLowerCase().includes(recipientUsername.toLowerCase())
+              );
+            });
+
+            if (matchingConv) {
+              // Found matching conversation - send message
+              FB.api('/' + matchingConv.id + '/messages', 'POST', {
+                message: message,
+                access_token: currentIgAccount.pageToken
+              }, function (sendResponse) {
+                if (sendResponse && !sendResponse.error) {
+                  alert('✅ Message sent successfully!');
+                  closeDrawer('sendIgDM');
+                  loadInstagramDMs();
+                } else {
+                  console.error('Send message error:', sendResponse);
+                  alert('❌ Failed to send message: ' + (sendResponse.error?.message || 'Unknown error'));
+                }
+              });
+              return;
+            }
+          }
+
+          // No existing conversation found
+          alert(
+            '⚠️ INSTAGRAM API LIMITATION\n\n' +
+            'Cannot find conversation with @' + recipientUsername + '\n\n' +
+            'Instagram API restrictions:\n' +
+            '• Users must message your account first\n' +
+            '• Cannot initiate new conversations by username\n\n' +
+            'To send messages:\n' +
+            '1. Switch to the DMs tab\n' +
+            '2. Click "Reply" on existing conversations'
+          );
+        });
+      }
     }
 
     // ========== LEADS FUNCTIONS (leads_retrieval) ==========
