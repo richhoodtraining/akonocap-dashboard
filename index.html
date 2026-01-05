@@ -1050,6 +1050,18 @@
             </div>
           </div>
 
+          <!-- Official Documentation Reference -->
+          <div
+            style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 10px; padding: 14px; margin-top: 12px;">
+            <p style="margin: 0 0 8px; font-size: 14px; font-weight: 700;">📚 Official Meta Documentation</p>
+            <p style="margin: 0; font-size: 12px; line-height: 1.8;">
+              All permissions requested are documented in the official Meta for Developers portal:<br/>
+              • <a href="https://developers.facebook.com/docs/features-reference" style="color: white; text-decoration: underline;" target="_blank">Features Reference (developers.facebook.com)</a><br/>
+              • <a href="https://developers.facebook.com/docs/permissions/reference" style="color: white; text-decoration: underline;" target="_blank">Permissions Reference</a><br/>
+              • <a href="https://developers.facebook.com/docs/graph-api" style="color: white; text-decoration: underline;" target="_blank">Graph API Documentation</a>
+            </p>
+          </div>
+
           <!-- Critical Requirements Alert -->
           <div
             style="background: rgba(255,0,0,0.2); border: 2px solid rgba(255,255,255,0.5); border-radius: 10px; padding: 14px; margin-top: 12px;">
@@ -1105,6 +1117,223 @@
                 style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">catalog_management</span>
               <span
                 style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 999px;">leads_retrieval</span>
+            </div>
+          </div>
+
+          <!-- New Permissions Detailed Explanation -->
+          <div style="background: rgba(255,255,255,0.12); border-radius: 10px; padding: 16px; margin-top: 12px; border: 2px solid rgba(255,255,255,0.3);">
+            <p style="margin: 0 0 12px; font-size: 14px; font-weight: 700;">🆕 New Permissions Requested - Detailed Breakdown</p>
+            <p style="margin: 0 0 12px; font-size: 11px; opacity: 0.9;">Each permission is required for specific business functionality as documented in Meta's official Features Reference.</p>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+              <!-- Ads Management Standard Access -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #00d4ff;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #00d4ff;">📊 Ads Management Standard Access</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Manage Facebook ad campaigns, ad sets, and ads<br/>
+                  <strong>Our Use:</strong> Create and monitor B2B wholesale lead generation campaigns<br/>
+                  <strong>API Calls:</strong> GET/POST /{ad-account-id}/campaigns, insights<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/marketing-api" style="color: white; text-decoration: underline;">Marketing API Docs</a>
+                </div>
+              </div>
+
+              <!-- instagram_business_basic -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #e4405f;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #ff94ab;">📸 instagram_business_basic</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Read Instagram Business account profile and media<br/>
+                  <strong>Our Use:</strong> Display Instagram metrics, media grid, and engagement stats<br/>
+                  <strong>API Calls:</strong> GET /{ig-user-id}, /{ig-user-id}/media<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/instagram-api" style="color: white; text-decoration: underline;">Instagram Graph API</a>
+                </div>
+              </div>
+
+              <!-- instagram_business_manage_messages -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #e4405f;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #ff94ab;">💬 instagram_business_manage_messages</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Read and respond to Instagram Direct Messages<br/>
+                  <strong>Our Use:</strong> Customer service for wholesale inquiries via Instagram DMs<br/>
+                  <strong>API Calls:</strong> GET /{ig-user-id}/conversations, POST messages<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/messenger-platform/instagram" style="color: white; text-decoration: underline;">Instagram Messaging</a>
+                </div>
+              </div>
+
+              <!-- pages_manage_posts -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #1877f2;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #5ba3ff;">📝 pages_manage_posts</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Create, edit, and delete Page posts<br/>
+                  <strong>Our Use:</strong> Post product updates and wholesale inventory announcements<br/>
+                  <strong>API Calls:</strong> POST /{page-id}/feed, GET /{page-id}/feed<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/pages-api" style="color: white; text-decoration: underline;">Pages API</a>
+                </div>
+              </div>
+
+              <!-- pages_show_list -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #1877f2;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #5ba3ff;">📋 pages_show_list</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> List all Facebook Pages a user manages<br/>
+                  <strong>Our Use:</strong> Display user's Pages for selection in dashboard<br/>
+                  <strong>API Calls:</strong> GET /me/accounts<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/pages-api" style="color: white; text-decoration: underline;">Pages API</a>
+                </div>
+              </div>
+
+              <!-- pages_manage_metadata -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #1877f2;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #5ba3ff;">⚙️ pages_manage_metadata</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Update Page settings (about, phone, website)<br/>
+                  <strong>Our Use:</strong> Keep business contact information current<br/>
+                  <strong>API Calls:</strong> POST /{page-id} (about, phone, website fields)<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/pages-api" style="color: white; text-decoration: underline;">Pages API</a>
+                </div>
+              </div>
+
+              <!-- pages_manage_ads -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #1877f2;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #5ba3ff;">🎯 pages_manage_ads</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Create and manage ads from a Page<br/>
+                  <strong>Our Use:</strong> Boost posts and create Page-level ad promotions<br/>
+                  <strong>API Calls:</strong> POST /{page-id}/promotions<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/marketing-api" style="color: white; text-decoration: underline;">Marketing API</a>
+                </div>
+              </div>
+
+              <!-- instagram_manage_comments -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #e4405f;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #ff94ab;">💭 instagram_manage_comments</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Read, create, and delete Instagram comments<br/>
+                  <strong>Our Use:</strong> Respond to customer questions on product posts<br/>
+                  <strong>API Calls:</strong> GET /{media-id}/comments, POST replies<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/instagram-api" style="color: white; text-decoration: underline;">Instagram Graph API</a>
+                </div>
+              </div>
+
+              <!-- pages_messaging -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #1877f2;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #5ba3ff;">💬 pages_messaging</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Send and receive Page messages<br/>
+                  <strong>Our Use:</strong> Respond to wholesale customer inquiries<br/>
+                  <strong>API Calls:</strong> GET /{page-id}/conversations, POST messages<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/messenger-platform" style="color: white; text-decoration: underline;">Messenger Platform</a>
+                </div>
+              </div>
+
+              <!-- catalog_management -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #42b72a;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #6edb8f;">🏪 catalog_management</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Manage product catalogs for shops<br/>
+                  <strong>Our Use:</strong> Update wholesale product inventory and pricing<br/>
+                  <strong>API Calls:</strong> GET/POST /{catalog-id}/products<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/marketing-api/catalog" style="color: white; text-decoration: underline;">Catalog API</a>
+                </div>
+              </div>
+
+              <!-- instagram_content_publish -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #e4405f;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #ff94ab;">📤 instagram_content_publish</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Publish photos and videos to Instagram<br/>
+                  <strong>Our Use:</strong> Post new product arrivals and inventory updates<br/>
+                  <strong>API Calls:</strong> POST /{ig-user-id}/media, media_publish<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/instagram-api/guides/content-publishing" style="color: white; text-decoration: underline;">Content Publishing</a>
+                </div>
+              </div>
+
+              <!-- business_management -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #42b72a;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #6edb8f;">🏢 business_management</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Access Business Manager assets<br/>
+                  <strong>Our Use:</strong> Retrieve ad accounts and business assets<br/>
+                  <strong>API Calls:</strong> GET /me/businesses, /{business-id}/owned_ad_accounts<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/marketing-api/business-asset-management" style="color: white; text-decoration: underline;">Business Management</a>
+                </div>
+              </div>
+
+              <!-- ads_read -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #00d4ff;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #00d4ff;">👁️ ads_read</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Read ad campaign performance data<br/>
+                  <strong>Our Use:</strong> View ad spend, impressions, and conversion metrics<br/>
+                  <strong>API Calls:</strong> GET /{ad-account-id}/insights<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/marketing-api/insights" style="color: white; text-decoration: underline;">Insights API</a>
+                </div>
+              </div>
+
+              <!-- pages_read_engagement -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #1877f2;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #5ba3ff;">📈 pages_read_engagement</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Read Page engagement metrics<br/>
+                  <strong>Our Use:</strong> Track Page views, reach, and follower growth<br/>
+                  <strong>API Calls:</strong> GET /{page-id}/insights<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/graph-api/reference/insights" style="color: white; text-decoration: underline;">Page Insights</a>
+                </div>
+              </div>
+
+              <!-- leads_retrieval -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #42b72a;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #6edb8f;">🎯 leads_retrieval</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Retrieve leads from Facebook Lead Ads<br/>
+                  <strong>Our Use:</strong> Collect wholesale customer lead information<br/>
+                  <strong>API Calls:</strong> GET /{form-id}/leads, /{page-id}/leadgen_forms<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/marketing-api/guides/lead-ads" style="color: white; text-decoration: underline;">Lead Ads API</a>
+                </div>
+              </div>
+
+              <!-- instagram_basic -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #e4405f;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #ff94ab;">📱 instagram_basic</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Read basic Instagram account info<br/>
+                  <strong>Our Use:</strong> Display Instagram profile data<br/>
+                  <strong>API Calls:</strong> GET /{ig-user-id}?fields=username,account_type<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/instagram-basic-display-api" style="color: white; text-decoration: underline;">Instagram Basic Display</a>
+                </div>
+              </div>
+
+              <!-- instagram_manage_messages -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #e4405f;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #ff94ab;">✉️ instagram_manage_messages</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Advanced Instagram messaging features<br/>
+                  <strong>Our Use:</strong> Enhanced DM management for customer support<br/>
+                  <strong>API Calls:</strong> Works with instagram_business_manage_messages<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/messenger-platform/instagram" style="color: white; text-decoration: underline;">Instagram Messaging</a>
+                </div>
+              </div>
+
+              <!-- public_profile -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #8b9dc3;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #c9d3e8;">👤 public_profile</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Access user's basic profile information<br/>
+                  <strong>Our Use:</strong> Display logged-in user name and profile picture<br/>
+                  <strong>API Calls:</strong> GET /me?fields=id,name,picture<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/permissions/reference/public_profile" style="color: white; text-decoration: underline;">Public Profile</a>
+                </div>
+              </div>
+
+              <!-- pages_utility_messaging (Existing - Renewal) -->
+              <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; border-left: 4px solid #ffa500; border: 2px solid #ffa500;">
+                <div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #ffd700;">📦 pages_utility_messaging (RENEWAL)</div>
+                <div style="font-size: 11px; line-height: 1.6; opacity: 0.95;">
+                  <strong>Official Purpose:</strong> Send transactional messages (order updates)<br/>
+                  <strong>Our Use:</strong> Order confirmations, shipping notifications (NO promotions)<br/>
+                  <strong>API Calls:</strong> POST /{page-id}/messages with MESSAGE_TAG<br/>
+                  <strong>Reference:</strong> <a href="https://developers.facebook.com/docs/messenger-platform/policy/policy-overview" style="color: white; text-decoration: underline;">Messaging Policy</a>
+                </div>
+              </div>
             </div>
           </div>
 
