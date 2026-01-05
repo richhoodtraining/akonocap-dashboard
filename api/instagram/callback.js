@@ -47,8 +47,8 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const clientId = process.env.INSTAGRAM_APP_ID;
-  const clientSecret = process.env.INSTAGRAM_APP_SECRET;
+  const clientId = (process.env.INSTAGRAM_APP_ID || '').trim();
+  const clientSecret = (process.env.INSTAGRAM_APP_SECRET || '').trim();
   if (!clientId || !clientSecret) {
     res.setHeader('Set-Cookie', [clearCookie(STATE_COOKIE), clearCookie(NEXT_COOKIE)]);
     redirectToBase(req, res, { ig: 'error', reason: 'config' });

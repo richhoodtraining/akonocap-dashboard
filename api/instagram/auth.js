@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const { buildCookie, getRedirectUri, STATE_COOKIE, NEXT_COOKIE } = require('./_session');
 
 module.exports = async (req, res) => {
-  const clientId = process.env.INSTAGRAM_APP_ID;
+  const clientId = (process.env.INSTAGRAM_APP_ID || '').trim();
   if (!clientId) {
     res.statusCode = 500;
     res.end('Missing INSTAGRAM_APP_ID');
@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
 
   const state = crypto.randomBytes(16).toString('hex');
   const redirectUri = getRedirectUri(req);
-  const scopes = process.env.INSTAGRAM_SCOPES ||
+  const scopes = (process.env.INSTAGRAM_SCOPES || '').trim() ||
     'instagram_basic,instagram_manage_messages,instagram_manage_comments,instagram_content_publish';
 
   const requestUrl = new URL(req.url, 'http://localhost');
