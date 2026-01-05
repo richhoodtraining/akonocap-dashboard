@@ -835,6 +835,136 @@
       margin-left: 12px;
     }
 
+    /* App Review use cases */
+    .usecase-panel .panel-title {
+      font-size: 18px;
+    }
+
+    .usecase-panel .panel-sub {
+      max-width: 1000px;
+    }
+
+    .usecase-panel .panel-sub a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .usecase-panel .panel-sub a:hover {
+      text-decoration: underline;
+    }
+
+    .usecase-card {
+      margin-top: 12px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--bg-card);
+    }
+
+    .usecase-status {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .usecase-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 10px 0 6px;
+      color: var(--text-main);
+    }
+
+    .usecase-list {
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      background: var(--bg-card);
+      overflow: hidden;
+    }
+
+    .usecase-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .usecase-row:last-child {
+      border-bottom: none;
+    }
+
+    .usecase-name {
+      font-size: 13px;
+      font-weight: 500;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .usecase-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .usecase-link {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .usecase-link:hover {
+      text-decoration: underline;
+    }
+
+    .usecase-divider {
+      width: 1px;
+      height: 18px;
+      background: var(--border-subtle);
+    }
+
+    .usecase-trash {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .usecase-trash svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+    }
+
+    .usecase-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .usecase-helper {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .usecase-helper a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .usecase-helper a:hover {
+      text-decoration: underline;
+    }
+
     /* Page management section */
     .page-card {
       display: flex;
@@ -981,6 +1111,25 @@
 
       .cards {
         grid-template-columns: repeat(2, 1fr);
+      }
+
+      .usecase-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .usecase-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .usecase-divider {
+        display: none;
+      }
+
+      .usecase-footer {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
@@ -1977,6 +2126,509 @@
                 <div class="page-name">Permissions</div>
                 <div class="page-stats">All permissions verified</div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- APP REVIEW SUBMISSIONS PANEL -->
+        <section class="panel full-span usecase-panel">
+          <div class="panel-header">
+            <div class="panel-title">App Review submissions</div>
+          </div>
+          <div class="panel-sub">
+            When submitted, our reviewers will look at everything on the app to make sure it is set up to provide a
+            high-quality and safe experience for your users. We will review new and previously approved requests to
+            make sure usage follows our policies. We will also review your app icon, privacy policy URL and other
+            settings. <a href="https://developers.facebook.com/docs/app-review/" target="_blank" rel="noopener">About
+              App Review</a>
+          </div>
+
+          <div class="usecase-card">
+            <div class="usecase-status">Not submitted</div>
+
+            <div class="usecase-section-title">New requests</div>
+            <div class="usecase-list">
+              <div class="usecase-row">
+                <div class="usecase-name">Human Agent</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove Human Agent">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">Ads Management Standard Access</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove Ads Management Standard Access">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">instagram_business_basic</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove instagram_business_basic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">instagram_business_manage_messages</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove instagram_business_manage_messages">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">instagram_business_content_publish</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove instagram_business_content_publish">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">instagram_business_manage_insights</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove instagram_business_manage_insights">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">instagram_business_manage_comments</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove instagram_business_manage_comments">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">pages_manage_posts</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove pages_manage_posts">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">pages_show_list</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove pages_show_list">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">pages_manage_metadata</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove pages_manage_metadata">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">pages_manage_ads</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove pages_manage_ads">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">instagram_manage_comments</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove instagram_manage_comments">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">pages_messaging</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove pages_messaging">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">catalog_management</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove catalog_management">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">instagram_content_publish</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove instagram_content_publish">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">business_management</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove business_management">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">instagram_manage_messages</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove instagram_manage_messages">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">ads_read</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove ads_read">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">pages_read_engagement</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove pages_read_engagement">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">public_profile</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove public_profile">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">leads_retrieval</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove leads_retrieval">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">ads_management</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove ads_management">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="usecase-row">
+                <div class="usecase-name">instagram_basic</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                  <button class="usecase-trash" type="button" aria-label="Remove instagram_basic">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M6 6l1 14h10l1-14"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="usecase-section-title" style="margin-top: 14px;">Existing access for renewal</div>
+            <div class="usecase-list">
+              <div class="usecase-row">
+                <div class="usecase-name">pages_utility_messaging</div>
+                <div class="usecase-actions">
+                  <a class="usecase-link" href="https://developers.facebook.com/docs/app-review/" target="_blank"
+                    rel="noopener">Usage guidelines</a>
+                  <span class="usecase-divider"></span>
+                  <span class="usecase-link">In 1 use case</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="usecase-footer">
+              <div class="usecase-helper">
+                To remove permissions and features from your app, not just App Review,
+                <a href="https://developers.facebook.com/docs/app-review/" target="_blank" rel="noopener">customize use
+                  cases</a>
+              </div>
+              <button class="btn-primary" type="button">Next</button>
             </div>
           </div>
         </section>
