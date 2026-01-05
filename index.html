@@ -2960,44 +2960,108 @@
 
     // Load Selected Page Engagement (pages_read_engagement)
     function loadSelectedPageEngagement(pageId, pageToken) {
+      // Set defaults
+      document.getElementById('pageViewsValue').textContent = '--';
+      document.getElementById('postReachValue').textContent = '--';
+      document.getElementById('engagementsValue').textContent = '--';
+      document.getElementById('newFollowersValue').textContent = '--';
+
+      document.getElementById('pageViewsDelta').textContent = 'Past 7 days';
+      document.getElementById('postReachDelta').textContent = 'Past 7 days';
+      document.getElementById('engagementsDelta').textContent = 'Past 7 days';
+      document.getElementById('newFollowersDelta').textContent = 'Past 7 days';
+
+      // Calculate date range for the past 7 days
+      const endDate = new Date();
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 7);
+
+      const since = Math.floor(startDate.getTime() / 1000);
+      const until = Math.floor(endDate.getTime() / 1000);
+
+      // Try to load insights with date range
       FB.api('/' + pageId + '/insights', {
-        metric: 'page_views_total,page_post_engagements,page_fan_adds,page_impressions',
-        period: 'week',
+        metric: 'page_impressions,page_post_engagements,page_fans',
+        period: 'day',
+        since: since,
+        until: until,
         access_token: pageToken
       }, function (response) {
-        if (handleApiError(response)) return;
+        console.log('Page Insights Response:', response);
 
-        // Set defaults
-        document.getElementById('pageViewsValue').textContent = '--';
-        document.getElementById('postReachValue').textContent = '--';
-        document.getElementById('engagementsValue').textContent = '--';
-        document.getElementById('newFollowersValue').textContent = '--';
+        if (response && response.error) {
+          console.error('Page Insights Error:', response.error);
 
-        document.getElementById('pageViewsDelta').textContent = 'Past 7 days';
-        document.getElementById('postReachDelta').textContent = 'Past 7 days';
-        document.getElementById('engagementsDelta').textContent = 'Past 7 days';
-        document.getElementById('newFollowersDelta').textContent = 'Past 7 days';
+          // If error, try fallback approach - get page info directly
+          FB.api('/' + pageId, {
+            fields: 'fan_count,followers_count',
+            access_token: pageToken
+          }, function (pageResponse) {
+            if (pageResponse && !pageResponse.error) {
+              if (pageResponse.fan_count !== undefined) {
+                document.getElementById('newFollowersValue').textContent = pageResponse.fan_count.toLocaleString();
+              }
+            }
+          });
+          return;
+        }
 
-        if (response && response.data) {
+        if (response && response.data && response.data.length > 0) {
           response.data.forEach(metric => {
-            const value = metric.values && metric.values[0] ? metric.values[0].value : 0;
+            // Sum up all daily values for the period
+            let totalValue = 0;
+            if (metric.values && metric.values.length > 0) {
+              metric.values.forEach(v => {
+                if (typeof v.value === 'number') {
+                  totalValue += v.value;
+                } else if (typeof v.value === 'object') {
+                  // Some metrics return objects, sum their values
+                  totalValue += Object.values(v.value).reduce((a, b) => a + b, 0);
+                }
+              });
+            }
 
             switch (metric.name) {
-              case 'page_views_total':
-                document.getElementById('pageViewsValue').textContent = value.toLocaleString();
-                break;
               case 'page_impressions':
-                document.getElementById('postReachValue').textContent = value.toLocaleString();
+                if (totalValue > 0) {
+                  document.getElementById('pageViewsValue').textContent = totalValue.toLocaleString();
+                }
                 break;
               case 'page_post_engagements':
-                document.getElementById('engagementsValue').textContent = value.toLocaleString();
+                if (totalValue > 0) {
+                  document.getElementById('engagementsValue').textContent = totalValue.toLocaleString();
+                }
                 break;
-              case 'page_fan_adds':
-                document.getElementById('newFollowersValue').textContent = value.toLocaleString();
+              case 'page_fans':
+                // page_fans is a snapshot, use the most recent value
+                const latestValue = metric.values[metric.values.length - 1]?.value || 0;
+                if (latestValue > 0) {
+                  document.getElementById('newFollowersValue').textContent = latestValue.toLocaleString();
+                }
                 break;
             }
           });
+        } else {
+          console.warn('No insights data available for this page');
         }
+
+        // Also get page reach separately as it might be available
+        FB.api('/' + pageId + '/insights/page_impressions_unique', {
+          period: 'day',
+          since: since,
+          until: until,
+          access_token: pageToken
+        }, function (reachResponse) {
+          if (reachResponse && reachResponse.data && reachResponse.data[0] && reachResponse.data[0].values) {
+            let totalReach = 0;
+            reachResponse.data[0].values.forEach(v => {
+              totalReach += v.value || 0;
+            });
+            if (totalReach > 0) {
+              document.getElementById('postReachValue').textContent = totalReach.toLocaleString();
+            }
+          }
+        });
       });
     }
 
