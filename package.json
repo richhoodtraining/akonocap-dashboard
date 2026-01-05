@@ -1,0 +1,8 @@
+{
+  "name": "akonocap-dashboard",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
+  }
+}

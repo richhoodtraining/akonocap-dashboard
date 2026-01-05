@@ -1818,8 +1818,16 @@
             </span>
           </div>
 
+          <div class="field-row" id="igLoginRow" style="margin-bottom: 12px;">
+            <span style="font-size: 12px;">Instagram login:</span>
+            <span id="igLoginStatus" class="pill">Not connected</span>
+            <button id="igLoginBtn" class="btn-secondary" type="button" onclick="connectInstagramLogin()">Connect</button>
+            <button id="igLogoutBtn" class="btn-ghost" type="button" onclick="disconnectInstagramLogin()"
+              style="display: none;">Disconnect</button>
+          </div>
+
           <!-- Page Selector for Instagram -->
-          <div class="field-row" style="margin-bottom: 12px;">
+          <div class="field-row" id="igPageSelectRow" style="margin-bottom: 12px;">
             <span style="font-size: 12px;">Select Page:</span>
             <select id="igPageSelect" class="field-input" onchange="onIgPageSelected()">
               <option value="">-- Select a Facebook Page --</option>
@@ -1830,10 +1838,8 @@
           <div id="igNoAccount"
             style="display: none; padding: 16px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; margin-bottom: 12px;">
             <p style="margin: 0; font-size: 12px; color: #b45309;">
-              <strong>⚠️ No Instagram Business account connected</strong><br>
-              The selected Facebook Page does not have a connected Instagram Business account.
-              <a href="https://www.facebook.com/business/help/898752960195806" target="_blank"
-                style="color: #1877f2;">Learn how to connect one</a>.
+              <strong>Instagram login required</strong><br>
+              Connect Instagram to load profile data, media, comments, and DMs.
             </p>
           </div>
 
@@ -1847,7 +1853,7 @@
               </div>
               <div class="page-info">
                 <div class="page-name" id="igUsername">@username</div>
-                <div class="page-stats" id="igStats">0 followers • 0 posts</div>
+                <div class="page-stats" id="igStats">0 followers - 0 posts</div>
               </div>
               <button class="btn-ghost" onclick="openDrawer('createIgPost')">+ Create Post</button>
             </div>
@@ -3359,10 +3365,10 @@
       <button class="drawer-close" type="button" onclick="closeDrawer('sendIgDM')">×</button>
     </div>
     <div class="drawer-body">
-      <div class="field-label">Recipient Username</div>
+      <div class="field-label">Recipient ID</div>
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
         <span style="font-size: 16px;">@</span>
-        <input id="igRecipientInput" class="field-input" type="text" placeholder="username" style="flex: 1;">
+        <input id="igRecipientInput" class="field-input" type="text" placeholder="recipient id" style="flex: 1;">
         <button id="igResolveBtn" class="btn-secondary" onclick="resolveIgUser()">Find</button>
       </div>
 
@@ -3377,8 +3383,7 @@
       <textarea id="igDMText" class="field-textarea" placeholder="Type your message..."></textarea>
 
       <p style="font-size: 11px; color: #666; margin-top: 8px;">
-        Note: The Instagram Messaging API allows sending messages to users who have messaged you first, or using
-        standard replies.
+        Note: Use the recipient ID from your Instagram conversations. Users must message you first before you can reply.
       </p>
     </div>
     <div class="drawer-footer">
@@ -3431,6 +3436,10 @@
     const drawerBackdrop = document.getElementById("drawerBackdrop");
     const adAccountSelect = document.getElementById("adAccountSelect");
     const campaignAdAccount = document.getElementById("campaignAdAccount");
+    const igLoginStatus = document.getElementById("igLoginStatus");
+    const igLoginBtn = document.getElementById("igLoginBtn");
+    const igLogoutBtn = document.getElementById("igLogoutBtn");
+    const igPageSelectRow = document.getElementById("igPageSelectRow");
 
     // Facebook Login - REAL OAuth Flow
     function facebookLogin() {
@@ -4486,197 +4495,237 @@
 
     // Initialize
     updateUtilityPreview();
+    checkInstagramSession();
 
     // ========== INSTAGRAM FUNCTIONS (instagram_basic, instagram_business_basic, instagram_content_publish, instagram_manage_comments, instagram_business_manage_messages) ==========
 
+    let igSessionConnected = false;
+    let igSessionUser = null;
     let instagramAccounts = [];
     let currentIgAccount = null;
     let igMedia = [];
     let selectedIgMedia = null;
     let selectedIgComment = null;
 
+    async function fetchInstagram(endpoint, options = {}) {
+      const config = {
+        credentials: 'same-origin',
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(options.headers || {})
+        }
+      };
+
+      const response = await fetch(endpoint, config);
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (error) {
+        data = {};
+      }
+
+      if (!response.ok && !data.error) {
+        data.error = { message: 'Instagram request failed' };
+      }
+
+      if (data.error && data.error.message === 'Not connected') {
+        igSessionConnected = false;
+        igSessionUser = null;
+        updateIgLoginUI();
+        showInstagramLoginRequired();
+      }
+
+      return data;
+    }
+
+    function updateIgLoginUI() {
+      if (!igLoginStatus) return;
+
+      if (igSessionConnected && igSessionUser) {
+        igLoginStatus.textContent = `@${igSessionUser.username}`;
+        if (igLoginBtn) igLoginBtn.style.display = 'none';
+        if (igLogoutBtn) igLogoutBtn.style.display = 'inline-flex';
+      } else {
+        igLoginStatus.textContent = 'Not connected';
+        if (igLoginBtn) igLoginBtn.style.display = 'inline-flex';
+        if (igLogoutBtn) igLogoutBtn.style.display = 'none';
+      }
+
+      if (igPageSelectRow) igPageSelectRow.style.display = 'none';
+    }
+
+    async function checkInstagramSession() {
+      const response = await fetchInstagram('/api/instagram/status');
+      if (response && response.connected && response.user) {
+        igSessionConnected = true;
+        igSessionUser = response.user;
+        currentIgAccount = {
+          igId: response.user.id,
+          igUsername: response.user.username
+        };
+        updateIgLoginUI();
+        loadInstagramData();
+        return;
+      }
+
+      igSessionConnected = false;
+      igSessionUser = null;
+      currentIgAccount = null;
+      updateIgLoginUI();
+      showInstagramLoginRequired();
+    }
+
+    function connectInstagramLogin() {
+      window.location.href = `/api/instagram/auth?next=${encodeURIComponent(window.location.pathname)}`;
+    }
+
+    async function disconnectInstagramLogin() {
+      await fetchInstagram('/api/instagram/logout', { method: 'POST' });
+      igSessionConnected = false;
+      igSessionUser = null;
+      currentIgAccount = null;
+      updateIgLoginUI();
+      showInstagramLoginRequired();
+    }
+
+    function showInstagramLoginRequired() {
+      const igAccountInfo = document.getElementById('igAccountInfo');
+      const igNoAccount = document.getElementById('igNoAccount');
+      const mediaList = document.getElementById('igMediaList');
+
+      if (igAccountInfo) igAccountInfo.style.display = 'none';
+      if (igNoAccount) igNoAccount.style.display = 'block';
+      if (mediaList) {
+        mediaList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">Connect Instagram login to view media</div>';
+      }
+
+      document.getElementById('igFollowers').textContent = '--';
+      document.getElementById('igPosts').textContent = '--';
+      document.getElementById('igEngagement').textContent = '--';
+      document.getElementById('igReach').textContent = '--';
+    }
+
     // Load Instagram accounts from Pages - populate dropdown
     function loadInstagramAccounts() {
       instagramAccounts = [];
+
+      if (!igSessionConnected) {
+        showInstagramLoginRequired();
+        return;
+      }
+
       const igPageSelect = document.getElementById('igPageSelect');
-
-      if (!igPageSelect) return;
-
-      // Reset dropdown
-      igPageSelect.innerHTML = '<option value="">-- Select a Facebook Page --</option>';
-
-      // Hide account info and no account message initially
-      document.getElementById('igAccountInfo').style.display = 'none';
-      document.getElementById('igNoAccount').style.display = 'none';
-
-      // Populate dropdown with Pages that have Instagram accounts connected
-      pages.forEach(page => {
-        const hasIg = page.instagram_business_account ? true : false;
-        const igInfo = hasIg ? ` (@${page.instagram_business_account.username})` : ' (No IG connected)';
-
-        if (hasIg) {
-          instagramAccounts.push({
-            igId: page.instagram_business_account.id,
-            igUsername: page.instagram_business_account.username,
-            pageId: page.id,
-            pageToken: page.access_token,
-            pageName: page.name
-          });
-        }
-
-        // Add to dropdown - all pages, but indicate which have IG
-        igPageSelect.innerHTML += `<option value="${page.id}" data-hasig="${hasIg}">${page.name}${igInfo}</option>`;
-      });
-
-      // Reset media list
-      const mediaList = document.getElementById('igMediaList');
-      if (mediaList) {
-        mediaList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">Select a Facebook Page to view its connected Instagram account</div>';
+      if (igPageSelect) {
+        igPageSelect.innerHTML = '<option value="">Instagram login connected</option>';
       }
     }
 
     // Handle Page selection for Instagram
     function onIgPageSelected() {
-      const igPageSelect = document.getElementById('igPageSelect');
-      const pageId = igPageSelect?.value;
-
-      // Hide both sections initially
-      document.getElementById('igAccountInfo').style.display = 'none';
-      document.getElementById('igNoAccount').style.display = 'none';
-
-      if (!pageId) {
-        // No page selected - show default message
-        const mediaList = document.getElementById('igMediaList');
-        if (mediaList) {
-          mediaList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">Select a Facebook Page to view its connected Instagram account</div>';
-        }
-        currentIgAccount = null;
+      if (igSessionConnected) {
+        loadInstagramData();
         return;
       }
 
-      // Find the page
-      const page = pages.find(p => p.id === pageId);
-      if (!page) return;
-
-      // Check if this page has an Instagram account connected
-      if (page.instagram_business_account) {
-        // Has IG - load it
-        const igAccount = {
-          igId: page.instagram_business_account.id,
-          igUsername: page.instagram_business_account.username,
-          pageId: page.id,
-          pageToken: page.access_token,
-          pageName: page.name
-        };
-        loadInstagramData(igAccount);
-      } else {
-        // No IG connected to this page
-        document.getElementById('igNoAccount').style.display = 'block';
-        currentIgAccount = null;
-
-        // Clear media
-        const mediaList = document.getElementById('igMediaList');
-        if (mediaList) {
-          mediaList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">No Instagram account connected to this Page</div>';
-        }
-
-        // Clear engagement cards
-        document.getElementById('igFollowers').textContent = '--';
-        document.getElementById('igPosts').textContent = '--';
-        document.getElementById('igEngagement').textContent = '--';
-        document.getElementById('igReach').textContent = '--';
-      }
+      showInstagramLoginRequired();
     }
 
     // Load Instagram data (instagram_basic, instagram_business_basic)
-    function loadInstagramData(igAccount) {
-      currentIgAccount = igAccount;
+    async function loadInstagramData() {
+      if (!igSessionConnected) {
+        showInstagramLoginRequired();
+        return;
+      }
+
       const igLoading = document.getElementById('igLoading');
       if (igLoading) igLoading.classList.add('visible');
 
-      FB.api('/' + igAccount.igId, {
-        fields: 'id,username,profile_picture_url,followers_count,media_count,biography',
-        access_token: igAccount.pageToken
-      }, function (response) {
-        if (igLoading) igLoading.classList.remove('visible');
-        if (handleApiError(response)) return;
+      const response = await fetchInstagram('/api/instagram/me');
+      if (igLoading) igLoading.classList.remove('visible');
 
-        if (response && !response.error) {
-          // Update account info
-          document.getElementById('igAccountInfo').style.display = 'block';
-          document.getElementById('igUsername').textContent = '@' + response.username;
-          document.getElementById('igStats').textContent = (response.followers_count || 0).toLocaleString() + ' followers • ' + (response.media_count || 0) + ' posts';
-          if (response.profile_picture_url) {
-            document.getElementById('igProfilePic').src = response.profile_picture_url;
-          }
+      if (response && response.error) {
+        showInstagramLoginRequired();
+        return;
+      }
 
-          // Update engagement cards
-          document.getElementById('igFollowers').textContent = (response.followers_count || 0).toLocaleString();
-          document.getElementById('igFollowersDelta').textContent = 'Total followers';
-          document.getElementById('igPosts').textContent = response.media_count || 0;
+      if (response && response.id) {
+        currentIgAccount = {
+          igId: response.id,
+          igUsername: response.username
+        };
 
-          // Load media
-          loadInstagramMedia(igAccount);
+        document.getElementById('igAccountInfo').style.display = 'block';
+        document.getElementById('igNoAccount').style.display = 'none';
+        document.getElementById('igUsername').textContent = '@' + response.username;
 
-          // Load insights
-          loadInstagramInsights(igAccount);
+        const followers = response.followers_count || 0;
+        const mediaCount = response.media_count || 0;
+        document.getElementById('igStats').textContent = followers.toLocaleString() + ' followers - ' + mediaCount + ' posts';
+
+        if (response.profile_picture_url) {
+          document.getElementById('igProfilePic').src = response.profile_picture_url;
         }
-      });
+
+        document.getElementById('igFollowers').textContent = followers.toLocaleString();
+        document.getElementById('igFollowersDelta').textContent = 'Total followers';
+        document.getElementById('igPosts').textContent = mediaCount;
+
+        loadInstagramMedia();
+        loadInstagramInsights();
+      } else {
+        showInstagramLoginRequired();
+      }
     }
 
     // Load Instagram media (instagram_business_basic)
-    function loadInstagramMedia(igAccount) {
-      FB.api('/' + igAccount.igId + '/media', {
-        fields: 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,like_count,comments_count',
-        limit: 9,
-        access_token: igAccount.pageToken
-      }, function (response) {
-        if (handleApiError(response)) return;
+    async function loadInstagramMedia() {
+      const response = await fetchInstagram('/api/instagram/media');
+      const container = document.getElementById('igMediaList');
+      if (!container) return;
 
-        const container = document.getElementById('igMediaList');
-        if (!container) return;
+      container.innerHTML = '';
+      igMedia = [];
 
-        container.innerHTML = '';
-        igMedia = [];
-
-        if (response && response.data && response.data.length > 0) {
-          igMedia = response.data;
-          response.data.forEach((media, index) => {
-            const imgUrl = media.thumbnail_url || media.media_url || '';
-            const typeIcon = media.media_type === 'VIDEO' ? '🎬' : (media.media_type === 'CAROUSEL_ALBUM' ? '📷' : '');
-            container.innerHTML += `
+      if (response && response.data && response.data.length > 0) {
+        igMedia = response.data;
+        response.data.forEach((media, index) => {
+          const imgUrl = media.thumbnail_url || media.media_url || '';
+          const typeIcon = media.media_type === 'VIDEO' ? 'VID' : (media.media_type === 'CAROUSEL_ALBUM' ? 'CAR' : '');
+          container.innerHTML += `
               <div onclick="selectIgMedia(${index})" style="aspect-ratio: 1; border-radius: 8px; overflow: hidden; cursor: pointer; position: relative; border: 2px solid transparent; transition: all 0.15s ease;" id="igMedia-${index}">
                 <img src="${imgUrl}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
                 <div style="position: absolute; bottom: 4px; left: 4px; right: 4px; display: flex; justify-content: space-between; font-size: 10px; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-                  <span>❤️ ${media.like_count || 0}</span>
-                  <span>💬 ${media.comments_count || 0}</span>
+                  <span>Likes ${media.like_count || 0}</span>
+                  <span>Comments ${media.comments_count || 0}</span>
                 </div>
-                ${typeIcon ? `<div style="position: absolute; top: 4px; right: 4px; font-size: 14px;">${typeIcon}</div>` : ''}
+                ${typeIcon ? `<div style="position: absolute; top: 4px; right: 4px; font-size: 10px; background: rgba(0,0,0,0.6); padding: 2px 4px; border-radius: 4px;">${typeIcon}</div>` : ''}
               </div>
             `;
-          });
-        } else {
-          container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">No posts yet</div>';
-        }
-      });
+        });
+      } else if (response && response.error) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">Unable to load Instagram media</div>';
+      } else {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">No posts yet</div>';
+      }
     }
 
     // Load Instagram insights (instagram_business_basic)
-    function loadInstagramInsights(igAccount) {
-      FB.api('/' + igAccount.igId + '/insights', {
-        metric: 'reach,impressions',
-        period: 'day',
-        access_token: igAccount.pageToken
-      }, function (response) {
-        if (response && response.data) {
-          response.data.forEach(metric => {
-            if (metric.name === 'reach') {
-              const value = metric.values && metric.values[0] ? metric.values[0].value : 0;
-              document.getElementById('igReach').textContent = value.toLocaleString();
-            }
-          });
-        }
-      });
+    async function loadInstagramInsights() {
+      const response = await fetchInstagram('/api/instagram/insights');
+      if (response && response.error) {
+        document.getElementById('igReach').textContent = '--';
+        return;
+      }
+
+      if (response && response.data) {
+        response.data.forEach(metric => {
+          if (metric.name === 'reach') {
+            const value = metric.values && metric.values[0] ? metric.values[0].value : 0;
+            document.getElementById('igReach').textContent = value.toLocaleString();
+          }
+        });
+      }
     }
 
     // Select Instagram media for comment management
@@ -4695,33 +4744,31 @@
     }
 
     // Load Instagram comments (instagram_manage_comments)
-    function loadIgComments(mediaId) {
+    async function loadIgComments(mediaId) {
       if (!currentIgAccount) return;
 
-      FB.api('/' + mediaId + '/comments', {
-        fields: 'id,text,username,timestamp,like_count',
-        access_token: currentIgAccount.pageToken
-      }, function (response) {
-        const container = document.getElementById('igCommentsList');
-        if (!container) return;
+      const response = await fetchInstagram(`/api/instagram/comments?media_id=${encodeURIComponent(mediaId)}`);
+      const container = document.getElementById('igCommentsList');
+      if (!container) return;
 
-        container.innerHTML = '';
+      container.innerHTML = '';
 
-        if (response && response.data && response.data.length > 0) {
-          response.data.forEach(comment => {
-            const timeAgo = getTimeAgo(comment.timestamp);
-            container.innerHTML += `
+      if (response && response.data && response.data.length > 0) {
+        response.data.forEach(comment => {
+          const timeAgo = getTimeAgo(comment.timestamp);
+          container.innerHTML += `
               <div class="message-preview" style="border-left: 3px solid #d62976;" onclick="selectIgComment('${comment.id}', '${comment.username}')">
                 <div class="message-sender">@${comment.username}</div>
                 <div class="message-text">"${comment.text}"</div>
-                <div class="message-time">${timeAgo} • ❤️ ${comment.like_count || 0}</div>
+                <div class="message-time">${timeAgo} - Likes ${comment.like_count || 0}</div>
               </div>
             `;
-          });
-        } else {
-          container.innerHTML = '<div class="message-preview"><div class="message-sender">No comments</div><div class="message-text">This post has no comments yet</div></div>';
-        }
-      });
+        });
+      } else if (response && response.error) {
+        container.innerHTML = '<div class="message-preview"><div class="message-sender">Unable to load comments</div><div class="message-text">' + response.error.message + '</div></div>';
+      } else {
+        container.innerHTML = '<div class="message-preview"><div class="message-sender">No comments</div><div class="message-text">This post has no comments yet</div></div>';
+      }
     }
 
     // Select comment for reply
@@ -4735,7 +4782,7 @@
     }
 
     // Reply to Instagram comment (instagram_manage_comments)
-    function replyToIgComment() {
+    async function replyToIgComment() {
       if (!selectedIgComment || !currentIgAccount) {
         alert('Please select a comment to reply to');
         return;
@@ -4747,20 +4794,21 @@
         return;
       }
 
-      FB.api('/' + selectedIgComment.id + '/replies', 'POST', {
-        message: replyText,
-        access_token: currentIgAccount.pageToken
-      }, function (response) {
-        if (response && response.id) {
-          alert('✓ Reply posted successfully!');
-          document.getElementById('igReplyText').value = '';
-          loadIgComments(selectedIgMedia.id);
-        } else {
-          if (!handleApiError(response)) {
-            alert('Error: ' + (response.error ? response.error.message : 'Failed to post reply'));
-          }
-        }
+      const response = await fetchInstagram('/api/instagram/reply', {
+        method: 'POST',
+        body: JSON.stringify({
+          comment_id: selectedIgComment.id,
+          message: replyText
+        })
       });
+
+      if (response && response.id) {
+        alert('Reply posted successfully.');
+        document.getElementById('igReplyText').value = '';
+        loadIgComments(selectedIgMedia.id);
+      } else {
+        alert('Error: ' + (response.error ? response.error.message : 'Failed to post reply'));
+      }
     }
 
     // Switch Instagram tabs
@@ -4819,7 +4867,7 @@
     }
 
     // Load Instagram DMs (instagram_business_manage_messages, instagram_manage_messages)
-    function loadInstagramDMs() {
+    async function loadInstagramDMs() {
       if (!currentIgAccount) return;
 
       const container = document.getElementById('igDMList');
@@ -4827,60 +4875,59 @@
 
       container.innerHTML = '<div class="message-preview"><div class="message-text" style="text-align: center;"><div class="spinner" style="width:16px;height:16px;border-width:2px;margin:0 auto 8px;"></div>Loading DMs...</div></div>';
 
-      FB.api('/' + currentIgAccount.igId + '/conversations', {
-        fields: 'id,participants,messages.limit(1){message,from,created_time}',
-        platform: 'instagram',
-        access_token: currentIgAccount.pageToken,
-        limit: 10
-      }, function (response) {
-        console.log('Instagram DMs Response:', response);
-        container.innerHTML = '';
+      const response = await fetchInstagram('/api/instagram/conversations');
+      container.innerHTML = '';
 
-        if (response && response.data && response.data.length > 0) {
-          instagramConversations = response.data; // Store for reply functionality
+      if (response && response.data && response.data.length > 0) {
+        instagramConversations = response.data;
 
-          response.data.forEach((conv, index) => {
-            const lastMsg = conv.messages?.data?.[0];
-            const participant = conv.participants?.data?.find(p => p.id !== currentIgAccount.igId);
+        response.data.forEach((conv) => {
+          const lastMsg = conv.messages?.data?.[0];
+          const participants = conv.participants?.data || [];
+          let participant = participants[0];
+          if (currentIgAccount?.igId) {
+            participant = participants.find(p => p.id !== currentIgAccount.igId) || participants[0];
+          }
 
-            if (lastMsg && participant) {
-              const timeAgo = getTimeAgo(lastMsg.created_time);
-              const messagePreview = lastMsg.message?.substring(0, 80) || '[No text]';
+          if (lastMsg && participant) {
+            const timeAgo = getTimeAgo(lastMsg.created_time);
+            const messagePreview = lastMsg.message?.substring(0, 80) || '[No text]';
+            const participantName = participant.username || participant.name || 'Instagram User';
+            const participantId = participant.id || '';
 
-              container.innerHTML += `
-                <div class="message-preview" style="border-left: 3px solid #962fbf; cursor: pointer; position: relative;" onclick="replyToIgConversation('${conv.id}', '${participant.username || participant.name || 'user'}')">
+            container.innerHTML += `
+                <div class="message-preview" style="border-left: 3px solid #962fbf; cursor: pointer; position: relative;" onclick="replyToIgConversation('${conv.id}', '${participantName}', '${participantId}')">
                   <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div style="flex: 1;">
-                      <div class="message-sender">📩 ${participant.username ? '@' + participant.username : participant.name || 'Instagram User'}</div>
+                      <div class="message-sender">@${participantName}</div>
                       <div class="message-text">"${messagePreview}${lastMsg.message?.length > 80 ? '...' : ''}"</div>
                       <div class="message-time">${timeAgo}</div>
                     </div>
-                    <button class="btn-ghost" style="padding: 4px 8px; font-size: 11px; margin-left: 8px;" onclick="event.stopPropagation(); replyToIgConversation('${conv.id}', '${participant.username || participant.name || 'user'}')">Reply</button>
+                    <button class="btn-ghost" style="padding: 4px 8px; font-size: 11px; margin-left: 8px;" onclick="event.stopPropagation(); replyToIgConversation('${conv.id}', '${participantName}', '${participantId}')">Reply</button>
                   </div>
                 </div>
               `;
-            }
-          });
-        } else if (response && response.error) {
-          const errorText = (response.error.message || '').toLowerCase();
-          if (response.error.code === 3 || errorText.includes('capability')) {
-            renderInstagramDMDemo(container);
-          } else {
-            container.innerHTML = `
-              <div class="message-preview" style="border-left: 3px solid #dc2626;">
-                <div class="message-sender">Error Loading DMs</div>
-                <div class="message-text" style="font-size: 11px;">${response.error.message}</div>
-              </div>
-            `;
           }
+        });
+      } else if (response && response.error) {
+        const errorText = (response.error.message || '').toLowerCase();
+        if (response.error.code === 3 || errorText.includes('capability')) {
+          renderInstagramDMDemo(container);
         } else {
-          container.innerHTML = '<div class="message-preview"><div class="message-sender">No DMs</div><div class="message-text">No Instagram Direct Messages found. When users message your Instagram account, they will appear here.</div></div>';
+          container.innerHTML = `
+            <div class="message-preview" style="border-left: 3px solid #dc2626;">
+              <div class="message-sender">Error Loading DMs</div>
+              <div class="message-text" style="font-size: 11px;">${response.error.message}</div>
+            </div>
+          `;
         }
-      });
+      } else {
+        container.innerHTML = '<div class="message-preview"><div class="message-sender">No DMs</div><div class="message-text">No Instagram Direct Messages found. When users message your Instagram account, they will appear here.</div></div>';
+      }
     }
 
     // Reply to an existing Instagram conversation
-    function replyToIgConversation(conversationId, participantName) {
+    function replyToIgConversation(conversationId, participantName, participantId) {
       // Pre-fill the conversation ID and open the drawer
       openDrawer('sendIgDM');
 
@@ -4890,12 +4937,18 @@
       document.getElementById('igDMText').focus();
 
       // Store conversation ID in a data attribute for later use
-      document.getElementById('sendIgDMDrawer').setAttribute('data-conversation-id', conversationId);
+      const drawer = document.getElementById('sendIgDMDrawer');
+      drawer.setAttribute('data-conversation-id', conversationId || '');
+      if (participantId) {
+        drawer.setAttribute('data-recipient-id', participantId);
+      } else {
+        drawer.removeAttribute('data-recipient-id');
+      }
 
       // Update drawer title to show it's a reply
       const drawerHeader = document.querySelector('#sendIgDMDrawer .drawer-header span');
       if (drawerHeader) {
-        drawerHeader.textContent = `📩 Reply to @${participantName}`;
+        drawerHeader.textContent = `Reply to @${participantName}`;
       }
     }
 
@@ -4903,112 +4956,57 @@
     function resolveIgUser() {
       const input = document.getElementById('igRecipientInput').value.trim();
       if (!input) {
-        alert('Please enter a username');
+        alert('Please enter a recipient ID');
         return;
       }
 
       // Show "Resolved" state
       document.getElementById('igResolvedUser').style.display = 'block';
       document.getElementById('igResolvedName').textContent = input;
-      document.getElementById('igResolvedId').textContent = 'Map to IGSID on send';
+      document.getElementById('igResolvedId').textContent = 'Recipient ID: ' + input;
     }
 
     // Send Instagram DM (instagram_manage_messages)
-    function sendIgDM() {
+    async function sendIgDM() {
       if (!currentIgAccount) {
-        alert('Please select an Instagram account first');
+        alert('Please connect Instagram login first');
         return;
       }
 
       const message = document.getElementById('igDMText').value.trim();
-
       if (!message) {
         alert('Please enter a message');
         return;
       }
 
-      // Check if we have a stored conversation ID (from reply button)
       const drawer = document.getElementById('sendIgDMDrawer');
       const storedConversationId = drawer.getAttribute('data-conversation-id');
+      const storedRecipientId = drawer.getAttribute('data-recipient-id');
+      const recipientInput = document.getElementById('igRecipientInput').value.trim();
+      const recipientId = storedRecipientId || recipientInput;
 
-      if (storedConversationId) {
-        // We're replying to an existing conversation - send directly
-        console.log('Sending reply to conversation:', storedConversationId);
+      if (!recipientId && !storedConversationId) {
+        alert('Please enter a recipient ID');
+        return;
+      }
 
-        FB.api('/' + storedConversationId + '/messages', 'POST', {
+      const response = await fetchInstagram('/api/instagram/send-message', {
+        method: 'POST',
+        body: JSON.stringify({
           message: message,
-          access_token: currentIgAccount.pageToken
-        }, function (sendResponse) {
-          console.log('Send reply response:', sendResponse);
+          recipient_id: recipientId || null,
+          conversation_id: storedConversationId || null
+        })
+      });
 
-          if (sendResponse && !sendResponse.error) {
-            alert('✅ Message sent successfully!');
-            drawer.removeAttribute('data-conversation-id'); // Clear stored ID
-            closeDrawer('sendIgDM');
-            loadInstagramDMs(); // Refresh DM list
-          } else {
-            console.error('Send message error:', sendResponse);
-            alert('❌ Failed to send message: ' + (sendResponse.error?.message || 'Unknown error') + '\n\nPlease check the console for details.');
-          }
-        });
+      if (response && !response.error) {
+        alert('Message sent successfully!');
+        drawer.removeAttribute('data-conversation-id');
+        drawer.removeAttribute('data-recipient-id');
+        closeDrawer('sendIgDM');
+        loadInstagramDMs();
       } else {
-        // No stored conversation - user is trying to initiate new conversation
-        const recipientUsername = document.getElementById('igRecipientInput').value.trim();
-
-        if (!recipientUsername) {
-          alert('Please enter a recipient username');
-          return;
-        }
-
-        // Try to find existing conversation with this user
-        FB.api('/' + currentIgAccount.igId + '/conversations', {
-          platform: 'instagram',
-          access_token: currentIgAccount.pageToken
-        }, function (convResponse) {
-          console.log('Conversations response:', convResponse);
-
-          if (convResponse && convResponse.data && convResponse.data.length > 0) {
-            // Search for conversation with this username
-            const matchingConv = convResponse.data.find(conv => {
-              const participant = conv.participants?.data?.find(p => p.id !== currentIgAccount.igId);
-              return participant && (
-                participant.username === recipientUsername ||
-                participant.username === recipientUsername.replace('@', '') ||
-                participant.name?.toLowerCase().includes(recipientUsername.toLowerCase())
-              );
-            });
-
-            if (matchingConv) {
-              // Found matching conversation - send message
-              FB.api('/' + matchingConv.id + '/messages', 'POST', {
-                message: message,
-                access_token: currentIgAccount.pageToken
-              }, function (sendResponse) {
-                if (sendResponse && !sendResponse.error) {
-                  alert('✅ Message sent successfully!');
-                  closeDrawer('sendIgDM');
-                  loadInstagramDMs();
-                } else {
-                  console.error('Send message error:', sendResponse);
-                  alert('❌ Failed to send message: ' + (sendResponse.error?.message || 'Unknown error'));
-                }
-              });
-              return;
-            }
-          }
-
-          // No existing conversation found
-          alert(
-            '⚠️ INSTAGRAM API LIMITATION\n\n' +
-            'Cannot find conversation with @' + recipientUsername + '\n\n' +
-            'Instagram API restrictions:\n' +
-            '• Users must message your account first\n' +
-            '• Cannot initiate new conversations by username\n\n' +
-            'To send messages:\n' +
-            '1. Switch to the DMs tab\n' +
-            '2. Click "Reply" on existing conversations'
-          );
-        });
+        alert('Failed to send message: ' + (response.error?.message || 'Unknown error'));
       }
     }
 
