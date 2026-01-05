@@ -4577,7 +4577,7 @@
     }
 
     function connectInstagramLogin() {
-      window.location.href = `/api/instagram/auth?next=${encodeURIComponent(window.location.pathname)}`;
+      window.location.href = '/api/instagram/auth?next=/';
     }
 
     async function disconnectInstagramLogin() {

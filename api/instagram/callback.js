@@ -18,12 +18,22 @@ function sanitizeNext(value) {
   return '/';
 }
 
+function redirectToBase(req, res, params = {}) {
+  const base = getBaseUrl(req);
+  const url = new URL('/', base);
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) url.searchParams.set(key, value);
+  });
+  res.writeHead(302, { Location: url.toString() });
+  res.end();
+}
+
 module.exports = async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
   const error = url.searchParams.get('error');
   if (error) {
-    res.statusCode = 400;
-    res.end(`Instagram login error: ${error}`);
+    res.setHeader('Set-Cookie', [clearCookie(STATE_COOKIE), clearCookie(NEXT_COOKIE)]);
+    redirectToBase(req, res, { ig: 'error', reason: error });
     return;
   }
 
@@ -32,16 +42,16 @@ module.exports = async (req, res) => {
   const cookies = parseCookies(req);
 
   if (!code || !state || state !== cookies[STATE_COOKIE]) {
-    res.statusCode = 400;
-    res.end('Invalid OAuth state');
+    res.setHeader('Set-Cookie', [clearCookie(STATE_COOKIE), clearCookie(NEXT_COOKIE)]);
+    redirectToBase(req, res, { ig: 'error', reason: 'state' });
     return;
   }
 
   const clientId = process.env.INSTAGRAM_APP_ID;
   const clientSecret = process.env.INSTAGRAM_APP_SECRET;
   if (!clientId || !clientSecret) {
-    res.statusCode = 500;
-    res.end('Missing INSTAGRAM_APP_ID or INSTAGRAM_APP_SECRET');
+    res.setHeader('Set-Cookie', [clearCookie(STATE_COOKIE), clearCookie(NEXT_COOKIE)]);
+    redirectToBase(req, res, { ig: 'error', reason: 'config' });
     return;
   }
 
@@ -61,8 +71,8 @@ module.exports = async (req, res) => {
   });
   const tokenData = await tokenRes.json();
   if (!tokenRes.ok || !tokenData.access_token) {
-    res.statusCode = tokenRes.status || 500;
-    res.end('Failed to exchange Instagram code');
+    res.setHeader('Set-Cookie', [clearCookie(STATE_COOKIE), clearCookie(NEXT_COOKIE)]);
+    redirectToBase(req, res, { ig: 'error', reason: 'token' });
     return;
   }
 
@@ -74,8 +84,8 @@ module.exports = async (req, res) => {
   const longRes = await fetch(exchangeUrl.toString());
   const longData = await longRes.json();
   if (!longRes.ok || !longData.access_token) {
-    res.statusCode = longRes.status || 500;
-    res.end('Failed to exchange long-lived Instagram token');
+    res.setHeader('Set-Cookie', [clearCookie(STATE_COOKIE), clearCookie(NEXT_COOKIE)]);
+    redirectToBase(req, res, { ig: 'error', reason: 'exchange' });
     return;
   }
 
@@ -89,8 +99,8 @@ module.exports = async (req, res) => {
   const meRes = await fetch(meUrl.toString());
   const meData = await meRes.json();
   if (!meRes.ok || !meData.id) {
-    res.statusCode = meRes.status || 500;
-    res.end('Failed to fetch Instagram user');
+    res.setHeader('Set-Cookie', [clearCookie(STATE_COOKIE), clearCookie(NEXT_COOKIE)]);
+    redirectToBase(req, res, { ig: 'error', reason: 'me' });
     return;
   }
 

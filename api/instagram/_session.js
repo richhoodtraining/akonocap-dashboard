@@ -46,15 +46,21 @@ function clearCookie(name) {
   });
 }
 
+function cleanEnv(value) {
+  return typeof value === 'string' ? value.trim() : value;
+}
+
 function getBaseUrl(req) {
-  if (process.env.APP_BASE_URL) return process.env.APP_BASE_URL.replace(/\/$/, '');
+  const baseEnv = cleanEnv(process.env.APP_BASE_URL);
+  if (baseEnv) return baseEnv.replace(/\/$/, '');
   const proto = req.headers['x-forwarded-proto'] || 'https';
   const host = req.headers.host;
   return `${proto}://${host}`;
 }
 
 function getRedirectUri(req) {
-  if (process.env.INSTAGRAM_REDIRECT_URI) return process.env.INSTAGRAM_REDIRECT_URI;
+  const redirectEnv = cleanEnv(process.env.INSTAGRAM_REDIRECT_URI);
+  if (redirectEnv) return redirectEnv;
   return `${getBaseUrl(req)}/api/instagram/callback`;
 }
 
