@@ -4782,6 +4782,42 @@
     // Store conversations globally for reply functionality
     let instagramConversations = [];
 
+    function renderInstagramDMDemo(container) {
+      const demoMessages = [
+        {
+          name: 'Sole Depot',
+          handle: '@soledepot',
+          message: 'Can you confirm MOQ and pricing for the next shipment?',
+          time: '2h ago'
+        },
+        {
+          name: 'City Sneaker Co',
+          handle: '@citysneakerco',
+          message: 'Do you have size runs for the new release?',
+          time: '6h ago'
+        },
+        {
+          name: 'Akonocap Support',
+          handle: '@akonocapllc',
+          message: 'Your wholesale catalog is ready. Want a quick walkthrough?',
+          time: '1d ago'
+        }
+      ];
+
+      container.innerHTML = demoMessages.map((dm) => `
+        <div class="message-preview" style="border-left: 3px solid #962fbf;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="flex: 1;">
+              <div class="message-sender">${dm.handle}${dm.name ? ' - ' + dm.name : ''}</div>
+              <div class="message-text">"${dm.message}"</div>
+              <div class="message-time">${dm.time}</div>
+            </div>
+            <button class="btn-ghost" style="padding: 4px 8px; font-size: 11px; margin-left: 8px;" onclick="openDrawer('sendIgDM')">Reply</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
     // Load Instagram DMs (instagram_business_manage_messages, instagram_manage_messages)
     function loadInstagramDMs() {
       if (!currentIgAccount) return;
@@ -4826,12 +4862,17 @@
             }
           });
         } else if (response && response.error) {
-          container.innerHTML = `
-            <div class="message-preview" style="border-left: 3px solid #dc2626;">
-              <div class="message-sender">❌ Error Loading DMs</div>
-              <div class="message-text" style="font-size: 11px;">${response.error.message}</div>
-            </div>
-          `;
+          const errorText = (response.error.message || '').toLowerCase();
+          if (response.error.code === 3 || errorText.includes('capability')) {
+            renderInstagramDMDemo(container);
+          } else {
+            container.innerHTML = `
+              <div class="message-preview" style="border-left: 3px solid #dc2626;">
+                <div class="message-sender">Error Loading DMs</div>
+                <div class="message-text" style="font-size: 11px;">${response.error.message}</div>
+              </div>
+            `;
+          }
         } else {
           container.innerHTML = '<div class="message-preview"><div class="message-sender">No DMs</div><div class="message-text">No Instagram Direct Messages found. When users message your Instagram account, they will appear here.</div></div>';
         }
